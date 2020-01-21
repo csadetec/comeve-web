@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+
+import Navbar from './components/default/Navbar'
+import Footer from './components/default/Footer'
+
+import Home from './components/default/Home'
+
+//componenct dos eventos
+import EventList from './components/EventList'
+import EventForm from './components/EventForm'
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Router>
+        <Navbar />
+        <Route exact={true} path="/" component={ EventForm } />
+        <Route path="/home" component={ Home } />
+
+        <Route  path="/eventos/listar" component={ EventList } />
+        <Route path="/eventos/cadastrar" component={ EventForm } />
+        <Redirect from="*" to="/" />
+        <Footer />
+      </Router>
+    </>
+  )
 }
 
 export default App;
