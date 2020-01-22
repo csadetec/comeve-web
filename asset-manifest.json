@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/comeve-web/static/css/main.dbd7495c.chunk.css",
-    "main.js": "/comeve-web/static/js/main.9b5ae7e9.chunk.js",
-    "main.js.map": "/comeve-web/static/js/main.9b5ae7e9.chunk.js.map",
+    "main.js": "/comeve-web/static/js/main.9ee44092.chunk.js",
+    "main.js.map": "/comeve-web/static/js/main.9ee44092.chunk.js.map",
     "runtime-main.js": "/comeve-web/static/js/runtime-main.560fa575.js",
     "runtime-main.js.map": "/comeve-web/static/js/runtime-main.560fa575.js.map",
     "static/js/2.63c79db3.chunk.js": "/comeve-web/static/js/2.63c79db3.chunk.js",
     "static/js/2.63c79db3.chunk.js.map": "/comeve-web/static/js/2.63c79db3.chunk.js.map",
     "index.html": "/comeve-web/index.html",
-    "precache-manifest.3dcf68a9aede4221324944028df09d8a.js": "/comeve-web/precache-manifest.3dcf68a9aede4221324944028df09d8a.js",
+    "precache-manifest.8e35368f09aef8f4f601dd0384f0ae31.js": "/comeve-web/precache-manifest.8e35368f09aef8f4f601dd0384f0ae31.js",
     "service-worker.js": "/comeve-web/service-worker.js",
     "static/css/main.dbd7495c.chunk.css.map": "/comeve-web/static/css/main.dbd7495c.chunk.css.map",
     "static/js/2.63c79db3.chunk.js.LICENSE": "/comeve-web/static/js/2.63c79db3.chunk.js.LICENSE"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.560fa575.js",
     "static/js/2.63c79db3.chunk.js",
     "static/css/main.dbd7495c.chunk.css",
-    "static/js/main.9b5ae7e9.chunk.js"
+    "static/js/main.9ee44092.chunk.js"
   ]
 }
