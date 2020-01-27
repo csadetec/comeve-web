@@ -5,6 +5,7 @@ import api from '../service/api'
 function EventList() {
 
   const [events, setEvents] = useState([])
+  let cont = 1 
 
   useEffect(() => {
     async function loadEvents() {
@@ -56,7 +57,7 @@ function EventList() {
             <tbody>
               {events.map(r =>
                 <tr key={r.id}>
-                  <th scope="row">{r.id}</th>
+                  <th scope="row">{cont++}</th>
                   <td>{r.user_id}</td>
                   <td>{r.name}</td>
                   <td>{r.place}</td>

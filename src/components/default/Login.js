@@ -3,27 +3,39 @@ import api from '../../service/api'
 
 
 function Login() {
-  const [username, setUsername] = useState('testet')
-  const [password, setPassword] = useState('Sic7c8sic')
+  const [username, setUsername] = useState('lucas.assuncao')
+  const [password, setPassword] = useState('Sic7c8sic1')
+  const [alert, setAlert] = useState(false)
 
-  async function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault()
-    try{
-      const response = await api.post('/authenticate',{
+    try {
+      const { data } = await api.post('/authenticate', {
         username,
         password
       })
-  
-      console.log(response.data)
-    }catch(e){
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('username', data.username)
+      window.location.reload()
+
+      //console.log(response.data)
+    } catch (e) {
+
+      if (!e.response) {
+        return setAlert('Erro no Servidor!')
+      }
 
       let { field } = e.response.data[0]
-
-      if(field === 'username'){
-        console.log('Usuario nao cadastrado')
+   
+      if (field === 'username') {
+        setAlert('Usuário não cadastrado')
+        return false;
       }
+
+      setAlert('Senha Errada')
+
     }
-    
+
 
   }
 
@@ -31,12 +43,18 @@ function Login() {
     <div className="container">
       <div className="row justify-content-center mt-5">
         <div className="col-md-6">
+          {alert &&
+            <div className="alert alert-warning mt-2" role="alert">
+              {alert}
+            </div>
+          }
           <form className="border border-light p-5" onSubmit={handleSubmit}>
-            <input type="text"  className="form-control mb-4" placeholder="Usuario"
+
+            <input type="text" className="form-control mb-4" placeholder="Usuario"
               value={username} onChange={e => setUsername(e.target.value)}
               required
             />
-            <input type="password"  className="form-control mb-4" placeholder="Senha"
+            <input type="password" className="form-control mb-4" placeholder="Senha"
               value={password} onChange={e => setPassword(e.target.value)}
               required
             />

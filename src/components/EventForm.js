@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import api from '../service/api'
 
 function EventForm() {
@@ -9,8 +9,9 @@ function EventForm() {
   const [date, setDate] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
-  /*
+  
     useEffect(() => {
+      /*
       async function loadEvents() {
         const response = await api.get('/events')
   
@@ -19,6 +20,7 @@ function EventForm() {
       }
   
       loadEvents()
+      /** */
     }, [])
   /** */
   async function handleSubmit(e){
@@ -29,7 +31,10 @@ function EventForm() {
 
     })
     
-    console.log(response)
+    if(response.status === 200){
+      return <Redirect to='/eventos/listar' />
+    }
+    
   }
 
   return (
