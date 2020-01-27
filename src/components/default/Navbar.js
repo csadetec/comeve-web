@@ -35,7 +35,7 @@ function Navbar(){
 aria-haspopup="true" aria-expanded="false" >{localStorage.getItem('username') }</div>
               <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                 <Link className="dropdown-item" to="/eventos/listar">Eventos</Link>
-                <a className="dropdown-item" href="#" onClick={handleLogout}>Sair</a>
+                <a className="dropdown-item" href="/" onClick={handleLogout}>Sair</a>
               </div>
             </li>
 

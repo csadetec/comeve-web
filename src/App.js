@@ -30,7 +30,7 @@ function App() {
       {logged ?
       <Router>
         <Navbar />
-        <Route exact={true} path='/' component={ PlaceForm } />
+        <Route exact={true} path='/' component={ EventForm } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
