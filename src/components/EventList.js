@@ -12,7 +12,7 @@ function EventList() {
       const response = await api.get('/events')
 
       setEvents(response.data)
-      //console.log(response.data)
+      console.log(response.data)
     }
 
     loadEvents()
@@ -58,9 +58,9 @@ function EventList() {
               {events.map(r =>
                 <tr key={r.id}>
                   <th scope="row">{cont++}</th>
-                  <td>{r.user_id}</td>
+                  <td>{r.user.username}</td>
                   <td>{r.name}</td>
-                  <td>{r.place}</td>
+                  <td>{r.place.name}</td>
                   <td>{dateFormat(r.date)}</td>
                   <td>{r.start}</td>
                   <td>{r.end}</td>
