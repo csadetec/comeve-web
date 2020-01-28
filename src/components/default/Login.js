@@ -3,8 +3,8 @@ import api from '../../service/api'
 
 
 function Login() {
-  const [username, setUsername] = useState('lucas.assuncao')
-  const [password, setPassword] = useState('Sic7c8sic1')
+  const [username, setUsername] = useState('detec')
+  const [password, setPassword] = useState('teste')
   const [alert, setAlert] = useState(false)
 
   async function handleSubmit(e) {
