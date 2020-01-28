@@ -1,10 +1,19 @@
 import axios from 'axios'
 
-const api = axios.create({
-    baseURL: 'http://localhost:8001',
-    headers:{
-        Authorization:'Bearer '+localStorage.getItem('token')
-    }
-})
+const hostname = () => {
+  const app = window.location.hostname 
+  if(app === 'localhost'){
+    return 'http://localhost:8001' 
+  }
 
+  return 'http://10.20.0.26:8001'
+}
+
+const api = axios.create({
+  baseURL: hostname(),
+  headers: {
+    Authorization: 'Bearer ' + localStorage.getItem('token')
+  }
+})
+console.log(hostname())
 export default api
