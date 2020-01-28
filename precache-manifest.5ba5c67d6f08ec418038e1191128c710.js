@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "cf69c84fc0bb17a0eccb7e3ca799a1a0",
+    "revision": "7e9f7214fe093376a92abb06411f6497",
     "url": "/comeve-web/index.html"
   },
   {
-    "revision": "05dd58cb934c8c417061",
+    "revision": "f37347f65e7d70d7ffaa",
     "url": "/comeve-web/static/css/main.31ba68f2.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/comeve-web/static/js/2.de3d607b.chunk.js.LICENSE"
   },
   {
-    "revision": "05dd58cb934c8c417061",
-    "url": "/comeve-web/static/js/main.cf79d2ee.chunk.js"
+    "revision": "f37347f65e7d70d7ffaa",
+    "url": "/comeve-web/static/js/main.aa4183f2.chunk.js"
   },
   {
     "revision": "865b3fac2b3155c99dd8",
