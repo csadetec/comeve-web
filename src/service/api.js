@@ -5,8 +5,8 @@ const hostname = () => {
   if(app === 'localhost'){
     return 'http://localhost:8001' 
   }
-  return 'http://localhost:8001'
- // return 'http://10.20.0.26:8001'
+  //return 'http://localhost:8001'
+  return 'http://10.20.0.26:8001'
 }
 
 const api = axios.create({
