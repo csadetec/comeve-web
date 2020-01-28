@@ -5,7 +5,7 @@ import api from '../service/api'
 function EventForm() {
 
   const [name, setName] = useState('')
-  const [place, setPlace] = useState('')
+  const [place_id, setPlace_id] = useState('')
   const [date, setDate] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
@@ -25,7 +25,7 @@ function EventForm() {
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    const obj = { name, place, date, start, end}
+    const obj = { name, place_id, date, start, end}
     
     const response = await api.post('/events', obj)
     //console.log(response)
@@ -58,7 +58,7 @@ function EventForm() {
             <div className="row">
               <div className="col-md-6">
                 <label htmlFor="place">Local</label>
-                <select value={place} onChange={e => setPlace(e.target.value)} className="form-control" required>
+                <select value={place_id} onChange={e => setPlace_id(e.target.value)} className="form-control" required>
                   <option value="">Selecione</option>
                   {places.map(r => 
                     <option key={r.id} value={r.id}>{r.name}</option>
