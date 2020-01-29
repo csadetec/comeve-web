@@ -30,7 +30,7 @@ function App() {
       {logged ?
       <Router>
         <Navbar />
-        <Route exact={true} path='/' component={ EventList } />
+        <Route exact={true} path='/*' component={ EventList } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
@@ -42,7 +42,7 @@ function App() {
       </Router>
       :
       <Router>
-        <Route exact={true} path='/' component={ Login } />
+        <Route exact={true} path='/*' component={ Login } />
         <Redirect from='*' to='/' />        
       </Router>
       }
