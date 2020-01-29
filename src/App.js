@@ -28,21 +28,22 @@ function App() {
   return (
     <>
       {logged ?
-      <Router>
+      <Router >
         <Navbar />
-        <Route exact={true} path='/*' component={ EventList } />
+        <Route exact={true} path='/' component={ EventList } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
         <Route path='/locais/cadastrar' component={PlaceForm} />
         <Route  path='/eventos/listar' component={ EventList } />
         <Route path='/eventos/cadastrar' component={ EventForm } />
+
         <Redirect from='*' to='/' />
         <Footer />
       </Router>
       :
       <Router>
-        <Route exact={true} path='/*' component={ Login } />
+        <Route exact={true} path='/' component={ Login } />
         <Redirect from='*' to='/' />        
       </Router>
       }
