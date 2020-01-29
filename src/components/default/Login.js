@@ -6,10 +6,15 @@ function Login() {
   const [username, setUsername] = useState('detec123')
   const [password, setPassword] = useState('teste')
   const [alert, setAlert] = useState(false)
+  const [btnLabel, setBtnLabel] = useState('ENTRAR')
+  const [btnStatus, setBtnStatus] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
+    setBtnLabel('Carregando ...')
+    setBtnStatus(true)
     try {
+
       const { data } = await api.post('/authenticate', {
         username,
         password
@@ -17,16 +22,19 @@ function Login() {
       localStorage.setItem('token', data.token)
       localStorage.setItem('username', data.username)
       window.location.reload()
+      //history.push('/home')
 
       //console.log(response.data)
     } catch (e) {
+      setBtnLabel('ENTRAR')
+      setBtnStatus(false)
 
       if (!e.response) {
         return setAlert('Erro no Servidor!')
       }
 
       let { field } = e.response.data[0]
-   
+
       if (field === 'username') {
         setAlert('Usuário não cadastrado')
         return false;
@@ -59,7 +67,7 @@ function Login() {
               required
             />
 
-            <button className="btn btn-outline-indigo btn-block" type="submit">ENTRAR</button>
+            <button className="btn btn-outline-indigo btn-block" disabled={btnStatus} type="submit">{btnLabel}</button>
           </form>
 
         </div>

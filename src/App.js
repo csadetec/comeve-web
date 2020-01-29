@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import url from './service/url'
 
 import Navbar from './components/default/Navbar'
 import Footer from './components/default/Footer'

@@ -1,14 +1,34 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Link } from 'react-router-dom'
 
 import './Navbar.css'
 
-function Navbar(){
+const Navbar = () =>{
+  const [home,setHome] = useState('nav-item')
+  const [eventos, setEventos] =useState('nav-item')
+  const [locais, setLocais] = useState('nav-item')
 
   const handleLogout = () =>{
     localStorage.clear()
     window.location.reload()
     //console.log('baiii')
+  }
+
+  const handleActive = () =>{
+    setHome('nav-item')
+    setEventos('nav-item')
+    setLocais('nav-item')
+
+    let pathname = window.location.pathname
+    if(pathname === '/eventos/listar'){
+      return setEventos('nav-item active')
+
+    }
+    if(pathname === '/locais/listar'){
+      return setLocais('nav-item active');
+    }
+
+    return setHome('nav-item active')
   }
   return (
     <header>
@@ -18,15 +38,15 @@ function Navbar(){
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="basicExampleNav">
-          <ul className="navbar-nav ml-auto mr-5 ">
-            <li className="nav-item active">
+          <ul className="navbar-nav ml-auto mr-5 " onClick={handleActive}>
+            <li className={home}>
               <Link className="nav-link" to="/home">Home</Link>
             </li>
 
-            <li className="nav-item ">
+            <li className={eventos}>
               <Link className="nav-link" to="/eventos/listar">Eventos</Link>
             </li>
-            <li className="nav-item ">
+            <li className={locais}>
               <Link className="nav-link" to="/locais/listar">Locais</Link>
             </li>
 
