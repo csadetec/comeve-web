@@ -13,7 +13,7 @@ function EventForm() {
   let history = useHistory()
 
   useEffect(() => {
-
+    document.title = 'Cadastrar Evento'
     async function loadPlaces() {
       const { data } = await api.get('/places')
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import api from '../../service/api'
 
 
@@ -8,6 +8,10 @@ function Login() {
   const [alert, setAlert] = useState(false)
   const [btnLabel, setBtnLabel] = useState('ENTRAR')
   const [btnStatus, setBtnStatus] = useState(false)
+
+  useEffect(() => {
+    document.title = 'Comeve | Login'
+  })
 
   async function handleSubmit(e) {
     e.preventDefault()

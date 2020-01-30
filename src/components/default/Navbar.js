@@ -7,6 +7,7 @@ const Navbar = () =>{
   const [home,setHome] = useState('nav-item')
   const [eventos, setEventos] =useState('nav-item')
   const [locais, setLocais] = useState('nav-item')
+  const [recursos, setRecursos] = useState('nav-item')
 
   const handleLogout = () =>{
     localStorage.clear()
@@ -18,6 +19,7 @@ const Navbar = () =>{
     setHome('nav-item')
     setEventos('nav-item')
     setLocais('nav-item')
+    setRecursos('nav-item')
 
     let pathname = window.location.pathname
     if(pathname === '/eventos/listar'){
@@ -26,6 +28,10 @@ const Navbar = () =>{
     }
     if(pathname === '/locais/listar'){
       return setLocais('nav-item active');
+    }
+
+    if(pathname === '/recursos/listar'){
+      return setRecursos('nav-item active')
     }
 
     return setHome('nav-item active')
@@ -48,6 +54,9 @@ const Navbar = () =>{
             </li>
             <li className={locais}>
               <Link className="nav-link" to="/locais/listar">Locais</Link>
+            </li>
+            <li className={recursos}>
+              <Link className="nav-link" to="/recursos/listar">Recursos</Link>
             </li>
 
             <li className="nav-item dropdown">

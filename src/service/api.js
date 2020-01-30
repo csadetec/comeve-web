@@ -5,10 +5,10 @@ const hostname = () => {
   if(app === 'localhost'){
     return 'http://localhost:8001' 
   }
-  if(app === 'comeve.netlify.com'){
+  if(app === 'comeve.netlify.com' || app === 'teste-comeve.netlify.com'){
     return 'https://comeve.azurewebsites.net'
   }
-
+  //https://comeve.netlify.com/
   return 'http://10.20.0.26:8001'
 }
 
