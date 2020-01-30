@@ -13,7 +13,7 @@ function EventForm() {
   let history = useHistory()
 
   useEffect(() => {
-
+    document.title = 'Cadastrar Evento'
     async function loadPlaces() {
       const { data } = await api.get('/places')
 
@@ -73,7 +73,7 @@ function EventForm() {
                 />
               </div>
             </div>
-            <div className="row">
+            <div className="row"> 
               <div className="col-md-6">
                 <label htmlFor="start">Inicio</label>
                 <input type="time" id="start" className="form-control mb-4"

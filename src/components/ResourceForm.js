@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 
-function PlaceForm() {
+const ResourceForm = () => {
 
   const [name, setName] = useState('')
   const [alert, setAlert] = useState(false)
@@ -10,8 +10,7 @@ function PlaceForm() {
   const history = useHistory()
 
   useEffect(() => {
-    document.title = 'Cadastrar Local '
-
+    document.title = 'Cadastrar Recursos'
     /*
     async function loadEvents() {
       const response = await api.get('/events')
@@ -26,13 +25,15 @@ function PlaceForm() {
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
+    //console.log('add recurso')
 
     try {
-      const response = await api.post('/places', {
+      const response = await api.post('/resources', {
         name
       })
       if (response.status === 200) {
-        history.push('/locais/listar')
+        //console.log(response.data)
+        history.push('/recursos/listar')
 
       }
     } catch (e) {
@@ -51,7 +52,7 @@ function PlaceForm() {
     <div className="container pb-5">
       <div className="row mb-4">
         <div className="col-md-12 border-bottom">
-          <h2>Cadastrar Local</h2>
+          <h2>Cadastrar Recursos</h2>
         </div>
       </div>
       <div className="row justify-content-center">
@@ -71,7 +72,7 @@ function PlaceForm() {
             />
             <div className="text-center">
               <button className="btn btn-outline-indigo" type="submit">Salvar</button>
-              <Link className="btn btn-outline-danger" type="submit" to="/locais/listar">Cancelar</Link>
+              <Link className="btn btn-outline-danger" type="submit" to="/recursos/listar">Cancelar</Link>
             </div>
           </form>
         </div>
@@ -80,4 +81,4 @@ function PlaceForm() {
   )
 }
 
-export default PlaceForm
+export default ResourceForm
