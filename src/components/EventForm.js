@@ -28,10 +28,10 @@ function EventForm() {
     const obj = { name, place_id, date, start, end}
     
     const response = await api.post('/events', obj)
-    //console.log(response)
+    console.log(response)
     
     if(response.status === 200){
-      history.push('/eventos/listar')
+      history.push(`/eventos/${response.data.id}/recursos`)
     }
     /** */
 
