@@ -46,14 +46,20 @@ function EventList() {
           <ul className="list-group">
             {events.map(r =>
               <li class="list-group-item">
-                <div className="float-right">
+                <div className="row">
+                  <div className="col-md-4">
+                    <h4>{r.name}</h4>
+                    <p>{r.user.username} | {r.place.name}</p>
+                  </div>
+                  <div className="col-md-4">
+                    list Recursos
+                  </div>
+                  <div className="col-md-4">
                   <sub className="float-right">{dateFormat(r.date)}</sub><br/>
-                  <sub className="float-right">{r.start} - {r.end}</sub>
-                  <Link type="button" className="btn btn-outline-indigo" to='/eventos/"'+{r.id}+'"/recursos'>+ Recursos</Link>
+                  <sub className="float-right">{r.start} - {r.end}</sub><br/>
+                  <Link type="button" className="btn btn-outline-indigo float-right" to={`/eventos/${r.id}/recursos`}>+ Recursos</Link>
+                  </div>
                 </div>
-
-                <h4>{r.name}</h4>
-                <p>{r.user.username} | {r.place.name} </p>
               </li>
             )}
           </ul>
