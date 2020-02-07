@@ -5,7 +5,7 @@ import api from '../service/api'
 function EventList() {
 
   const [events, setEvents] = useState([])
-  let cont = 1
+  let cont = 1 
 
   useEffect(() => {
     document.title = 'Eventos'
@@ -43,20 +43,32 @@ function EventList() {
       </div>
       <div className="row">
         <div className="col-md-12">
-          <ul className="list-group">
-            {events.map(r =>
-              <li class="list-group-item">
-                <div className="float-right">
-                  <sub className="float-right">{dateFormat(r.date)}</sub><br/>
-                  <sub className="float-right">{r.start} - {r.end}</sub>
-                  <Link type="button" className="btn btn-outline-indigo" to='/eventos/"'+{r.id}+'"/recursos'>+ Recursos</Link>
-                </div>
-
-                <h4>{r.name}</h4>
-                <p>{r.user.username} | {r.place.name} </p>
-              </li>
-            )}
-          </ul>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Local</th>
+                <th scope="col">Date</th>
+                <th scope="col">Início</th>
+                <th scope="col">Fim</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events.map(r =>
+                <tr key={r.id}>
+                  <th scope="row">{cont++}</th>
+                  <td>{r.user.username}</td>
+                  <td>{r.name}</td>
+                  <td>{r.place.name}</td>
+                  <td>{dateFormat(r.date)}</td>
+                  <td>{r.start}</td>
+                  <td>{r.end}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
