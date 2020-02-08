@@ -38,7 +38,7 @@ const App = () => {
       {logged ?
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ EventList} />
+        <Route exact={true} path='/' component={ EventForm } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
