@@ -5,7 +5,7 @@ import api from '../service/api'
 function EventList() {
 
   const [events, setEvents] = useState([])
-  let cont = 1
+  //let cont = 1
 
   useEffect(() => {
     document.title = 'Eventos'
@@ -45,7 +45,7 @@ function EventList() {
         <div className="col-md-12">
           <ul className="list-group">
             {events.map(r =>
-              <li class="list-group-item">
+              <li key={r.id} className="list-group-item">
                 <div className="row">
                   <div className="col-md-4">
                     <h4>{r.name}</h4>
@@ -57,7 +57,7 @@ function EventList() {
                   <div className="col-md-4">
                   <sub className="float-right">{dateFormat(r.date)}</sub><br/>
                   <sub className="float-right">{r.start} - {r.end}</sub><br/>
-                  <Link type="button" className="btn btn-outline-indigo float-right" to={`/eventos/${r.id}/recursos`}>+ Recursos</Link>
+                  <Link type="button" className="btn btn-outline-indigo float-right" to={`/eventos/editar/${r.id}`}><i className="fas fa-edit"></i>Editar</Link>
                   </div>
                 </div>
               </li>

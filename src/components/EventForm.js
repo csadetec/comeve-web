@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 
-function EventForm() {
+function EventForm(props) {
 
   const [name, setName] = useState('')
   const [place_id, setPlace_id] = useState('')
@@ -11,42 +11,87 @@ function EventForm() {
   const [end, setEnd] = useState('')
   const [places, setPlaces] = useState([])
   const [resource, setResources] = useState([])
+  const [searchResource] = useState('')
+  const [itemsResources, setItemsResources] = useState([])
+  const [h2, setH2 ] = useState('Cadastrar Evento')
+  const { id } =  props.match.params 
   let history = useHistory()
 
   useEffect(() => {
-    document.title = 'Cadastrar Evento'
+ 
+    if(id === undefined){
+      document.title = 'Cadastrar Evento'
+      return ;
+    }
+    document.title = 'Editar Evento'
+    setH2('Editar Evento')
+    async function loadEvent(){
+      const { data } = await api.get(`/events/${id}`)
+      setName(data.name)
+
+
+    }
+    loadEvent()
+
+
+
+  }, [])
+
+  useEffect(() => {
+
     async function loadPlaces() {
       const { data } = await api.get('/places')
 
       setPlaces(data)
     }
-    async function loadResource(){
+    async function loadResources() {
       const { data } = await api.get('/resources')
-      setResources( data )
+      setResources(data)
     }
     loadPlaces()
+    loadResources()
     /** */
   }, [])
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    const obj = { name, place_id, date, start, end }
+    const obj = { name, place_id, date, start, end, itemsResources }
+    //console.log(obj)
 
+    
     const response = await api.post('/events', obj)
     console.log(response)
 
     if (response.status === 200) {
-      history.push(`/eventos/${response.data.id}/recursos`)
+      history.push(`/eventos/listar`)
     }
-    /** */
 
+    /** */
+  }
+
+
+  async function handleSelectResource(e) {
+    //await setSearchResource(e.target.value)
+    let itemSelected = parseInt(e.target.value)
+    let obj = resource.filter((r) => {
+      return r.id === itemSelected
+    })
+
+    let testFind = itemsResources.filter((r) => {
+      return r.id === itemSelected
+    })
+
+    if (testFind.length === 0) {
+      setItemsResources([...itemsResources, obj[0]])
+
+    }
   }
 
   return (
     <div className="container pb-5">
       <div className="row mb-4">
         <div className="col-md-12 border-bottom">
-          <h2>Cadastrar Evento</h2>
+          <h2>{h2}</h2>
         </div>
       </div>
       <div className="row border border-light p-4">
@@ -96,7 +141,13 @@ function EventForm() {
             </div>
             <div className="row">
               <div className="col-md-12">
-                <input type="text" placeholder="Pesquisar Recursos" className="form-control mb-4"  />
+                <select value={searchResource} className="form-control mb-4" onChange={handleSelectResource} >
+                  <option value="">SELECIONE O RECURSO</option>
+                  {resource.map(r =>
+                    <option key={r.id} value={r.id}>{r.name}</option>
+                  )}
+
+                </select>
               </div>
             </div>
             <div className="text-left">
@@ -109,10 +160,10 @@ function EventForm() {
           <h4>
             Recursos
           </h4>
-          <ul class="list-group">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
+          <ul className="list-group">
+            {itemsResources.map(r =>
+              <li key={r.id} className="list-group-item">{r.name}</li>
+            )}
           </ul>
         </div>
       </div>

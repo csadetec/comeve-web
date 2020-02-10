@@ -38,14 +38,15 @@ const App = () => {
       {logged ?
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ EventForm } />
+        <Route exact={true} path='/' component={ EventList } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
         <Route path='/locais/cadastrar' component={PlaceForm} />
         <Route  path='/eventos/listar' component={ EventList } />
         <Route path='/eventos/cadastrar' component={ EventForm } />
-        <Route path='/eventos/:id/recursos' component={ EventResourceForm } />
+        {/*<Route path='/eventos//recursos' component={ EventResourceForm } />*/}
+        <Route path='/eventos/editar/:id' component={EventForm} />
         <Route path='/recursos/listar' component={ResourceList} />
         <Route path='/recursos/cadastrar' component={ResourceForm} />
         
