@@ -28,14 +28,18 @@ function EventForm(props) {
     async function loadEvent(){
       const { data } = await api.get(`/events/${id}`)
       setName(data.name)
-
+      setPlace_id(data.place_id)
+      setDate(data.date)
+      setStart(data.start)
+      setEnd(data.end)
+      
 
     }
     loadEvent()
 
 
 
-  }, [])
+  }, [id])
 
   useEffect(() => {
 
@@ -58,6 +62,15 @@ function EventForm(props) {
     const obj = { name, place_id, date, start, end, itemsResources }
     //console.log(obj)
 
+    if(id){
+      const {status} = await api.put(`/events/${id}`, obj)
+
+      if(status === 200){
+        console.log('update com sucess')
+      }
+
+      return ;
+    }
     
     const response = await api.post('/events', obj)
     console.log(response)

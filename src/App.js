@@ -21,7 +21,7 @@ import ResourceList from './components/ResourceList'
 import ResourceForm from './components/ResourceForm'
 
 //components events with resources
-import EventResourceForm from './components/EventResourceForm'
+//import EventResourceForm from './components/EventResourceForm'
 
 const App = () => {
   const [logged, setLogged ] = useState(false)
