@@ -39,7 +39,7 @@ const Navbar = () =>{
   return (
     <header>
       <nav className="navbar navbar-expand-lg navbar-dark indigo mb-4">
-        <a className="navbar-brand" href="/">Comeve</a>
+        <a className="navbar-brand" href="/">Comeve 12</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"  aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
