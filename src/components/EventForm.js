@@ -32,6 +32,7 @@ function EventForm(props) {
       setDate(data.date)
       setStart(data.start)
       setEnd(data.end)
+      console.log('editar evento')
       
 
     }
