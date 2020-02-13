@@ -10,10 +10,10 @@ function EventList() {
   useEffect(() => {
     document.title = 'Eventos'
     async function loadEvents() {
-      const response = await api.get('/events')
+      const { data } = await api.get('/events')
 
-      setEvents(response.data)
-      //console.log(response.data)
+      setEvents(data)
+      //console.log(data)
     }
 
     loadEvents()
@@ -47,17 +47,22 @@ function EventList() {
             {events.map(r =>
               <li key={r.id} className="list-group-item">
                 <div className="row">
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <h4>{r.name}</h4>
                     <p>{r.user.username} | {r.place.name}</p>
                   </div>
                   <div className="col-md-4">
-                    list Recursos
+                    <ul className="list-group">
+                      {r.resource.map((i) => 
+                        <li key={i.id} className="list-group-item">{i.name}</li>
+                      )}
+                    </ul>
+
                   </div>
-                  <div className="col-md-4">
-                  <sub className="float-right">{dateFormat(r.date)}</sub><br/>
-                  <sub className="float-right">{r.start} - {r.end}</sub><br/>
-                  <Link type="button" className="btn btn-outline-indigo float-right" to={`/eventos/editar/${r.id}`}><i className="fas fa-edit"></i>Editar</Link>
+                  <div className="col-md-5">
+                    <sub className="float-right">{dateFormat(r.date)}</sub><br />
+                    <sub className="float-right">{r.start} - {r.end}</sub><br />
+                    <Link type="button" className="btn btn-outline-indigo float-right" to={`/eventos/editar/${r.id}`}><i className="fas fa-edit"></i>Editar</Link>
                   </div>
                 </div>
               </li>

@@ -28,15 +28,14 @@ function EventForm(props) {
     setH2('Editar Evento')
     async function loadEvent() {
       const { data } = await api.get(`/events/${id}`)
-      setName(data.name)
-      setPlace_id(data.place_id)
-      setDate(data.date)
-      setStart(data.start)
-      setEnd(data.end)
-
+      setName(data[0].name)
+      setPlace_id(data[0].place_id)
+      setDate(data[0].date)
+      setStart(data[0].start)
+      setEnd(data[0].end)
+      setItemsResources(data[0].resource)
+      //console.log(data)
       //console.log('editar evento')
-
-
     }
     loadEvent()
 
