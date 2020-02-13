@@ -13,27 +13,29 @@ function EventForm(props) {
   const [resource, setResources] = useState([])
   const [searchResource] = useState('')
   const [itemsResources, setItemsResources] = useState([])
-  const [h2, setH2 ] = useState('Cadastrar Evento')
-  const { id } =  props.match.params 
+  const [h2, setH2] = useState('Cadastrar Evento')
+  const [alert, setAlert] = useState(false)
+  const { id } = props.match.params
   let history = useHistory()
 
   useEffect(() => {
- 
-    if(id === undefined){
+
+    if (id === undefined) {
       document.title = 'Cadastrar Evento'
-      return ;
+      return;
     }
     document.title = 'Editar Evento'
     setH2('Editar Evento')
-    async function loadEvent(){
+    async function loadEvent() {
       const { data } = await api.get(`/events/${id}`)
       setName(data.name)
       setPlace_id(data.place_id)
       setDate(data.date)
       setStart(data.start)
       setEnd(data.end)
-      console.log('editar evento')
-      
+
+      //console.log('editar evento')
+
 
     }
     loadEvent()
@@ -63,16 +65,18 @@ function EventForm(props) {
     const obj = { name, place_id, date, start, end, itemsResources }
     //console.log(obj)
 
-    if(id){
-      const {status} = await api.put(`/events/${id}`, obj)
+    if (id) {
+      const { status } = await api.put(`/events/${id}`, obj)
 
-      if(status === 200){
-        console.log('update com sucess')
+      if (status === 200) {
+        setAlert('Atualizado com Sucesso!')
+        //console.log('update com sucess')
+        //alert('teste')
       }
 
-      return ;
+      return;
     }
-    
+
     const response = await api.post('/events', obj)
     console.log(response)
 
@@ -80,12 +84,11 @@ function EventForm(props) {
       history.push(`/eventos/listar`)
     }
 
-    /** */
   }
-
 
   async function handleSelectResource(e) {
     //await setSearchResource(e.target.value)
+    setAlert(false)
     let itemSelected = parseInt(e.target.value)
     let obj = resource.filter((r) => {
       return r.id === itemSelected
@@ -102,16 +105,23 @@ function EventForm(props) {
   }
 
   return (
-    <div className="container pb-5">
+    <div className="container">
       <div className="row mb-4">
         <div className="col-md-12 border-bottom">
           <h2>{h2}</h2>
         </div>
       </div>
+      <div className="row">
+        {alert &&
+          <div className="alert alert-success col-md-12" role="alert">
+            {alert}
+          </div>
+        }
+      </div>
       <div className="row border border-light p-4">
+
         <div className="col-md-8">
           <form onSubmit={handleSubmit}>
-
             <label htmlFor="name">Nome</label>
             <input type="text" id="name" className="form-control mb-4" placeholder="Nome do eventos .."
               value={name} onChange={e => setName(e.target.value)}
@@ -166,7 +176,7 @@ function EventForm(props) {
             </div>
             <div className="text-left">
               <button className="btn btn-outline-indigo" type="submit">Salvar</button>
-              <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Cancelar</Link>
+              <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
             </div>
           </form>
         </div>
