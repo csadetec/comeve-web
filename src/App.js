@@ -38,7 +38,7 @@ const App = () => {
       {logged ?
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ EventList } />
+        <Route exact={true} path='/' component={ ResourceList } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
@@ -49,6 +49,7 @@ const App = () => {
         <Route path='/eventos/editar/:id' component={EventForm} />
         <Route path='/recursos/listar' component={ResourceList} />
         <Route path='/recursos/cadastrar' component={ResourceForm} />
+        <Route path='/recursos/editar/:id' component={ResourceForm} />
         
         <Redirect from='*' to='/' />
         <Footer />

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 
+import './EventForm.css'
+
 function EventForm(props) {
 
   const [name, setName] = useState('')
@@ -103,6 +105,17 @@ function EventForm(props) {
     }
   }
 
+  const deleteResource = (id) => {
+    ///console.log('excluir resource', id)
+    let filter = itemsResources.filter( r => {
+      return r.id !== id
+    })
+
+    setItemsResources(filter)
+    //console.log(filter)
+
+  }
+
   return (
     <div className="container">
       <div className="row mb-4">
@@ -185,7 +198,10 @@ function EventForm(props) {
           </h4>
           <ul className="list-group">
             {itemsResources.map(r =>
-              <li key={r.id} className="list-group-item">{r.name}</li>
+              <li key={r.id} className="list-group-item cursor-pointer" onClick={() => deleteResource(r.id)} title="Retirar Recurso">
+                {r.name}
+                <i className="fas fa-times-circle float-right"></i>
+              </li>
             )}
           </ul>
         </div>

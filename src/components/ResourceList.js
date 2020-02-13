@@ -34,6 +34,8 @@ const  ResourceList = () => {
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Nome</th>
+                <th scope="col">Setor</th>
+                <th scope="col">Editar</th>
               </tr>
             </thead>
             <tbody>
@@ -41,6 +43,8 @@ const  ResourceList = () => {
                 <tr key={r.id}>
                   <th scope="row">{cont++}</th>
                   <td>{r.name}</td>
+                  <td>setor</td>
+                  <td><Link to={`/recursos/editar/${r.id}`} title="Editar Recurso"><i className="fas fa-edit"></i></Link></td>
                 </tr>
               )}
             </tbody>
