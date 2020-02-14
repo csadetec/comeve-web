@@ -32,11 +32,12 @@ const ResourceForm = (props) => {
   async function handleSubmit(e) {
     e.preventDefault()
     //console.log('add recurso')
+    let obj = {name, sector}
+    //console.log(obj)
+    
 
     try {
-      const response = await api.post('/resources', {
-        name
-      })
+      const response = await api.post('/resources', obj)
       if (response.status === 200) {
         //console.log(response.data)
         history.push('/recursos/listar')
@@ -51,7 +52,7 @@ const ResourceForm = (props) => {
       setAlert(message)
     }
 
-
+    /** */
   }
 
   return (
@@ -78,11 +79,11 @@ const ResourceForm = (props) => {
               <form className="text-center" onSubmit={handleSubmit}>
      
                 <div className="md-form mt-3">
-                  <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} autoFocus={true} />
+                  <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} autoFocus={true} required />
                   <label htmlFor="name" >Name</label>
                 </div>
                 <div className="form-row">
-                  <select value={sector} className="form-control" onChange={e => setSector(e.target.value)}>
+                  <select value={sector} className="form-control" onChange={e => setSector(e.target.value)} required>
                     <option value="">Selecione o Setor</option>
                     <option value="Comunicação">Comunicação</option>
                     <option value="Detec">Detec</option>
@@ -106,20 +107,3 @@ const ResourceForm = (props) => {
 
 export default ResourceForm
 
-{/*
-
-      <form className="border border-light p-4" onSubmit={handleSubmit}>
-            {/*
-            <p className="h4 mb-4 text-center">Dados do Evento</p>*
-            <label htmlFor="name">Nome</label>
-            <input type="text" id="name" className="form-control mb-4" placeholder="Nome do local .."
-              value={name} onChange={e => setName(e.target.value)}
-              required
-            />
-            <div className="text-center">
-              <button className="btn btn-outline-indigo" type="submit">Salvar</button>
-              <Link className="btn btn-outline-danger" type="submit" to="/recursos/listar">Cancelar</Link>
-            </div>
-          </form>
-
-*/}

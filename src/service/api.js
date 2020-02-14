@@ -2,6 +2,9 @@ import axios from 'axios'
 
 const hostname = () => {
   const app = window.location.hostname 
+  if(app === '10.20.2.22'){
+    return 'http://10.20.2.22:8001'
+  }
   if(app === 'localhost'){
     return 'http://localhost:8001' 
   }
