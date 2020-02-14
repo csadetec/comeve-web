@@ -7,20 +7,20 @@ const ResourceForm = (props) => {
   const [name, setName] = useState('')
   const [sector, setSector] = useState('')
   const [alert, setAlert] = useState(false)
-  const [h2, setH2 ] = useState('Cadastrar Recurso')
+  const [h2, setH2 ] = useState('Cadastrar Setor')
   const { id } = props.match.params
 
   const history = useHistory()
 
   useEffect(() => {
     if(id === undefined){
-      document.title = 'Cadastrar Recurso'
+      document.title = 'Cadastrar Setor'
       return;
     }
-    setH2('Editar Recurso')
-    document.title = 'Editar Recurso'
+    setH2('Editar Setor')
+    document.title = 'Editar Setor'
     async function loadResource(){
-      const { data } = await api.get(`/resources/${id}`)
+      const { data } = await api.get(`/sectors/${id}`)
       setName(data.name)
       setSector(data.sector)
       console.log(data)
@@ -35,17 +35,17 @@ const ResourceForm = (props) => {
     let obj = {name, sector}
     try {
       if(id){
-        const { status } = await api.put(`/events/${id}`, obj)
+        const { status } = await api.put(`/sectors/${id}`, obj)
 
         if(status === 200){
           console.log('update ')
         }
       }
 
-      const response = await api.post('/resources', obj)
+      const response = await api.post('/sectors', obj)
       if (response.status === 200) {
         //console.log(response.data)
-        history.push('/recursos/listar')
+        history.push('/setores/listar')
 
       }
     } catch (e) {
@@ -77,7 +77,7 @@ const ResourceForm = (props) => {
           <div className="card">
 
             <h5 className="card-header indigo white-text text-center py-4">
-              <strong>Informações do Recurso</strong>
+              <strong>Setor</strong>
             </h5>
             <div className="card-body px-lg-5">
 
@@ -87,17 +87,8 @@ const ResourceForm = (props) => {
                   <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} autoFocus={true} required />
                   <label htmlFor="name" >Name</label>
                 </div>
-                <div className="form-row">
-                  <select value={sector} className="form-control" onChange={e => setSector(e.target.value)} required>
-                    <option value="">Selecione o Setor</option>
-                    <option value="COMUNICAÇÃO">COMUNICAÇÃO</option>
-                    <option value="DETEC">DETEC</option>
-                    <option value="MANUTENÇÃO">MANUTENÇÃO</option>
-                  </select>
-                </div>
-
                 <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit">Salvar</button>
-                <Link className="btn btn-outline-danger" to='/recursos/listar'>Fechar</Link>
+                <Link className="btn btn-outline-danger" to='/setores/listar'>Fechar</Link>
 
               </form>
             </div>

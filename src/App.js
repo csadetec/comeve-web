@@ -20,6 +20,10 @@ import PlaceForm from './components/PlaceForm'
 import ResourceList from './components/ResourceList'
 import ResourceForm from './components/ResourceForm'
 
+//components sectors
+import SectorList from './components/SectorList'
+import SectorForm from './components/SectorForm'
+
 //components events with resources
 //import EventResourceForm from './components/EventResourceForm'
 
@@ -38,7 +42,7 @@ const App = () => {
       {logged ?
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ ResourceList } />
+        <Route exact={true} path='/' component={ SectorForm } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
@@ -50,6 +54,9 @@ const App = () => {
         <Route path='/recursos/listar' component={ResourceList} />
         <Route path='/recursos/cadastrar' component={ResourceForm} />
         <Route path='/recursos/editar/:id' component={ResourceForm} />
+
+        <Route path='/setores/listar' component={SectorList} />
+        <Route path='/setores/cadastrar' component={SectorForm} />
         
         <Redirect from='*' to='/' />
         <Footer />

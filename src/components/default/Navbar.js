@@ -8,6 +8,7 @@ const Navbar = () =>{
   const [eventos, setEventos] =useState('nav-item')
   const [locais, setLocais] = useState('nav-item')
   const [recursos, setRecursos] = useState('nav-item')
+  const [setores, setSetores ] = useState('nav-item')
 
   const handleLogout = () =>{
     localStorage.clear()
@@ -20,6 +21,7 @@ const Navbar = () =>{
     setEventos('nav-item')
     setLocais('nav-item')
     setRecursos('nav-item')
+    setSetores('nav-item')
 
     let pathname = window.location.pathname
     if(pathname === '/eventos/listar'){
@@ -33,13 +35,16 @@ const Navbar = () =>{
     if(pathname === '/recursos/listar'){
       return setRecursos('nav-item active')
     }
+    if(pathname === '/setores/listar'){
+      return setSetores('nav-item active')
+    }
 
     return setHome('nav-item active')
   }
   return (
     <header>
       <nav className="navbar navbar-expand-lg navbar-dark indigo mb-4 fixed-top">
-        <a className="navbar-brand" href="/">Comeve 12</a>
+        <a className="navbar-brand" href="/">Comeve</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"  aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -58,7 +63,9 @@ const Navbar = () =>{
             <li className={recursos}>
               <Link className="nav-link" to="/recursos/listar">Recursos</Link>
             </li>
-
+            <li className={setores}>
+              <Link className="nav-link" to="/setores/listar">Setores</Link>
+            </li>
             <li className="nav-item dropdown">
               <div className="nav-link dropdown-toggle cursor-pointer" id="navbarDropdownMenuLink" data-toggle="dropdown"
 aria-haspopup="true" aria-expanded="false" >{localStorage.getItem('username') }</div>

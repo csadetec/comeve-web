@@ -21,6 +21,6 @@ const api = axios.create({
     Authorization: 'Bearer ' + localStorage.getItem('token')
   }
 })
-console.log('23:38')
+//console.log('23:38')
 console.log(hostname())
 export default api
