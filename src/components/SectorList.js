@@ -21,7 +21,7 @@ const  SectorList = () => {
     <div className="container">
       <div className="row mb-3">
         <div className="col-md-12 border-bottom">
-          <Link type="button" className="btn btn-indigo float-right" to='/setores/cadastrar'>Cadastrar Setores</Link>
+          <Link type="button" className="btn btn-indigo float-right" to='/setores/cadastrar'>Cadastrar Setor</Link>
 
           <h2>Setores</h2>
         </div>

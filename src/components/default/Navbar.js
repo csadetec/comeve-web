@@ -68,7 +68,7 @@ const Navbar = () =>{
             </li>
             <li className="nav-item dropdown">
               <div className="nav-link dropdown-toggle cursor-pointer" id="navbarDropdownMenuLink" data-toggle="dropdown"
-aria-haspopup="true" aria-expanded="false" >{localStorage.getItem('username') }</div>
+aria-haspopup="true" aria-expanded="false" >{localStorage.getItem('name') }</div>
               <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                 <Link className="dropdown-item" to="/eventos/listar">Eventos</Link>
                 <a className="dropdown-item" href="/" onClick={handleLogout}>Sair</a>

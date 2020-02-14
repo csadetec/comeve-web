@@ -1,60 +1,77 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
+import logout from '../service/logout'
 
 const ResourceForm = (props) => {
 
   const [name, setName] = useState('')
   const [sector, setSector] = useState('')
   const [alert, setAlert] = useState(false)
-  const [h2, setH2 ] = useState('Cadastrar Recurso')
+  const [h2, setH2] = useState('Cadastrar Recurso')
+  const [listSectors, setListSectors] = useState([])
   const { id } = props.match.params
 
   const history = useHistory()
 
   useEffect(() => {
-    if(id === undefined){
+    async function loadSectors() {
+      const { data } = await api.get('/sectors')
+      setListSectors(data)
+      //console.log(data)
+      console.log('load sectors')
+    }
+    loadSectors()
+
+  }, [])
+
+  useEffect(() => {
+    if (id === undefined) {
       document.title = 'Cadastrar Recurso'
       return;
     }
     setH2('Editar Recurso')
     document.title = 'Editar Recurso'
-    async function loadResource(){
+    async function loadResource() {
       const { data } = await api.get(`/resources/${id}`)
       setName(data.name)
-      setSector(data.sector)
+      setSector(data.sector_id)
       console.log(data)
     }
     loadResource()
-  
+
   }, [id])
 
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    let obj = {name, sector}
+    let obj = { name, sector_id: sector }
+    //console.log(obj)
+    //return ;
     try {
-      if(id){
-        const { status } = await api.put(`/events/${id}`, obj)
+      if (id) {
+        const { status } = await api.put(`/resources/${id}`, obj)
 
-        if(status === 200){
-          console.log('update ')
+        if (status === 200) {
+          //console.log('update ')
+          setAlert('Atualizado com Sucesso')
+          return;
         }
       }
 
-      const response = await api.post('/resources', obj)
-      if (response.status === 200) {
-        //console.log(response.data)
-        history.push('/recursos/listar')
 
+      const { data } = await api.post('/resources', obj)
+      const { message } = data
+
+      if (message) {
+        setAlert(message)
+        return ;
       }
+      history.push('/recursos/listar')
+
     } catch (e) {
-
-      if (!e.response) {
-        return setAlert('Erro no Servidor!')
-      }
-      let { message } = e.response.data
-      setAlert(message)
+      
+      logout()
     }
 
     /** */
@@ -70,7 +87,7 @@ const ResourceForm = (props) => {
       <div className="row justify-content-center">
         <div className="col-md-8">
           {alert &&
-            <div className="alert alert-warning mt-2" role="alert">
+            <div className="alert alert-info mt-2" role="alert">
               {alert}
             </div>
           }
@@ -82,7 +99,7 @@ const ResourceForm = (props) => {
             <div className="card-body px-lg-5">
 
               <form className="text-center" onSubmit={handleSubmit}>
-     
+
                 <div className="md-form mt-3">
                   <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} autoFocus={true} required />
                   <label htmlFor="name" >Name</label>
@@ -90,9 +107,9 @@ const ResourceForm = (props) => {
                 <div className="form-row">
                   <select value={sector} className="form-control" onChange={e => setSector(e.target.value)} required>
                     <option value="">Selecione o Setor</option>
-                    <option value="COMUNICAÇÃO">COMUNICAÇÃO</option>
-                    <option value="DETEC">DETEC</option>
-                    <option value="MANUTENÇÃO">MANUTENÇÃO</option>
+                    {listSectors.map(r => 
+                      <option key={r.id} value={r.id}>{r.name}</option>                        
+                    )}
                   </select>
                 </div>
 
@@ -106,7 +123,7 @@ const ResourceForm = (props) => {
         </div>
       </div>
     </div>
-    
+
   )
 }
 

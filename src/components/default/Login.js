@@ -24,7 +24,7 @@ function Login() {
         password
       })
       localStorage.setItem('token', data.token)
-      localStorage.setItem('username', data.username)
+      localStorage.setItem('name', data.name)
       window.location.reload()
       //history.push('/home')
 

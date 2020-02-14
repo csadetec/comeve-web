@@ -21,6 +21,7 @@ const ResourceForm = (props) => {
     document.title = 'Editar Setor'
     async function loadResource(){
       const { data } = await api.get(`/sectors/${id}`)
+
       setName(data.name)
       setSector(data.sector)
       console.log(data)
@@ -38,23 +39,25 @@ const ResourceForm = (props) => {
         const { status } = await api.put(`/sectors/${id}`, obj)
 
         if(status === 200){
-          console.log('update ')
+          //onsole.log('update ')
+          setAlert('Atualizado com Sucesso')
         }
+        return ;
       }
 
-      const response = await api.post('/sectors', obj)
-      if (response.status === 200) {
-        //console.log(response.data)
-        history.push('/setores/listar')
-
+      //const { message } = await api.post('/sectors', obj)
+      const { data } = await api.post('/sectors', obj)
+      const { message } = data 
+      if (message) {
+        setAlert(message)
+        return ;
       }
+     history.push('/setores/listar')
+     /** */
     } catch (e) {
 
-      if (!e.response) {
-        return setAlert('Erro no Servidor!')
-      }
-      let { message } = e.response.data
-      setAlert(message)
+      localStorage.clear()
+      window.location.reload()
     }
 
     /** */
@@ -70,7 +73,7 @@ const ResourceForm = (props) => {
       <div className="row justify-content-center">
         <div className="col-md-8">
           {alert &&
-            <div className="alert alert-warning mt-2" role="alert">
+            <div className="alert alert-info mt-2" role="alert">
               {alert}
             </div>
           }

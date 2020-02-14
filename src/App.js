@@ -42,7 +42,7 @@ const App = () => {
       {logged ?
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ SectorForm } />
+        <Route exact={true} path='/' component={ ResourceForm } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
@@ -57,6 +57,7 @@ const App = () => {
 
         <Route path='/setores/listar' component={SectorList} />
         <Route path='/setores/cadastrar' component={SectorForm} />
+        <Route path='/setores/editar/:id' component={SectorForm} />
         
         <Redirect from='*' to='/' />
         <Footer />
