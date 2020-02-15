@@ -24,8 +24,8 @@ import ResourceForm from './components/ResourceForm'
 import SectorList from './components/SectorList'
 import SectorForm from './components/SectorForm'
 
-//components events with resources
-//import EventResourceForm from './components/EventResourceForm'
+//componets users
+import UserList from './components/UserList'
 
 const App = () => {
   const [logged, setLogged ] = useState(false)
@@ -42,15 +42,17 @@ const App = () => {
       {logged ?
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ ResourceForm } />
+        <Route exact={true} path='/' component={ PlaceList } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
         <Route path='/locais/cadastrar' component={PlaceForm} />
+        <Route path='/locais/editar/:id' component={PlaceForm} />
+
         <Route  path='/eventos/listar' component={ EventList } />
         <Route path='/eventos/cadastrar' component={ EventForm } />
-        {/*<Route path='/eventos//recursos' component={ EventResourceForm } />*/}
         <Route path='/eventos/editar/:id' component={EventForm} />
+
         <Route path='/recursos/listar' component={ResourceList} />
         <Route path='/recursos/cadastrar' component={ResourceForm} />
         <Route path='/recursos/editar/:id' component={ResourceForm} />
@@ -58,6 +60,8 @@ const App = () => {
         <Route path='/setores/listar' component={SectorList} />
         <Route path='/setores/cadastrar' component={SectorForm} />
         <Route path='/setores/editar/:id' component={SectorForm} />
+
+        <Route path='/usuarios/listar' component={UserList} />
         
         <Redirect from='*' to='/' />
         <Footer />

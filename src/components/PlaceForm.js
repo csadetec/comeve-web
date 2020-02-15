@@ -1,47 +1,63 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
+import logout from '../service/logout'
 
-function PlaceForm() {
+function PlaceForm(props) {
 
   const [name, setName] = useState('')
   const [alert, setAlert] = useState(false)
-
+  const [h2, setH2] = useState('Cadastrar Local')
+  const { id } = props.match.params
   const history = useHistory()
 
   useEffect(() => {
-    document.title = 'Cadastrar Local '
 
-    /*
-    async function loadEvents() {
-      const response = await api.get('/events')
- 
-      setEvents(response.data)
-      //console.log(response.data)
+    if(id === undefined){
+      document.title = 'Cadastrar Local'
+      return ;
+      //setH2('Editar Local')
     }
- 
-    loadEvents()
+    document.title = 'Cadastrar Local '
+    setH2('Editar Local')
+    async function loadPlace() {
+      const {data} = await api.get(`/places/${id}`)
+      setName(data.name)
+      //console.log(data)
+    }
+    loadPlace()
     /** */
-  }, [])
+  }, [id])
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
+    let obj = { name }
+    //console.log(obj)
 
     try {
-      const response = await api.post('/places', {
-        name
-      })
-      if (response.status === 200) {
-        history.push('/locais/listar')
+      
+      if(id){
+        const { status, data } = await api.put(`/places/${id}`, obj)
 
+        if(status === 200){
+          setAlert('Atualizado com Sucesso')
+          console.log(data)
+        }
+        return ;
       }
+      
+      const { data } = await api.post('/places', obj)
+      const { message } = data
+      
+      if (message) {
+        setAlert(message)
+        return ;
+      }
+      
+      history.push('/locais/listar')
     } catch (e) {
-
-      if (!e.response) {
-        return setAlert('Erro no Servidor!')
-      }
-      let { message } = e.response.data
-      setAlert(message)
+      logout()
+     
     }
 
 
@@ -51,13 +67,13 @@ function PlaceForm() {
     <div className="container pb-5">
       <div className="row mb-4">
         <div className="col-md-12 border-bottom">
-          <h2>Cadastrar Local</h2>
+          <h2>{h2}</h2>
         </div>
       </div>
       <div className="row justify-content-center">
         <div className="col-md-8">
           {alert &&
-            <div className="alert alert-warning mt-2" role="alert">
+            <div className="alert alert-info mt-2" role="alert">
               {alert}
             </div>
           }
@@ -71,7 +87,7 @@ function PlaceForm() {
             />
             <div className="text-center">
               <button className="btn btn-outline-indigo" type="submit">Salvar</button>
-              <Link className="btn btn-outline-danger" type="submit" to="/locais/listar">Cancelar</Link>
+              <Link className="btn btn-outline-danger" type="submit" to="/locais/listar">Fechar</Link>
             </div>
           </form>
         </div>
