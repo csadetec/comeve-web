@@ -32,7 +32,9 @@ const  UserList = () => {
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Nome</th>
+                <th scope="col">Usuário</th>
+                <th scope="col">Email</th>
+                <th scope="col">Setor</th>
                 <th scope="col">Editar</th>
               </tr>
             </thead>
@@ -40,7 +42,9 @@ const  UserList = () => {
               {users.map(r =>
                 <tr key={r.id}>
                   <th scope="row">{cont++}</th>
-                  <td>{r.name}</td>
+                  <td>{r.username}</td>
+                  <td>{r.email}</td>
+                  <td>{r.sector.name}</td>
                   <td><Link to={`/usuarios/editar/${r.id}`} title="Editar Usuário"><i className="fas fa-edit"></i></Link></td>
                 </tr>
               )}

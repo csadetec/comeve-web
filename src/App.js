@@ -26,6 +26,7 @@ import SectorForm from './components/SectorForm'
 
 //componets users
 import UserList from './components/UserList'
+import UserForm from './components/UserForm'
 
 const App = () => {
   const [logged, setLogged ] = useState(false)
@@ -42,7 +43,7 @@ const App = () => {
       {logged ?
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ PlaceList } />
+        <Route exact={true} path='/' component={ UserList } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' component={PlaceList} />
@@ -62,6 +63,8 @@ const App = () => {
         <Route path='/setores/editar/:id' component={SectorForm} />
 
         <Route path='/usuarios/listar' component={UserList} />
+        <Route path='/usuarios/cadastrar' component={UserForm} />
+        <Route path='/usuarios/editar/:id' component={UserForm} />
         
         <Redirect from='*' to='/' />
         <Footer />
