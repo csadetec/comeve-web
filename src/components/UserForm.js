@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 import logout from '../service/logout'
 
+import './style.css'
 const UserForm = (props) => {
 
   const [username, setUsername] = useState('')
@@ -18,7 +19,7 @@ const UserForm = (props) => {
   const history = useHistory()
 
   useEffect(() => {
-    async function loadSectors(){
+    async function loadSectors() {
       const { data } = await api.get('sectors')
 
       setSectors(data)
@@ -30,18 +31,19 @@ const UserForm = (props) => {
       document.title = 'Cadastrar Usuário'
       return;
     }
-    setH2('Editar Recurso')
-    document.title = 'Editar Recurso'
-    
+    setH2('Editar Usuário')
+    document.title = 'Editar Usuário'
+
+
     async function loadUser() {
       const { data } = await api.get(`/users/${id}`)
-    
+
       setUsername(data.username)
       setName(data.name)
       setEmail(data.email)
       setSectorId(data.sector_id)
       /** */
-  
+
     }
     loadUser()
     /** */
@@ -70,12 +72,12 @@ const UserForm = (props) => {
 
       if (message) {
         setAlert(message)
-        return ;
+        return;
       }
       history.push('/usuarios/listar')
 
     } catch (e) {
-      
+
       logout()
     }
 
@@ -91,11 +93,7 @@ const UserForm = (props) => {
       </div>
       <div className="row justify-content-center">
         <div className="col-md-8">
-          {alert &&
-            <div className="alert alert-info mt-2" role="alert">
-              {alert}
-            </div>
-          }
+
           <div className="card">
 
             <h5 className="card-header indigo white-text text-center py-4">
@@ -104,28 +102,33 @@ const UserForm = (props) => {
             <div className="card-body px-lg-5">
 
               <form className="text-center" onSubmit={handleSubmit}>
+                {alert &&
+                  <div className="alert alert-info mt-2" role="alert">
+                    {alert}
+                  </div>
+                }
 
                 <div className="md-form mt-3">
                   <input type="text" id="username" className="form-control" value={username} onChange={e => setUsername(e.target.value)} autoFocus={true} required />
-                  <label htmlFor="username" >Usuário</label>
+                  <label htmlFor="username" className="{active: Title}" >Usuário</label>
                 </div>
                 <div className="md-form mt-3">
-                  <input type="password" id="password" className="form-control" value={password} onChange={e => setPassword(e.target.value)} autoFocus={true}  />
+                  <input type="password" id="password" className="form-control" value={password} onChange={e => setPassword(e.target.value)} />
                   <label htmlFor="password" >Senha</label>
                 </div>
                 <div className="md-form mt-3">
-                  <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} autoFocus={true} required />
+                  <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} required />
                   <label htmlFor="name" >Nome</label>
                 </div>
                 <div className="md-form mt-3">
-                  <input type="email" id="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} autoFocus={true} required />
+                  <input type="email" id="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
                   <label htmlFor="email" >Email</label>
                 </div>
                 <div className="form-row">
                   <select value={sector_id} className="form-control" onChange={e => setSectorId(e.target.value)} required>
                     <option value="">Selecione o Setor</option>
-                    {sectors.map(r => 
-                      <option key={r.id} value={r.id}>{r.name}</option>                        
+                    {sectors.map(r =>
+                      <option key={r.id} value={r.id}>{r.name}</option>
                     )}
                   </select>
                 </div>

@@ -1,0 +1,15 @@
+.cursor-pointer{
+  cursor: pointer;
+}
+.cursor-pointer:hover{
+  background-color: #80808017;
+
+}
+.icon-green{
+  font-size: 20px;
+  color: green;
+}
+.icon-orange{
+  font-size: 20px;
+  color: orange;
+}

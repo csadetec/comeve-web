@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 
 function EventList() {
 
   const [events, setEvents] = useState([])
+  let history = useHistory()
+
   //let cont = 1
 
   useEffect(() => {
@@ -23,15 +25,33 @@ function EventList() {
     let d = new Date(dateString)
     let month = String(d.getMonth() + 1);
     let day = String(d.getDate());
-    const year = String(d.getFullYear());
+    //const year = String(d.getFullYear());
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
 
-    return `${day}/${month}/${year}`;
+    return `${day}/${month}`;
   }
 
+  const timeFormat = (time) => {
+    return time.slice(0, 5)
 
+  }
+
+  const handleClick = (id) => {
+    history.push(`/eventos/editar/${id}`)
+  }
+
+  const title = (date, name, resource) => {
+    let txt = ``
+    +`Editar ${name} - ${dateFormat(date)}\n`
+
+    txt += resource.map( r => {
+      return '\n'+r.name
+    })
+
+    return txt
+  }
   return (
     <div className="container">
       <div className="row mb-3">
@@ -43,31 +63,32 @@ function EventList() {
       </div>
       <div className="row">
         <div className="col-md-12">
-          <ul className="list-group">
-            {events.map(r =>
-              <li key={r.id} className="list-group-item">
-                <div className="row">
-                  <div className="col-md-3">
-                    <h4>{r.name}</h4>
-                    <p>{r.user.username} | {r.place.name}</p>
-                  </div>
-                  <div className="col-md-4">
-                    <ul className="list-group">
-                      {r.resource.map((i) => 
-                        <li key={i.id} className="list-group-item">{i.name}</li>
-                      )}
-                    </ul>
-
-                  </div>
-                  <div className="col-md-5">
-                    <sub className="float-right">{dateFormat(r.date)}</sub><br />
-                    <sub className="float-right">{r.start} - {r.end}</sub><br />
-                    <Link type="button" className="btn btn-outline-indigo float-right" to={`/eventos/editar/${r.id}`}><i className="fas fa-edit"></i>Editar</Link>
-                  </div>
-                </div>
-              </li>
-            )}
-          </ul>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Horas</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Local</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events.map(r =>
+                <tr 
+                  title={title(r.date, r.name,  r.resource)}
+                  onClick={() => handleClick(r.id)} key={r.id} className="cursor-pointer">
+                  <th>{dateFormat(r.date)}</th>
+                  <td>{timeFormat(r.start)} - {timeFormat(r.end)}</td>
+                  <td>{r.name}</td>
+                  <td>{r.place.name}</td>
+                  <td>
+                    <i className="fas fa-check-circle icon-green"></i>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

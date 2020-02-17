@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 
-import './EventForm.css'
+import './Event.css'
 
 function EventForm(props) {
 
@@ -132,7 +132,7 @@ function EventForm(props) {
       </div>
       <div className="row border border-light p-4">
 
-        <div className="col-md-8">
+        <div className="col-md-7">
           <form onSubmit={handleSubmit}>
             <label htmlFor="name">Nome</label>
             <input type="text" id="name" className="form-control mb-4" placeholder="Nome do eventos .."
@@ -192,7 +192,7 @@ function EventForm(props) {
             </div>
           </form>
         </div>
-        <div className="col-md-4 border-left">
+        <div className="col-md-5 border-left">
           <h4>
             Recursos
           </h4>
