@@ -76,7 +76,7 @@ const UserForm = (props) => {
 
     } catch (e) {
       
-      //logout()
+      logout()
     }
 
     /** */
