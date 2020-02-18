@@ -9,7 +9,7 @@ const hostname = () => {
     return 'http://localhost:8001' 
   }
   if(app === 'teste-comeve.netlify.com' || app === 'comeve.netlify.com'){
-    return 'https://comeve.azurewebsites.net/'
+    return 'https://csa-comeve.azurewebsites.net/'
     //return 'https://comeve.detec.site'
   }
   //https://comeve.netlify.com/
