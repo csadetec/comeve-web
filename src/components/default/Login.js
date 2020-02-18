@@ -36,7 +36,7 @@ function Login() {
       if (!e.response) {
         return setAlert('Erro no Servidor!')
       }
-
+      console.log(e.response)
       let { field } = e.response.data[0]
 
       if (field === 'username') {
