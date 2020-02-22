@@ -8,6 +8,10 @@ function PlaceForm(props) {
   const [name, setName] = useState('')
   const [alert, setAlert] = useState(false)
   const [h2, setH2] = useState('Cadastrar Local')
+  const [btndisabled, setBtndisabled ] = useState(false)
+  const [btnLabel, setBtnLabel ] = useState('Salvar')
+  //console.log(btnLabel)
+
   const { id } = props.match.params
   const history = useHistory()
 
@@ -33,9 +37,10 @@ function PlaceForm(props) {
     e.preventDefault()
     let obj = { name }
     //console.log(obj)
-
+    setBtnLabel('SALVANDO ...')
+    setBtndisabled(true)
     try {
-      
+   
       if(id){
         const { status, data } = await api.put(`/places/${id}`, obj)
 
@@ -51,6 +56,8 @@ function PlaceForm(props) {
       
       if (message) {
         setAlert(message)
+        setBtnLabel('Salvar')
+        setBtndisabled(false)
         return ;
       }
       
@@ -86,7 +93,7 @@ function PlaceForm(props) {
               required
             />
             <div className="text-center">
-              <button className="btn btn-outline-indigo" type="submit">Salvar</button>
+              <button className="btn btn-outline-indigo" type="submit" disabled={btndisabled}>{btnLabel}</button>
               <Link className="btn btn-outline-danger" type="submit" to="/locais/listar">Fechar</Link>
             </div>
           </form>

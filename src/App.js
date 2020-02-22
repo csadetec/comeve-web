@@ -42,35 +42,38 @@ const App = () => {
     if(token){
       setLogged(true)
     }
-
-    async function loadEventos(){
-      const { data } = await api.get('/events')
-      setEvents(data)
-    }
-    async function loadPlaces(){
-      const { data } = await api.get('/places')
-      setPlaces(data)
-    }
-    async function loadResources(){
-      const { data } = await api.get('/resources')
-      setResources(data)
-    }
-    async function loadSectors(){
-      const { data } = await api.get('/sectors')
-      setSectors(data)
-    }
-    async function loadUsers(){
-      const { data } = await api.get('/users')
-      setUsers(data)
-      //console.log(data)
-    }
-
     loadEventos()
     loadPlaces()
     loadResources()
     loadSectors()
     loadUsers()
+   
+    
   }, [])
+
+
+
+  async function loadEventos(){
+    const { data } = await api.get('/events')
+    setEvents(data)
+  }
+  async function loadPlaces(){
+    const { data } = await api.get('/places')
+    setPlaces(data)
+  }
+  async function loadResources(){
+    const { data } = await api.get('/resources')
+    setResources(data)
+  }
+  async function loadSectors(){
+    const { data } = await api.get('/sectors')
+    setSectors(data)
+  }
+  async function loadUsers(){
+    const { data } = await api.get('/users')
+    setUsers(data)
+    //console.log(data)
+  }
 
   return (
     <>
@@ -81,12 +84,12 @@ const App = () => {
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' >
-          <PlaceList places={places} />
+          <PlaceList places={places} load={loadPlaces} />
         </Route>
-
-
-        <Route path='/locais/cadastrar' component={PlaceForm} />
         <Route path='/locais/editar/:id' component={PlaceForm} />
+
+        <Route path='/locais/cadastrar' component={PlaceForm}/>
+         
 
         <Route  path='/eventos/listar'>
           <EventList events={events} />
