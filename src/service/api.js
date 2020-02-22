@@ -3,10 +3,10 @@ import axios from 'axios'
 const hostname = () => {
   const app = window.location.hostname 
   if(app === '10.20.2.22'){
-    return 'http://10.20.2.22:8001'
+    return 'http://10.20.2.22:8000/api'
   }
   if(app === 'localhost'){
-    return 'http://localhost:8001' 
+    return 'http://localhost:8000/api' 
   }
   if(app === 'teste-comeve.netlify.com' || app === 'comeve.netlify.com'){
     return 'https://csa-comeve.azurewebsites.net/'

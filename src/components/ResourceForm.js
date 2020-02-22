@@ -36,7 +36,7 @@ const ResourceForm = (props) => {
       const { data } = await api.get(`/resources/${id}`)
       setName(data.name)
       setSector(data.sector_id)
-      console.log(data)
+      //console.log(data)
     }
     loadResource()
 

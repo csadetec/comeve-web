@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
+import logout from '../service/logout'
 
 function EventList() {
 
@@ -12,9 +13,15 @@ function EventList() {
   useEffect(() => {
     document.title = 'Eventos'
     async function loadEvents() {
-      const { data } = await api.get('/events')
+      try{
+        const { data } = await api.get('/events')
 
-      setEvents(data)
+        setEvents(data)
+  
+      }catch(e){
+        logout();
+        // console.log(e)
+      }
       //console.log(data)
     }
 
@@ -43,12 +50,14 @@ function EventList() {
   }
 
   const title = (date, name, resource) => {
+    
     let txt = ``
     +`Editar ${name} - ${dateFormat(date)}\n`
-
+    
     txt += resource.map( r => {
       return '\n'+r.name
     })
+    /** */
 
     return txt
   }
@@ -74,9 +83,10 @@ function EventList() {
               </tr>
             </thead>
             <tbody>
-              {events.map(r =>
+            
+              {events && events.map(r =>
                 <tr 
-                  title={title(r.date, r.name,  r.resource)}
+                  title={title(r.date, r.name,  r.resources)}
                   onClick={() => handleClick(r.id)} key={r.id} className="cursor-pointer">
                   <th>{dateFormat(r.date)}</th>
                   <td>{timeFormat(r.start)} - {timeFormat(r.end)}</td>

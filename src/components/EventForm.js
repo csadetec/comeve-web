@@ -14,7 +14,7 @@ function EventForm(props) {
   const [places, setPlaces] = useState([])
   const [resource, setResources] = useState([])
   const [searchResource] = useState('')
-  const [itemsResources, setItemsResources] = useState([])
+  const [itensResources, setItensResources] = useState([])
   const [h2, setH2] = useState('Cadastrar Evento')
   const [alert, setAlert] = useState(false)
   const { id } = props.match.params
@@ -30,14 +30,14 @@ function EventForm(props) {
     setH2('Editar Evento')
     async function loadEvent() {
       const { data } = await api.get(`/events/${id}`)
-      setName(data[0].name)
-      setPlace_id(data[0].place_id)
-      setDate(data[0].date)
-      setStart(data[0].start)
-      setEnd(data[0].end)
-      setItemsResources(data[0].resource)
-      //console.log(data)
-      //console.log('editar evento')
+      
+      setName(data.name)
+      setPlace_id(data.place_id)
+      setDate(data.date)
+      setStart(data.start)
+      setEnd(data.end)
+      setItensResources(data.resources)
+     
     }
     loadEvent()
 
@@ -63,12 +63,14 @@ function EventForm(props) {
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    const obj = { name, place_id, date, start, end, itemsResources }
-    //console.log(obj)
-
+    const obj = { name, place_id, date, start, end, itensResources }
+    
+    console.log(obj)
+    //return;
     if (id) {
-      const { status } = await api.put(`/events/${id}`, obj)
-
+      const {status } = await api.put(`/events/${id}`, obj)
+      
+ //     console.log(data);
       if (status === 200) {
         setAlert('Atualizado com Sucesso!')
         //console.log('update com sucess')
@@ -81,7 +83,7 @@ function EventForm(props) {
     const response = await api.post('/events', obj)
     console.log(response)
 
-    if (response.status === 200) {
+    if (response.status === 201) {
       history.push(`/eventos/listar`)
     }
 
@@ -95,23 +97,23 @@ function EventForm(props) {
       return r.id === itemSelected
     })
 
-    let testFind = itemsResources.filter((r) => {
+    let testFind = itensResources.filter((r) => {
       return r.id === itemSelected
     })
 
     if (testFind.length === 0) {
-      setItemsResources([...itemsResources, obj[0]])
+      setItensResources([...itensResources, obj[0]])
 
     }
   }
 
   const deleteResource = (id) => {
     ///console.log('excluir resource', id)
-    let filter = itemsResources.filter( r => {
+    let filter = itensResources.filter( r => {
       return r.id !== id
     })
 
-    setItemsResources(filter)
+    setItensResources(filter)
     //console.log(filter)
 
   }
@@ -197,7 +199,7 @@ function EventForm(props) {
             Recursos
           </h4>
           <ul className="list-group">
-            {itemsResources.map(r =>
+            {itensResources.map(r =>
               <li key={r.id} className="list-group-item cursor-pointer" onClick={() => deleteResource(r.id)} title="Retirar Recurso">
                 {r.name}
                 <i className="fas fa-times-circle float-right"></i>

@@ -3,7 +3,7 @@ import api from '../../service/api'
 
 
 function Login() {
-  const [username, setUsername] = useState('detec123')
+  const [email, setEmail] = useState('teste@gmail')
   const [password, setPassword] = useState('teste')
   const [alert, setAlert] = useState(false)
   const [btnLabel, setBtnLabel] = useState('ENTRAR')
@@ -17,18 +17,17 @@ function Login() {
     e.preventDefault()
     setBtnLabel('Carregando ...')
     setBtnStatus(true)
+    let obj = {email, password}
+    //console.log(obj)
     try {
 
-      const { data } = await api.post('/authenticate', {
-        username,
-        password
-      })
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('name', data.name)
+      const { data } = await api.post('/login', obj)
+      
+      localStorage.setItem('token', data.access_token)
+      localStorage.setItem('name', data.user.name)
       window.location.reload()
-      //history.push('/home')
-
-      //console.log(response.data)
+      /** */
+      console.log(data)
     } catch (e) {
       setBtnLabel('ENTRAR')
       setBtnStatus(false)
@@ -36,11 +35,13 @@ function Login() {
       if (!e.response) {
         return setAlert('Erro no Servidor!')
       }
-      console.log(e.response)
-      let { field } = e.response.data[0]
+      //console.log(e.response)
+      //return ;
+      let { error } = e.response.data
+      console.log(error)
 
-      if (field === 'username') {
-        setAlert('Usuário não cadastrado')
+      if (error === 'Email not exist') {
+        setAlert('E-mail não cadastrado')
         return false;
       }
 
@@ -63,7 +64,7 @@ function Login() {
           <form className="border border-light p-5" onSubmit={handleSubmit}>
 
             <input type="text" className="form-control mb-4" placeholder="Usuario"
-              value={username} onChange={e => setUsername(e.target.value)}
+              value={email} onChange={e => setEmail(e.target.value)}
               required
             />
             <input type="password" className="form-control mb-4" placeholder="Senha"
