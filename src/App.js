@@ -63,6 +63,7 @@ const App = () => {
   }
   async function loadResources(){
     const { data } = await api.get('/resources')
+   // return data
     setResources(data)
   }
   async function loadSectors(){
@@ -77,14 +78,14 @@ const App = () => {
 
   return (
     <>
-      {logged ?
+      {logged ? 
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ Home } />
+        <Route exact={true} path='/' component={ SectorList } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' >
-          <PlaceList places={places} load={loadPlaces} />
+          <PlaceList places={places}  />
         </Route>
         <Route path='/locais/editar/:id' component={PlaceForm} />
 
@@ -98,7 +99,7 @@ const App = () => {
         <Route path='/eventos/editar/:id' component={EventForm} />
 
         <Route path='/recursos/listar'>
-          <ResourceList resources={resources} />
+          <ResourceList resources={resources} load={loadResources}/>
         </Route>
 
 

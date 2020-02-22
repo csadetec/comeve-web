@@ -2,58 +2,65 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 
+import Loading from './default/Loading'
+import Alert from './default/Alert'
+
+
 const ResourceForm = (props) => {
 
   const [name, setName] = useState('')
-  const [sector, setSector] = useState('')
+  //const [sector, setSector] = useState('')
   const [alert, setAlert] = useState(false)
-  const [h2, setH2 ] = useState('Cadastrar Setor')
+  const [h2, setH2] = useState('Cadastrar Setor')
+  const [loading, setLoading] = useState(false)
   const { id } = props.match.params
 
   const history = useHistory()
 
   useEffect(() => {
-    if(id === undefined){
+    if (id === undefined) {
       document.title = 'Cadastrar Setor'
       return;
     }
     setH2('Editar Setor')
     document.title = 'Editar Setor'
-    async function loadResource(){
+    setLoading(true)
+    async function loadResource() {
       const { data } = await api.get(`/sectors/${id}`)
 
       setName(data.name)
-      setSector(data.sector)
+      setLoading(false)
+      // setSector(data.sector)
       //console.log(data)
     }
     loadResource()
-  
+
   }, [id])
 
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    let obj = {name, sector}
+    let obj = { name }
     try {
-      if(id){
+      if (id) {
         const { status } = await api.put(`/sectors/${id}`, obj)
 
-        if(status === 200){
+        if (status === 200) {
           //onsole.log('update ')
           setAlert('Atualizado com Sucesso')
         }
-        return ;
+        return;
       }
 
       //const { message } = await api.post('/sectors', obj)
       const { data } = await api.post('/sectors', obj)
-      const { message } = data 
+      const { message } = data
       if (message) {
         setAlert(message)
-        return ;
+        return;
       }
-     history.push('/setores/listar')
-     /** */
+      history.push('/setores/listar')
+      /** */
     } catch (e) {
 
       localStorage.clear()
@@ -64,6 +71,7 @@ const ResourceForm = (props) => {
   }
 
   return (
+
     <div className="container pb-5">
       <div className="row mb-4">
         <div className="col-md-12 border-bottom">
@@ -71,36 +79,41 @@ const ResourceForm = (props) => {
         </div>
       </div>
       <div className="row justify-content-center">
-        <div className="col-md-8">
-          {alert &&
-            <div className="alert alert-info mt-2" role="alert">
-              {alert}
-            </div>
-          }
-          <div className="card">
+        {loading ?
+          <Loading />
+          :
 
-            <h5 className="card-header indigo white-text text-center py-4">
-              <strong>Setor</strong>
-            </h5>
-            <div className="card-body px-lg-5">
+          <div className="col-md-8">
 
-              <form className="text-center" onSubmit={handleSubmit}>
-     
-                <div className="md-form mt-3">
-                  <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} autoFocus={true} required />
-                  <label htmlFor="name" >Name</label>
-                </div>
-                <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit">Salvar</button>
-                <Link className="btn btn-outline-danger" to='/setores/listar'>Fechar</Link>
+            <div className="card">
 
-              </form>
+              <h5 className="card-header indigo white-text text-center py-4">
+                <strong>Setor</strong>
+              </h5>
+
+              <div className="card-body px-lg-5">
+                {alert &&
+                  <Alert msg={alert} />
+                }
+                <form className="text-center mt-3" onSubmit={handleSubmit}>
+
+                  <div className="md-form mt-3">
+                    <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} autoFocus={true} required />
+                    <label htmlFor="name" >Name</label>
+                  </div>
+                  <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit">Salvar</button>
+                  <Link className="btn btn-outline-danger" to='/setores/listar'>Fechar</Link>
+
+                </form>
+              </div>
+
             </div>
 
           </div>
-        </div>
+        }
       </div>
+
     </div>
-    
   )
 }
 

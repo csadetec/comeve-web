@@ -10,6 +10,8 @@ const ResourceForm = (props) => {
   const [alert, setAlert] = useState(false)
   const [h2, setH2] = useState('Cadastrar Recurso')
   const [listSectors, setListSectors] = useState([])
+  const [btnLabel, setBtnLabel ] = useState('Salvar')
+  const [btnDisabled, setBtnDisabled] = useState(false)
   const { id } = props.match.params
 
   const history = useHistory()
@@ -18,8 +20,6 @@ const ResourceForm = (props) => {
     async function loadSectors() {
       const { data } = await api.get('/sectors')
       setListSectors(data)
-      //console.log(data)
-      console.log('load sectors')
     }
     loadSectors()
 
@@ -46,8 +46,9 @@ const ResourceForm = (props) => {
   async function handleSubmit(e) {
     e.preventDefault()
     let obj = { name, sector_id: sector }
-    //console.log(obj)
-    //return ;
+    setBtnLabel('Salvando ...')
+    setBtnDisabled(true)
+
     try {
       if (id) {
         const { status } = await api.put(`/resources/${id}`, obj)
@@ -65,6 +66,8 @@ const ResourceForm = (props) => {
 
       if (message) {
         setAlert(message)
+        setBtnLabel('Salvar')
+        setBtnDisabled(false)
         return ;
       }
       history.push('/recursos/listar')
@@ -113,7 +116,7 @@ const ResourceForm = (props) => {
                   </select>
                 </div>
 
-                <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit">Salvar</button>
+                <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit" disabled={btnDisabled}>{btnLabel}</button>
                 <Link className="btn btn-outline-danger" to='/recursos/listar'>Fechar</Link>
 
               </form>

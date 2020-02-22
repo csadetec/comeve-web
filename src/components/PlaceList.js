@@ -4,8 +4,7 @@ import api from '../service/api'
 
 function PlaceList(props) {
   const [places, setPlaces] = useState(props.places)
-  //const [load, setLoad ] = useState(props.load)
-  //const [cont, setCont ] = useState(0)
+
  
   let cont = 1
 
@@ -14,7 +13,6 @@ function PlaceList(props) {
     async function loadPlaces(){
       const { data } = await api.get('/places')
       setPlaces(data)
-      //console.log(data)
     }
     loadPlaces()
   }, [])

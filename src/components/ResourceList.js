@@ -4,16 +4,17 @@ import api from '../service/api'
 
 const  ResourceList = (props) => {
   const [resources, setResources ] = useState(props.resources)
+  //const [resources, setResources ] = useState([])
+  //const { load } = props
   let cont = 1
-
   useEffect(() => {
     document.title = 'Recursos'
+
     async function loadResources(){
+     
       const { data } = await api.get('/resources')
       setResources(data)
-   
-      ///console.log(response.data)
-    }
+     }
     loadResources()
   }, [])
 
