@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 //import url from './service/url'
+import api from './service/api'
 
 //components default
 import Navbar from './components/default/Navbar'
@@ -30,12 +31,45 @@ import UserForm from './components/UserForm'
 
 const App = () => {
   const [logged, setLogged ] = useState(false)
+  const [events, setEvents ] = useState([])
+  const [places, setPlaces ] = useState([])
+  const [resources, setResources ] = useState([])
+  const [sectors, setSectors ] = useState([])
+  const [users, setUsers] = useState([])
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     if(token){
       setLogged(true)
     }
+
+    async function loadEventos(){
+      const { data } = await api.get('/events')
+      setEvents(data)
+    }
+    async function loadPlaces(){
+      const { data } = await api.get('/places')
+      setPlaces(data)
+    }
+    async function loadResources(){
+      const { data } = await api.get('/resources')
+      setResources(data)
+    }
+    async function loadSectors(){
+      const { data } = await api.get('/sectors')
+      setSectors(data)
+    }
+    async function loadUsers(){
+      const { data } = await api.get('/users')
+      setUsers(data)
+      //console.log(data)
+    }
+
+    loadEventos()
+    loadPlaces()
+    loadResources()
+    loadSectors()
+    loadUsers()
   }, [])
 
   return (
@@ -43,26 +77,42 @@ const App = () => {
       {logged ?
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ UserList } />
+        <Route exact={true} path='/' component={ Home } />
         <Route path='/home' component={ Home } />
      
-        <Route path='/locais/listar' component={PlaceList} />
+        <Route path='/locais/listar' >
+          <PlaceList places={places} />
+        </Route>
+
+
         <Route path='/locais/cadastrar' component={PlaceForm} />
         <Route path='/locais/editar/:id' component={PlaceForm} />
 
-        <Route  path='/eventos/listar' component={ EventList } />
+        <Route  path='/eventos/listar'>
+          <EventList events={events} />
+        </Route>
         <Route path='/eventos/cadastrar' component={ EventForm } />
         <Route path='/eventos/editar/:id' component={EventForm} />
 
-        <Route path='/recursos/listar' component={ResourceList} />
+        <Route path='/recursos/listar'>
+          <ResourceList resources={resources} />
+        </Route>
+
+
         <Route path='/recursos/cadastrar' component={ResourceForm} />
         <Route path='/recursos/editar/:id' component={ResourceForm} />
 
-        <Route path='/setores/listar' component={SectorList} />
+        <Route path='/setores/listar'  >
+          <SectorList sectors={sectors} />
+        </Route>
         <Route path='/setores/cadastrar' component={SectorForm} />
         <Route path='/setores/editar/:id' component={SectorForm} />
 
-        <Route path='/usuarios/listar' component={UserList} />
+        <Route path='/usuarios/listar'>
+          <UserList users={users} />
+        </Route>
+
+
         <Route path='/usuarios/cadastrar' component={UserForm} />
         <Route path='/usuarios/editar/:id' component={UserForm} />
         

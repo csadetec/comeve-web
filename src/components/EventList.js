@@ -3,12 +3,10 @@ import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 import logout from '../service/logout'
 
-function EventList() {
+function EventList(props) {
 
-  const [events, setEvents] = useState([])
+  const [events, setEvents] = useState(props.events)
   let history = useHistory()
-
-  //let cont = 1
 
   useEffect(() => {
     document.title = 'Eventos'

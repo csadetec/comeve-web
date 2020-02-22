@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../service/api'
 
-const  UserList = () => {
-  const [users, setUsers ] = useState([])
+const  UserList = (props) => {
+  const [users, setUsers ] = useState(props.users)
+  //const [users, setUsers ] = useState([])
   let cont = 1
 
   useEffect(() => {

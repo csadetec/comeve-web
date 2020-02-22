@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../service/api'
 
-const  ResourceList = () => {
-  const [resources, setResources ] = useState([])
+const  ResourceList = (props) => {
+  const [resources, setResources ] = useState(props.resources)
   let cont = 1
 
   useEffect(() => {

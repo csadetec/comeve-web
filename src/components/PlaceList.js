@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../service/api'
 
-function PlaceList() {
-  const [places, setPlaces ] = useState([])
+function PlaceList(props) {
+  const [places, setPlaces ] = useState(props.places)
   //const [cont, setCont ] = useState(0)
   let cont = 1
 
