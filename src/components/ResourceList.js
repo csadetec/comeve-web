@@ -9,10 +9,10 @@ const  ResourceList = () => {
   useEffect(() => {
     document.title = 'Recursos'
     async function loadResources(){
-      const response = await api.get('/resources')
-      setResources(response.data)
+      const { data } = await api.get('/resources')
+      setResources(data)
    
-      console.log(response.data)
+      ///console.log(response.data)
     }
     loadResources()
   }, [])

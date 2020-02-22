@@ -6,7 +6,6 @@ import logout from '../service/logout'
 import './style.css'
 const UserForm = (props) => {
 
-  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -38,7 +37,6 @@ const UserForm = (props) => {
     async function loadUser() {
       const { data } = await api.get(`/users/${id}`)
 
-      setUsername(data.username)
       setName(data.name)
       setEmail(data.email)
       setSectorId(data.sector_id)
@@ -52,14 +50,16 @@ const UserForm = (props) => {
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    let obj = { username, password, name, email, sector_id }
-    //console.log(obj)
-    //return ;
+    let obj = { email, password, name,  sector_id }
+    /*
+    console.log(obj)
+    return ;
+    /** */
     try {
       if (id) {
-        const { data, status } = await api.put(`/users/${id}`, obj)
+        const { status } = await api.put(`/users/${id}`, obj)
 
-        console.log(data)
+        //console.log(data)
         if (status === 200) {
           //console.log('update ')
           setAlert('Usuário Atualizado com Sucesso')
@@ -77,7 +77,7 @@ const UserForm = (props) => {
       history.push('/usuarios/listar')
 
     } catch (e) {
-
+      console.log(e)
       logout()
     }
 
@@ -107,11 +107,11 @@ const UserForm = (props) => {
                     {alert}
                   </div>
                 }
-
                 <div className="md-form mt-3">
-                  <input type="text" id="username" className="form-control" value={username} onChange={e => setUsername(e.target.value)} autoFocus={true} required />
-                  <label htmlFor="username" className="{active: Title}" >Usuário</label>
+                  <input type="email" id="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
+                  <label htmlFor="email" >Email</label>
                 </div>
+
                 <div className="md-form mt-3">
                   <input type="password" id="password" className="form-control" value={password} onChange={e => setPassword(e.target.value)} />
                   <label htmlFor="password" >Senha</label>
@@ -120,10 +120,7 @@ const UserForm = (props) => {
                   <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} required />
                   <label htmlFor="name" >Nome</label>
                 </div>
-                <div className="md-form mt-3">
-                  <input type="email" id="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
-                  <label htmlFor="email" >Email</label>
-                </div>
+
                 <div className="form-row">
                   <select value={sector_id} className="form-control" onChange={e => setSectorId(e.target.value)} required>
                     <option value="">Selecione o Setor</option>

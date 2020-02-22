@@ -24,7 +24,7 @@ const ResourceForm = (props) => {
 
       setName(data.name)
       setSector(data.sector)
-      console.log(data)
+      //console.log(data)
     }
     loadResource()
   

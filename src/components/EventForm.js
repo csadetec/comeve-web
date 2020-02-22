@@ -65,7 +65,7 @@ function EventForm(props) {
     e.preventDefault()
     const obj = { name, place_id, date, start, end, itensResources }
     
-    console.log(obj)
+    //console.log(obj)
     //return;
     if (id) {
       const {status } = await api.put(`/events/${id}`, obj)
@@ -80,10 +80,9 @@ function EventForm(props) {
       return;
     }
 
-    const response = await api.post('/events', obj)
-    console.log(response)
+    const { status } = await api.post('/events', obj)
 
-    if (response.status === 201) {
+    if (status === 201) {
       history.push(`/eventos/listar`)
     }
 
