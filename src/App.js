@@ -81,7 +81,7 @@ const App = () => {
       {logged ? 
       <Router >
         <Navbar />
-        <Route exact={true} path='/' component={ SectorList } />
+        <Route exact={true} path='/' component={ Home } />
         <Route path='/home' component={ Home } />
      
         <Route path='/locais/listar' >

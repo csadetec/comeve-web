@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import api from '../service/api'
 
 const  SectorList = (props) => {
-  //const [sectors, setSectors ] = useState(props.sectors)
-  const [sectors, setSectors ] = useState([])
+  const [sectors, setSectors ] = useState(props.sectors)
+  //const [sectors, setSectors ] = useState([])
   let cont = 1
 
   useEffect(() => {

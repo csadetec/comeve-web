@@ -12,7 +12,7 @@ const ResourceForm = (props) => {
   //const [sector, setSector] = useState('')
   const [alert, setAlert] = useState(false)
   const [h2, setH2] = useState('Cadastrar Setor')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const { id } = props.match.params
 
   const history = useHistory()
@@ -20,11 +20,12 @@ const ResourceForm = (props) => {
   useEffect(() => {
     if (id === undefined) {
       document.title = 'Cadastrar Setor'
+      setLoading(false)
       return;
     }
     setH2('Editar Setor')
     document.title = 'Editar Setor'
-    setLoading(true)
+    //setLoading(true)
     async function loadResource() {
       const { data } = await api.get(`/sectors/${id}`)
 
