@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../service/api'
+import logout from '../service/logout'
 
 const  UserList = (props) => {
   const [users, setUsers ] = useState(props.users)
@@ -10,8 +11,13 @@ const  UserList = (props) => {
   useEffect(() => {
     document.title = 'Usuários'
     async function loadUsers(){
-      const { data } = await api.get('/users')
-      setUsers(data)
+      try{
+        const { data } = await api.get('/users')
+        setUsers(data)
+  
+      }catch(e){
+        logout()
+      }
    
     }
     loadUsers()

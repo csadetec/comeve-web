@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../service/api'
+import logout from '../service/logout'
 
 const  ResourceList = (props) => {
   const [resources, setResources ] = useState(props.resources)
@@ -11,9 +12,12 @@ const  ResourceList = (props) => {
     document.title = 'Recursos'
 
     async function loadResources(){
-     
-      const { data } = await api.get('/resources')
-      setResources(data)
+      try{
+        const { data } = await api.get('/resources')
+        setResources(data)  
+      }catch(e){
+        logout()
+      }
      }
     loadResources()
   }, [])
