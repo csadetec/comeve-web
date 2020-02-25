@@ -13,7 +13,7 @@ const hostname = () => {
     //return 'https://comeve.detec.site'
   }
   if(app === 'd-comeve.netlify.com'){
-    return 'https://comeve.servico.site'
+    return 'https://comeve.servico.site/api'
   }
   //https://comeve.netlify.com/
   return 'http://10.20.0.26:8001'
