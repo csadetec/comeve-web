@@ -32,6 +32,7 @@ const UserForm = (props) => {
 
     if (id === undefined) {
       document.title = 'Cadastrar Usuário'
+      setLoading(false)
       return;
     }
     setH2('Editar Usuário')
@@ -44,6 +45,7 @@ const UserForm = (props) => {
       setName(data.name)
       setEmail(data.email)
       setSectorId(data.sector_id)
+      setLoading(false)
       /** */
 
     }

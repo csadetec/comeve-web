@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 
+import Alert from './default/Alert'
+import Loading from './default/Loading'
+
+
 import './Event.css'
 
 function EventForm(props) {
@@ -17,6 +21,7 @@ function EventForm(props) {
   const [itensResources, setItensResources] = useState([])
   const [h2, setH2] = useState('Cadastrar Evento')
   const [alert, setAlert] = useState(false)
+  const [loading, setLoagind] = useState(true)
   const { id } = props.match.params
   let history = useHistory()
 
@@ -24,20 +29,22 @@ function EventForm(props) {
 
     if (id === undefined) {
       document.title = 'Cadastrar Evento'
+      setLoagind(false)
       return;
     }
     document.title = 'Editar Evento'
     setH2('Editar Evento')
     async function loadEvent() {
       const { data } = await api.get(`/events/${id}`)
-      
+
       setName(data.name)
       setPlace_id(data.place_id)
       setDate(data.date)
       setStart(data.start)
       setEnd(data.end)
       setItensResources(data.resources)
-     
+      setLoagind(false)
+
     }
     loadEvent()
 
@@ -64,13 +71,13 @@ function EventForm(props) {
   async function handleSubmit(e) {
     e.preventDefault()
     const obj = { name, place_id, date, start, end, itensResources }
-    
+
     //console.log(obj)
     //return;
     if (id) {
-      const {status } = await api.put(`/events/${id}`, obj)
-      
- //     console.log(data);
+      const { status } = await api.put(`/events/${id}`, obj)
+
+      //     console.log(data);
       if (status === 200) {
         setAlert('Atualizado com Sucesso!')
         //console.log('update com sucess')
@@ -108,7 +115,7 @@ function EventForm(props) {
 
   const deleteResource = (id) => {
     ///console.log('excluir resource', id)
-    let filter = itensResources.filter( r => {
+    let filter = itensResources.filter(r => {
       return r.id !== id
     })
 
@@ -118,96 +125,99 @@ function EventForm(props) {
   }
 
   return (
-    <div className="container">
-      <div className="row mb-4">
-        <div className="col-md-12 border-bottom">
-          <h2>{h2}</h2>
-        </div>
-      </div>
-      <div className="row">
-        {alert &&
-          <div className="alert alert-success col-md-12" role="alert">
-            {alert}
+    <>
+      {loading ?
+        <Loading /> :
+        <div className="container">
+          <div className="row mb-4">
+            <div className="col-md-12 border-bottom">
+              <h2>{h2}</h2>
+            </div>
           </div>
-        }
-      </div>
-      <div className="row border border-light p-4">
+          <div className="row">
+            {alert &&
+              <Alert msg={alert} />
+            }
+          </div>
+          <div className="row border border-light p-4">
 
-        <div className="col-md-7">
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="name">Nome</label>
-            <input type="text" id="name" className="form-control mb-4" placeholder="Nome do eventos .."
-              value={name} onChange={e => setName(e.target.value)}
-              required
-            />
-
-            <div className="row">
-              <div className="col-md-6">
-                <label htmlFor="place">Local</label>
-                <select value={place_id} onChange={e => setPlace_id(e.target.value)} className="form-control" required>
-                  <option value="">Selecione</option>
-                  {places.map(r =>
-                    <option key={r.id} value={r.id}>{r.name}</option>
-                  )}
-                </select>
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="date">Data</label>
-                <input type="date" id="date" className="form-control mb-4"
-                  value={date} onChange={e => setDate(e.target.value)}
+            <div className="col-md-7">
+              <form onSubmit={handleSubmit}>
+                <label htmlFor="name">Nome</label>
+                <input type="text" id="name" className="form-control mb-4" placeholder="Nome do eventos .."
+                  value={name} onChange={e => setName(e.target.value)}
                   required
                 />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <label htmlFor="start">Inicio</label>
-                <input type="time" id="start" className="form-control mb-4"
-                  value={start} onChange={e => setStart(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="end">Fim</label>
-                <input type="time" id="end" className="form-control mb-4"
-                  value={end} onChange={e => setEnd(e.target.value)}
-                  required
 
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <select value={searchResource} className="form-control mb-4" onChange={handleSelectResource} >
-                  <option value="">SELECIONE O RECURSO</option>
-                  {resource.map(r =>
-                    <option key={r.id} value={r.id}>{r.name}</option>
-                  )}
+                <div className="row">
+                  <div className="col-md-6">
+                    <label htmlFor="place">Local</label>
+                    <select value={place_id} onChange={e => setPlace_id(e.target.value)} className="form-control" required>
+                      <option value="">Selecione</option>
+                      {places.map(r =>
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      )}
+                    </select>
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="date">Data</label>
+                    <input type="date" id="date" className="form-control mb-4"
+                      value={date} onChange={e => setDate(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <label htmlFor="start">Inicio</label>
+                    <input type="time" id="start" className="form-control mb-4"
+                      value={start} onChange={e => setStart(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="end">Fim</label>
+                    <input type="time" id="end" className="form-control mb-4"
+                      value={end} onChange={e => setEnd(e.target.value)}
+                      required
 
-                </select>
-              </div>
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-12">
+                    <select value={searchResource} className="form-control mb-4" onChange={handleSelectResource} >
+                      <option value="">SELECIONE O RECURSO</option>
+                      {resource.map(r =>
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      )}
+
+                    </select>
+                  </div>
+                </div>
+                <div className="text-left">
+                  <button className="btn btn-outline-indigo" type="submit">Salvar</button>
+                  <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
+                </div>
+              </form>
             </div>
-            <div className="text-left">
-              <button className="btn btn-outline-indigo" type="submit">Salvar</button>
-              <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
-            </div>
-          </form>
-        </div>
-        <div className="col-md-5 border-left">
-          <h4>
-            Recursos
+            <div className="col-md-5 border-left">
+              <h4>
+                Recursos
           </h4>
-          <ul className="list-group">
-            {itensResources.map(r =>
-              <li key={r.id} className="list-group-item cursor-pointer" onClick={() => deleteResource(r.id)} title="Retirar Recurso">
-                {r.name}
-                <i className="fas fa-times-circle float-right"></i>
-              </li>
-            )}
-          </ul>
+              <ul className="list-group">
+                {itensResources.map(r =>
+                  <li key={r.id} className="list-group-item cursor-pointer" onClick={() => deleteResource(r.id)} title="Retirar Recurso">
+                    {r.name}
+                    <i className="fas fa-times-circle float-right"></i>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      }
+    </>
   )
 }
 
