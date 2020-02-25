@@ -17,6 +17,8 @@ const UserForm = (props) => {
   const [alert, setAlert] = useState(false)
   const [loading, setLoading] = useState(true)
   const [h2, setH2] = useState('')
+  const [btnLabel, setBtnLabel] = useState('Salvar')
+  const [btnDisabled, setBtnDisabled ] = useState(false)
   const { id } = props.match.params
 
   const history = useHistory()
@@ -57,10 +59,10 @@ const UserForm = (props) => {
   async function handleSubmit(e) {
     e.preventDefault()
     let obj = { email, password, name, sector_id }
-    /*
-    console.log(obj)
-    return ;
-    /** */
+   
+    setBtnLabel('Salvando ...')
+    setBtnDisabled(true)
+
     try {
       if (id) {
         const { status } = await api.put(`/users/${id}`, obj)
@@ -69,6 +71,8 @@ const UserForm = (props) => {
         if (status === 200) {
           //console.log('update ')
           setAlert('Usuário Atualizado com Sucesso')
+          setBtnLabel('Salvar')
+          setBtnDisabled(true)
           return;
         }
       }
@@ -78,6 +82,8 @@ const UserForm = (props) => {
 
       if (message) {
         setAlert(message)
+        setBtnLabel('Salvar')
+        setBtnDisabled(true)
         return;
       }
       history.push('/usuarios/listar')
@@ -112,9 +118,8 @@ const UserForm = (props) => {
 
                 <form className="text-center" onSubmit={handleSubmit}>
                   {alert &&
-                    <div className="alert alert-info mt-2" role="alert">
-                      {alert}
-                    </div>
+                    <Alert msg={alert} />
+                    
                   }
                   <div className="md-form mt-3">
                     <input type="email" id="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
@@ -139,7 +144,7 @@ const UserForm = (props) => {
                     </select>
                   </div>
 
-                  <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit">Salvar</button>
+                  <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit" disabled={btnDisabled}>{btnLabel}</button>
                   <Link className="btn btn-outline-danger" to='/usuarios/listar'>Fechar</Link>
 
                 </form>

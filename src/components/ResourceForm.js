@@ -61,6 +61,8 @@ const ResourceForm = (props) => {
         if (status === 200) {
           //console.log('update ')
           setAlert('Atualizado com Sucesso')
+          setBtnLabel('Salvar')
+          setBtnDisabled(false)
           return;
         }
       }

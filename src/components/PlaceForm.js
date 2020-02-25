@@ -50,6 +50,8 @@ function PlaceForm(props) {
 
         if (status === 200) {
           setAlert('Atualizado com Sucesso')
+          setBtnLabel('Salvar')
+          setBtndisabled(false)
           console.log(data)
         }
         return;
