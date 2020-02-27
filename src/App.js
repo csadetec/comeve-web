@@ -29,6 +29,9 @@ import SectorForm from './components/SectorForm'
 import UserList from './components/UserList'
 import UserForm from './components/UserForm'
 
+import currentPage from './service/currentPage'
+
+
 const App = () => {
   const [logged, setLogged ] = useState(false)
   const [events, setEvents ] = useState([])
@@ -36,6 +39,8 @@ const App = () => {
   const [resources, setResources ] = useState([])
   const [sectors, setSectors ] = useState([])
   const [users, setUsers] = useState([])
+  //let location = useLocation()
+  //console.log(currentPage())
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -47,8 +52,6 @@ const App = () => {
     loadResources()
     loadSectors()
     loadUsers()
-   
-    
   }, [])
 
 
@@ -120,7 +123,10 @@ const App = () => {
         <Route path='/usuarios/cadastrar' component={UserForm} />
         <Route path='/usuarios/editar/:id' component={UserForm} />
         
-        <Redirect from='*' to='/' />
+        <Route path='*'>
+
+        </Route>
+
         <Footer />
       </Router>
       :
