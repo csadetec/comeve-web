@@ -124,7 +124,7 @@ const App = () => {
             <Route path='/usuarios/cadastrar' component={UserForm} />
             <Route path='/usuarios/editar/:id' component={UserForm} />
 
-            <Route path='*' />
+           
           </Switch>
 
           <Footer />
