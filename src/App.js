@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 //import url from './service/url'
 import api from './service/api'
 
@@ -33,18 +33,18 @@ import currentPage from './service/currentPage'
 
 
 const App = () => {
-  const [logged, setLogged ] = useState(false)
-  const [events, setEvents ] = useState([])
-  const [places, setPlaces ] = useState([])
-  const [resources, setResources ] = useState([])
-  const [sectors, setSectors ] = useState([])
+  const [logged, setLogged] = useState(false)
+  const [events, setEvents] = useState([])
+  const [places, setPlaces] = useState([])
+  const [resources, setResources] = useState([])
+  const [sectors, setSectors] = useState([])
   const [users, setUsers] = useState([])
   //let location = useLocation()
   //console.log(currentPage())
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    if(token){
+    if (token) {
       setLogged(true)
     }
     loadEventos()
@@ -56,24 +56,24 @@ const App = () => {
 
 
 
-  async function loadEventos(){
+  async function loadEventos() {
     const { data } = await api.get('/events')
     setEvents(data)
   }
-  async function loadPlaces(){
+  async function loadPlaces() {
     const { data } = await api.get('/places')
     setPlaces(data)
   }
-  async function loadResources(){
+  async function loadResources() {
     const { data } = await api.get('/resources')
-   // return data
+    // return data
     setResources(data)
   }
-  async function loadSectors(){
+  async function loadSectors() {
     const { data } = await api.get('/sectors')
     setSectors(data)
   }
-  async function loadUsers(){
+  async function loadUsers() {
     const { data } = await api.get('/users')
     setUsers(data)
     //console.log(data)
@@ -81,59 +81,59 @@ const App = () => {
 
   return (
     <>
-      {logged ? 
-      <Router >
-        <Navbar />
-        <Route exact={true} path='/' component={ Home } />
-        <Route path='/home' component={ Home } />
-     
-        <Route path='/locais/listar' >
-          <PlaceList places={places}  />
-        </Route>
-        <Route path='/locais/editar/:id' component={PlaceForm} />
+      {logged ?
+        <Router >
+          <Navbar />
+          <Switch>
+            <Route exact={true} path='/' component={Home} />
+            <Route path='/home' component={Home} />
 
-        <Route path='/locais/cadastrar' component={PlaceForm}/>
-         
+            <Route path='/locais/listar' >
+              <PlaceList places={places} />
+            </Route>
+            <Route path='/locais/editar/:id' component={PlaceForm} />
 
-        <Route  path='/eventos/listar'>
-          <EventList events={events} />
-        </Route>
-        <Route path='/eventos/cadastrar' component={ EventForm } />
-        <Route path='/eventos/editar/:id' component={EventForm} />
-
-        <Route path='/recursos/listar'>
-          <ResourceList resources={resources} load={loadResources}/>
-        </Route>
+            <Route path='/locais/cadastrar' component={PlaceForm} />
 
 
-        <Route path='/recursos/cadastrar' component={ResourceForm} />
-        <Route path='/recursos/editar/:id' component={ResourceForm} />
+            <Route path='/eventos/listar'>
+              <EventList events={events} />
+            </Route>
+            <Route path='/eventos/cadastrar' component={EventForm} />
+            <Route path='/eventos/editar/:id' component={EventForm} />
 
-        <Route path='/setores/listar'  >
-          <SectorList sectors={sectors} />
-        </Route>
-        <Route path='/setores/cadastrar' component={SectorForm} />
-        <Route path='/setores/editar/:id' component={SectorForm} />
-
-        <Route path='/usuarios/listar'>
-          <UserList users={users} />
-        </Route>
+            <Route path='/recursos/listar'>
+              <ResourceList resources={resources} load={loadResources} />
+            </Route>
 
 
-        <Route path='/usuarios/cadastrar' component={UserForm} />
-        <Route path='/usuarios/editar/:id' component={UserForm} />
-        
-        <Route path='*'>
+            <Route path='/recursos/cadastrar' component={ResourceForm} />
+            <Route path='/recursos/editar/:id' component={ResourceForm} />
 
-        </Route>
+            <Route path='/setores/listar'  >
+              <SectorList sectors={sectors} />
+            </Route>
+            <Route path='/setores/cadastrar' component={SectorForm} />
+            <Route path='/setores/editar/:id' component={SectorForm} />
 
-        <Footer />
-      </Router>
-      :
-      <Router>
-        <Route exact={true} path='/' component={ Login } />
-        <Redirect from='*' to='/' />        
-      </Router>
+            <Route path='/usuarios/listar'>
+              <UserList users={users} />
+            </Route>
+
+
+            <Route path='/usuarios/cadastrar' component={UserForm} />
+            <Route path='/usuarios/editar/:id' component={UserForm} />
+
+            <Route path='*' />
+          </Switch>
+
+          <Footer />
+        </Router>
+        :
+        <Router>
+          <Route exact={true} path='/' component={Login} />
+          <Redirect from='*' to='/' />
+        </Router>
       }
     </>
   )
