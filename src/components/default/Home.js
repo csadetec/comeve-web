@@ -9,7 +9,7 @@ function Home() {
     <div className="container">
       <h2>Home</h2>
       <p>Aplicação para organização dos recursos dos eventos do colégio</p>
-      <p>teste 2343</p>
+      <p>teste 0022</p>
     </div>
 
   )
