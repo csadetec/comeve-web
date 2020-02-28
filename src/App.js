@@ -79,7 +79,7 @@ const App = () => {
         :
         <Router>
           <Route exact={true} path='/' component={Login} />
-          <Redirect path='*' to='/' />
+          {/*<Redirect path='*' to='/' />/*/}
          
         </Router>
       }

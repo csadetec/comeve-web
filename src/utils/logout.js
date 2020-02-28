@@ -1,8 +1,12 @@
+import React from 'react'
+import  {Redirect} from 'react-router-dom'
+
 const logout = () => {
   
   localStorage.clear()
-  window.location.reload()
-  //console.log('em caso de erro\nlogout do usuario')
+  return(
+    <Redirect  path='*' to="/" />
+  )
 }
 
 export default logout
