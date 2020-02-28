@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
-import logout from '../service/logout'
+import logout from '../utils/logout'
 
 import Alert from './default/Alert'
 import Loading from './default/Loading'
@@ -70,7 +70,7 @@ function PlaceForm(props) {
       }
 
       history.push('/locais/listar')
-      window.location.reload()
+      //window.location.reload()
     } catch (e) {
       logout()
 

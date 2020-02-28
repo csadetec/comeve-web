@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../service/api'
 
-function PlaceList(props) {
-  const [places, setPlaces] = useState(props.places)
+function PlaceList() {
+  const [places, setPlaces] = useState(JSON.parse(localStorage.getItem('places')))
 
  
   let cont = 1
 
   useEffect(() => {
     document.title = 'Locais'
-    
+    /*
     async function loadPlaces(){
       const { data } = await api.get('/places')
       setPlaces(data)

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../service/api'
-import logout from '../service/logout'
+import logout from '../utils/logout'
 
-const  UserList = (props) => {
-  const [users, setUsers ] = useState(props.users)
+const  UserList = () => {
+  const [users, setUsers ] = useState(JSON.parse(localStorage.getItem('users')))
   let cont = 1
 
   useEffect(() => {
     document.title = 'Usuários'
-    
+    /*
     async function loadUsers(){
       try{
         const { data } = await api.get('/users')

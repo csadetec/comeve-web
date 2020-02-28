@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
-import logout from '../service/logout'
+import logout from '../utils/logout'
 
 import Loading from './default/Loading'
 import Alert from './default/Alert'
@@ -80,9 +80,7 @@ const ResourceForm = (props) => {
         return;
       }
       history.push('/recursos/listar')
-      window.location.reload()
-
-
+      //window.location.reload()
     } catch (e) {
 
       logout()

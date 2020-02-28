@@ -1,14 +1,16 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom'
 
+
 import './Navbar.css'
 
 const Navbar = () =>{
-  const [home,setHome] = useState('nav-item')
+  const [home,setHome] = useState('nav-item active')
   const [eventos, setEventos] =useState('nav-item')
   const [locais, setLocais] = useState('nav-item')
   const [recursos, setRecursos] = useState('nav-item')
   const [setores, setSetores ] = useState('nav-item')
+  const [usuarios, setUsuarios ] = useState('nav-item')
 
   const handleLogout = () =>{
     localStorage.clear()
@@ -22,6 +24,7 @@ const Navbar = () =>{
     setLocais('nav-item')
     setRecursos('nav-item')
     setSetores('nav-item')
+    setUsuarios('nav-item')
 
     let pathname = window.location.pathname
     if(pathname === '/eventos/listar'){
@@ -37,6 +40,9 @@ const Navbar = () =>{
     }
     if(pathname === '/setores/listar'){
       return setSetores('nav-item active')
+    }
+    if(pathname === '/usuarios/listar'){
+      return setUsuarios('nav-item active')
     }
 
     return setHome('nav-item active')
@@ -66,6 +72,10 @@ const Navbar = () =>{
             <li className={setores}>
               <Link className="nav-link" to="/setores/listar">Setores</Link>
             </li>
+            <li className={usuarios}>
+              <Link className="nav-link" to="/usuarios/listar">Usuários</Link>
+            </li>
+            
             <li className="nav-item dropdown">
               <div className="nav-link dropdown-toggle cursor-pointer" id="navbarDropdownMenuLink" data-toggle="dropdown"
 aria-haspopup="true" aria-expanded="false" >{localStorage.getItem('name') }</div>

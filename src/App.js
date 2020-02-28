@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 //import url from './service/url'
 import api from './service/api'
+//import logout from './service/logout'
+
 
 //components default
 import Navbar from './components/default/Navbar'
@@ -31,11 +33,7 @@ import UserForm from './components/UserForm'
 
 const App = () => {
   const [logged, setLogged] = useState(false)
-  const [events, setEvents] = useState([])
-  const [places, setPlaces] = useState([])
-  const [resources, setResources] = useState([])
-  const [sectors, setSectors] = useState([])
-  const [users, setUsers] = useState([])
+ 
   //let location = useLocation()
   //console.log(currentPage())
 
@@ -44,36 +42,39 @@ const App = () => {
     if (token) {
       setLogged(true)
     }
+    
     loadEventos()
     loadPlaces()
     loadResources()
     loadSectors()
     loadUsers()
+    /** */
   }, [])
 
 
 
   async function loadEventos() {
     const { data } = await api.get('/events')
-    setEvents(data)
+    localStorage.setItem('events', JSON.stringify(data))
+  
   }
   async function loadPlaces() {
     const { data } = await api.get('/places')
-    setPlaces(data)
+    localStorage.setItem('places', JSON.stringify(data))
+    //setPlaces(data)
   }
   async function loadResources() {
     const { data } = await api.get('/resources')
-    // return data
-    setResources(data)
+    localStorage.setItem('resources', JSON.stringify(data))
   }
   async function loadSectors() {
     const { data } = await api.get('/sectors')
-    setSectors(data)
+    //setSectors(data)
+    localStorage.setItem('sectors', JSON.stringify(data))
   }
   async function loadUsers() {
     const { data } = await api.get('/users')
-    setUsers(data)
-    //console.log(data)
+    localStorage.setItem('users', JSON.stringify(data))
   }
 
   return (
@@ -85,43 +86,25 @@ const App = () => {
             <Route exact={true} path='/' component={Home} />
             <Route path='/home' component={Home} />
 
-            <Route path='/locais/listar' >
-              <PlaceList places={places} />
-            </Route>
+            <Route path='/locais/listar' component={PlaceList} />
             <Route path='/locais/editar/:id' component={PlaceForm} />
-
             <Route path='/locais/cadastrar' component={PlaceForm} />
 
             <Route path='/eventos/listar' component={EventList} />
-
-            <Route path='/eventos/listar'>
-              <EventList events={events} />
-            </Route>
             <Route path='/eventos/cadastrar' component={EventForm} />
             <Route path='/eventos/editar/:id' component={EventForm} />
 
-            <Route path='/recursos/listar'>
-              <ResourceList resources={resources} load={loadResources} />
-            </Route>
-
-
+            <Route path='/recursos/listar' component={ResourceList} />
             <Route path='/recursos/cadastrar' component={ResourceForm} />
             <Route path='/recursos/editar/:id' component={ResourceForm} />
 
-            <Route path='/setores/listar'  >
-              <SectorList sectors={sectors} />
-            </Route>
+            <Route path='/setores/listar'  component={SectorList} />
             <Route path='/setores/cadastrar' component={SectorForm} />
             <Route path='/setores/editar/:id' component={SectorForm} />
 
-            <Route path='/usuarios/listar'>
-              <UserList users={users} />
-            </Route>
-
-
+            <Route path='/usuarios/listar' component={UserList} />
             <Route path='/usuarios/cadastrar' component={UserForm} />
             <Route path='/usuarios/editar/:id' component={UserForm} />
-
            
           </Switch>
 
@@ -130,6 +113,7 @@ const App = () => {
         :
         <Router>
           <Route exact={true} path='/' component={Login} />
+          <Redirect path='*' to='/' />
          
         </Router>
       }

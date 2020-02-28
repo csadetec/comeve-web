@@ -15,13 +15,15 @@ function EventForm(props) {
   const [date, setDate] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
-  const [places, setPlaces] = useState([])
-  const [resource, setResources] = useState([])
+  const [places] = useState(JSON.parse(localStorage.getItem('places')))
+  const [resource] = useState(JSON.parse(localStorage.getItem('resources')))
   const [searchResource] = useState('')
   const [itensResources, setItensResources] = useState([])
   const [h2, setH2] = useState('Cadastrar Evento')
   const [alert, setAlert] = useState(false)
   const [loading, setLoagind] = useState(true)
+  const [btnLabel, setBtnLabel] = useState('Salvar')
+  const [btnDisabled, setBtnDisabled] = useState(false)
   const { id } = props.match.params
   let history = useHistory()
 
@@ -52,26 +54,11 @@ function EventForm(props) {
 
   }, [id])
 
-  useEffect(() => {
-
-    async function loadPlaces() {
-      const { data } = await api.get('/places')
-
-      setPlaces(data)
-    }
-    async function loadResources() {
-      const { data } = await api.get('/resources')
-      setResources(data)
-    }
-    loadPlaces()
-    loadResources()
-    /** */
-  }, [])
-  /** */
   async function handleSubmit(e) {
     e.preventDefault()
     const obj = { name, place_id, date, start, end, itensResources }
-
+    setBtnDisabled(true)
+    setBtnLabel('Salvando ...')
     //console.log(obj)
     //return;
     if (id) {
@@ -79,11 +66,12 @@ function EventForm(props) {
 
       //     console.log(data);
       if (status === 200) {
-        window.alert('Atuazado com Sucesso')
-        window.location.reload()
-        //setAlert('Atualizado com Sucesso!')
-        //console.log('update com sucess')
-        //alert('teste')
+        //window.alert('Atuazado com Sucesso')
+        //window.location.reload()
+        setAlert('Atualizado com Sucesso!')
+        setBtnDisabled(false)
+        setBtnLabel('Salvar')
+
       }
 
       return;
@@ -93,7 +81,7 @@ function EventForm(props) {
 
     if (status === 201) {
       history.push(`/eventos/listar`)
-      window.location.reload()
+      //window.location.reload()
       //history.push(`/eventos/listar`)
     }
 
@@ -200,7 +188,7 @@ function EventForm(props) {
                   </div>
                 </div>
                 <div className="text-left">
-                  <button className="btn btn-outline-indigo" type="submit">Salvar</button>
+                  <button className="btn btn-outline-indigo" type="submit" disabled={btnDisabled}>{btnLabel}</button>
                   <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
                 </div>
               </form>

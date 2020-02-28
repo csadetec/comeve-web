@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
-import logout from '../service/logout'
+import logout from '../utils/logout'
 
 import Alert from './default/Alert'
 import Loading from './default/Loading'
@@ -25,6 +25,7 @@ const UserForm = (props) => {
 
   useEffect(() => {
     async function loadSectors() {
+      
       const { data } = await api.get('sectors')
 
       setSectors(data)
@@ -70,9 +71,9 @@ const UserForm = (props) => {
         //console.log(data)
         if (status === 200) {
           //console.log('update ')
-          window.alert('Atualizado com Sucesso')
-          window.location.reload()
-          //setAlert('Usuário Atualizado com Sucesso')
+          //window.alert('Atualizado com Sucesso')
+          //window.location.reload()
+          setAlert('Usuário Atualizado com Sucesso')
           setBtnLabel('Salvar')
           setBtnDisabled(true)
           return;
@@ -89,7 +90,7 @@ const UserForm = (props) => {
         return;
       }
       history.push('/usuarios/listar')
-      window.location.reload()
+      //window.location.reload()
     } catch (e) {
       console.log(e)
       logout()

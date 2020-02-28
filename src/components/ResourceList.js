@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../service/api'
-import logout from '../service/logout'
+import logout from '../utils/logout'
 
-const  ResourceList = (props) => {
+const  ResourceList = () => {
 
-  const [resources, setResources ] = useState(props.resources)
+  const [resources, setResources ] = useState(JSON.parse(localStorage.getItem('resources')))
   let cont = 1
   useEffect(() => {
     document.title = 'Recursos'
