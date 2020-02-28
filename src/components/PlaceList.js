@@ -10,11 +10,13 @@ function PlaceList(props) {
 
   useEffect(() => {
     document.title = 'Locais'
+    /*
     async function loadPlaces(){
       const { data } = await api.get('/places')
       setPlaces(data)
     }
     loadPlaces()
+    /** */
   }, [])
 
 

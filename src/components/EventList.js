@@ -3,13 +3,15 @@ import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 import logout from '../service/logout'
 
-function EventList(props) {
+function EventList() {
 
-  const [events, setEvents] = useState(props.events)
+  //const [events, setEvents] = useState(props.events)
+  const [events, setEvents] = useState()
   let history = useHistory()
 
   useEffect(() => {
     document.title = 'Eventos'
+    
     async function loadEvents() {
       try{
         const { data } = await api.get('/events')
@@ -24,6 +26,7 @@ function EventList(props) {
     }
 
     loadEvents()
+    /** */
   }, [])
 
   const dateFormat = (dateString) => {

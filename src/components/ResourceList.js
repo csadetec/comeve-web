@@ -10,7 +10,7 @@ const  ResourceList = (props) => {
   let cont = 1
   useEffect(() => {
     document.title = 'Recursos'
-
+    /*
     async function loadResources(){
       try{
         const { data } = await api.get('/resources')
@@ -20,6 +20,7 @@ const  ResourceList = (props) => {
       }
      }
     loadResources()
+    /** */
   }, [])
 
 /** */

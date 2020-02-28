@@ -95,10 +95,13 @@ const App = () => {
 
             <Route path='/locais/cadastrar' component={PlaceForm} />
 
+            <Route path='/eventos/listar' component={EventList} />
 
+            {/*
             <Route path='/eventos/listar'>
               <EventList events={events} />
             </Route>
+            */}
             <Route path='/eventos/cadastrar' component={EventForm} />
             <Route path='/eventos/editar/:id' component={EventForm} />
 
