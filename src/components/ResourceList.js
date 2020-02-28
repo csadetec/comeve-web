@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+/*
 import api from '../service/api'
 import logout from '../utils/logout'
-
+/** */
 const  ResourceList = () => {
 
-  const [resources, setResources ] = useState(JSON.parse(localStorage.getItem('resources')))
+  const [resources ] = useState(JSON.parse(localStorage.getItem('resources')))
   let cont = 1
   useEffect(() => {
     document.title = 'Recursos'
-    async function loadResources(){
-      try{
-        const { data } = await api.get('/resources')
-        setResources(data)  
-      }catch(e){
-        logout()
-      }
-     }
-    loadResources()
-    /** */
   }, [])
 
 /** */

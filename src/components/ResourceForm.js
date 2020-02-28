@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 import logout from '../utils/logout'
+import {loadResources} from '../utils/load'
 
 import Loading from './default/Loading'
 import Alert from './default/Alert'
@@ -12,22 +13,13 @@ const ResourceForm = (props) => {
   const [sector, setSector] = useState('')
   const [alert, setAlert] = useState(false)
   const [h2, setH2] = useState('Cadastrar Recurso')
-  const [listSectors, setListSectors] = useState([])
+  const [listSectors] = useState(JSON.parse(localStorage.getItem('sectors')))
   const [btnLabel, setBtnLabel] = useState('Salvar')
   const [btnDisabled, setBtnDisabled] = useState(false)
   const [loading, setLoading] = useState(true)
   const { id } = props.match.params
 
   const history = useHistory()
-
-  useEffect(() => {
-    async function loadSectors() {
-      const { data } = await api.get('/sectors')
-      setListSectors(data)
-    }
-    loadSectors()
-
-  }, [])
 
   useEffect(() => {
     if (id === undefined) {
@@ -59,12 +51,11 @@ const ResourceForm = (props) => {
         const { status } = await api.put(`/resources/${id}`, obj)
 
         if (status === 200) {
-          //console.log('update ')
-          window.alert('Atualizado com Sucesso.')
-          window.location.reload()
-          //setAlert('Atualizado com Sucesso')
+          setAlert('Atualizado com Sucesso')
+          //localStorage.setItem()
           setBtnLabel('Salvar')
           setBtnDisabled(false)
+          loadResources()
           return;
         }
       }
@@ -79,8 +70,10 @@ const ResourceForm = (props) => {
         setBtnDisabled(false)
         return;
       }
+      await loadResources()
+
       history.push('/recursos/listar')
-      //window.location.reload()
+     
     } catch (e) {
 
       logout()

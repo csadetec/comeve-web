@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-//import url from './service/url'
-import api from './service/api'
-//import logout from './service/logout'
-
+import {loadEvents, loadPlaces, loadResources, loadSectors, loadUsers} from './utils/load'
 
 //components default
 import Navbar from './components/default/Navbar'
@@ -34,48 +31,17 @@ import UserForm from './components/UserForm'
 const App = () => {
   const [logged, setLogged] = useState(false)
  
-  //let location = useLocation()
-  //console.log(currentPage())
-
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
       setLogged(true)
+      loadEvents()
+      loadPlaces()
+      loadResources()
+      loadUsers()
+      loadSectors()
     }
-    
-    loadEventos()
-    loadPlaces()
-    loadResources()
-    loadSectors()
-    loadUsers()
-    /** */
   }, [])
-
-
-
-  async function loadEventos() {
-    const { data } = await api.get('/events')
-    localStorage.setItem('events', JSON.stringify(data))
-  
-  }
-  async function loadPlaces() {
-    const { data } = await api.get('/places')
-    localStorage.setItem('places', JSON.stringify(data))
-    //setPlaces(data)
-  }
-  async function loadResources() {
-    const { data } = await api.get('/resources')
-    localStorage.setItem('resources', JSON.stringify(data))
-  }
-  async function loadSectors() {
-    const { data } = await api.get('/sectors')
-    //setSectors(data)
-    localStorage.setItem('sectors', JSON.stringify(data))
-  }
-  async function loadUsers() {
-    const { data } = await api.get('/users')
-    localStorage.setItem('users', JSON.stringify(data))
-  }
 
   return (
     <>

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
+import logout from '../utils/logout'
 
 import Loading from './default/Loading'
 import Alert from './default/Alert'
+import {loadSectors} from '../utils/load'
 
 
 const ResourceForm = (props) => {
 
   const [name, setName] = useState('')
-  //const [sector, setSector] = useState('')
   const [alert, setAlert] = useState(false)
   const [h2, setH2] = useState('Cadastrar Setor')
   const [loading, setLoading] = useState(true)
@@ -26,15 +27,13 @@ const ResourceForm = (props) => {
     setH2('Editar Setor')
     document.title = 'Editar Setor'
     //setLoading(true)
-    async function loadResource() {
+    async function loadSector() {
       const { data } = await api.get(`/sectors/${id}`)
 
       setName(data.name)
       setLoading(false)
-      // setSector(data.sector)
-      //console.log(data)
     }
-    loadResource()
+    loadSector()
 
   }, [id])
 
@@ -47,11 +46,10 @@ const ResourceForm = (props) => {
         const { status } = await api.put(`/sectors/${id}`, obj)
 
         if (status === 200) {
-          //onsole.log('update ')
           setAlert('Atualizado com Sucesso')
-          //window.alert('Atualizado com Sucesso.')
-          //window.location.reload()
-
+          loadSectors()         
+         
+          /** */
         }
         return;
       }
@@ -63,13 +61,13 @@ const ResourceForm = (props) => {
         setAlert(message)
         return;
       }
+      await loadSectors()
       history.push('/setores/listar')
       //window.location.reload()
       /** */
     } catch (e) {
 
-      localStorage.clear()
-      window.location.reload()
+      logout()
     }
 
     /** */

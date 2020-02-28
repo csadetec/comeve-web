@@ -7,6 +7,7 @@ import Alert from './default/Alert'
 import Loading from './default/Loading'
 
 import './style.css'
+import { loadUsers } from '../utils/load'
 const UserForm = (props) => {
 
   const [password, setPassword] = useState('')
@@ -70,12 +71,11 @@ const UserForm = (props) => {
 
         //console.log(data)
         if (status === 200) {
-          //console.log('update ')
-          //window.alert('Atualizado com Sucesso')
-          //window.location.reload()
+
           setAlert('Usuário Atualizado com Sucesso')
           setBtnLabel('Salvar')
           setBtnDisabled(true)
+          loadUsers()
           return;
         }
       }
@@ -89,10 +89,12 @@ const UserForm = (props) => {
         setBtnDisabled(true)
         return;
       }
+      loadUsers()
       history.push('/usuarios/listar')
-      //window.location.reload()
+     
+
     } catch (e) {
-      console.log(e)
+     
       logout()
     }
 

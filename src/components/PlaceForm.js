@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 import logout from '../utils/logout'
+import {loadPlaces} from '../utils/load'
 
 import Alert from './default/Alert'
 import Loading from './default/Loading'
@@ -46,15 +47,14 @@ function PlaceForm(props) {
     try {
 
       if (id) {
-        const { status, data } = await api.put(`/places/${id}`, obj)
+        const { status } = await api.put(`/places/${id}`, obj)
 
         if (status === 200) {
-          //setAlert('Atualizado com Sucesso')
-          window.alert('Atualizado com Sucesso')
-          window.location.reload()
+          setAlert('Atualizado com Sucesso')
           setBtnLabel('Salvar')
           setBtndisabled(false)
-          console.log(data)
+          loadPlaces()
+  
         }
         return;
       }
@@ -68,8 +68,9 @@ function PlaceForm(props) {
         setBtndisabled(false)
         return;
       }
-
+      await loadPlaces()
       history.push('/locais/listar')
+    
       //window.location.reload()
     } catch (e) {
       logout()

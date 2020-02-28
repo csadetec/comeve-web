@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
+import {loadEvents} from '../utils/load'
 
 import Alert from './default/Alert'
 import Loading from './default/Loading'
@@ -66,8 +67,7 @@ function EventForm(props) {
 
       //     console.log(data);
       if (status === 200) {
-        //window.alert('Atuazado com Sucesso')
-        //window.location.reload()
+        loadEvents()
         setAlert('Atualizado com Sucesso!')
         setBtnDisabled(false)
         setBtnLabel('Salvar')
@@ -80,9 +80,8 @@ function EventForm(props) {
     const { status } = await api.post('/events', obj)
 
     if (status === 201) {
+      await loadEvents()
       history.push(`/eventos/listar`)
-      //window.location.reload()
-      //history.push(`/eventos/listar`)
     }
 
   }

@@ -1,30 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import api from '../service/api'
-import logout from '../utils/logout'
 
 function EventList() {
-  const [events, setEvents] = useState(JSON.parse(localStorage.getItem('events')))
+  const [events] = useState(JSON.parse(localStorage.getItem('events')))
   let history = useHistory()
 
   useEffect(() => {
     document.title = 'Eventos'
-    /*
-    async function loadEvents() {
-      try{
-        const { data } = await api.get('/events')
-        localStorage.setItem('events', JSON.stringify(data))
-        setEvents(data)
-  
-      }catch(e){
-        logout();
-        // console.log(e)
-      }
-      //console.log(data)
-    }
-
-    loadEvents()
-    /** */
+   
   }, [])
 
   const dateFormat = (dateString) => {
