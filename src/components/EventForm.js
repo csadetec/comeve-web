@@ -79,7 +79,9 @@ function EventForm(props) {
 
       //     console.log(data);
       if (status === 200) {
-        setAlert('Atualizado com Sucesso!')
+        window.alert('Atuazado com Sucesso')
+        window.location.reload()
+        //setAlert('Atualizado com Sucesso!')
         //console.log('update com sucess')
         //alert('teste')
       }
@@ -91,6 +93,8 @@ function EventForm(props) {
 
     if (status === 201) {
       history.push(`/eventos/listar`)
+      window.location.reload()
+      //history.push(`/eventos/listar`)
     }
 
   }

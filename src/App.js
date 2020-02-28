@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 //import url from './service/url'
 import api from './service/api'
 
@@ -28,9 +28,6 @@ import SectorForm from './components/SectorForm'
 //componets users
 import UserList from './components/UserList'
 import UserForm from './components/UserForm'
-
-import currentPage from './service/currentPage'
-
 
 const App = () => {
   const [logged, setLogged] = useState(false)
@@ -97,11 +94,9 @@ const App = () => {
 
             <Route path='/eventos/listar' component={EventList} />
 
-            {/*
             <Route path='/eventos/listar'>
               <EventList events={events} />
             </Route>
-            */}
             <Route path='/eventos/cadastrar' component={EventForm} />
             <Route path='/eventos/editar/:id' component={EventForm} />
 

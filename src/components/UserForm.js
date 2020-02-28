@@ -70,7 +70,9 @@ const UserForm = (props) => {
         //console.log(data)
         if (status === 200) {
           //console.log('update ')
-          setAlert('Usuário Atualizado com Sucesso')
+          window.alert('Atualizado com Sucesso')
+          window.location.reload()
+          //setAlert('Usuário Atualizado com Sucesso')
           setBtnLabel('Salvar')
           setBtnDisabled(true)
           return;
@@ -87,7 +89,7 @@ const UserForm = (props) => {
         return;
       }
       history.push('/usuarios/listar')
-
+      window.location.reload()
     } catch (e) {
       console.log(e)
       logout()

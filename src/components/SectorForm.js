@@ -48,7 +48,10 @@ const ResourceForm = (props) => {
 
         if (status === 200) {
           //onsole.log('update ')
-          setAlert('Atualizado com Sucesso')
+          //setAlert('Atualizado com Sucesso')
+          window.alert('Atualizado com Sucesso.')
+          window.location.reload()
+
         }
         return;
       }
@@ -61,6 +64,7 @@ const ResourceForm = (props) => {
         return;
       }
       history.push('/setores/listar')
+      window.location.reload()
       /** */
     } catch (e) {
 

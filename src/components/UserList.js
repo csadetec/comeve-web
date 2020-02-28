@@ -5,11 +5,11 @@ import logout from '../service/logout'
 
 const  UserList = (props) => {
   const [users, setUsers ] = useState(props.users)
-  //const [users, setUsers ] = useState([])
   let cont = 1
 
   useEffect(() => {
     document.title = 'Usuários'
+    
     async function loadUsers(){
       try{
         const { data } = await api.get('/users')
@@ -21,6 +21,7 @@ const  UserList = (props) => {
    
     }
     loadUsers()
+    /** */
   }, [])
 
 /** */

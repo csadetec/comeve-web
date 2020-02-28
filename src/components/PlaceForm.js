@@ -49,7 +49,9 @@ function PlaceForm(props) {
         const { status, data } = await api.put(`/places/${id}`, obj)
 
         if (status === 200) {
-          setAlert('Atualizado com Sucesso')
+          //setAlert('Atualizado com Sucesso')
+          window.alert('Atualizado com Sucesso')
+          window.location.reload()
           setBtnLabel('Salvar')
           setBtndisabled(false)
           console.log(data)
@@ -68,6 +70,7 @@ function PlaceForm(props) {
       }
 
       history.push('/locais/listar')
+      window.location.reload()
     } catch (e) {
       logout()
 

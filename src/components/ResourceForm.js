@@ -60,7 +60,9 @@ const ResourceForm = (props) => {
 
         if (status === 200) {
           //console.log('update ')
-          setAlert('Atualizado com Sucesso')
+          window.alert('Atualizado com Sucesso.')
+          window.location.reload()
+          //setAlert('Atualizado com Sucesso')
           setBtnLabel('Salvar')
           setBtnDisabled(false)
           return;
@@ -78,6 +80,8 @@ const ResourceForm = (props) => {
         return;
       }
       history.push('/recursos/listar')
+      window.location.reload()
+
 
     } catch (e) {
 

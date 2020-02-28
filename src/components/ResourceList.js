@@ -4,13 +4,11 @@ import api from '../service/api'
 import logout from '../service/logout'
 
 const  ResourceList = (props) => {
+
   const [resources, setResources ] = useState(props.resources)
-  //const [resources, setResources ] = useState([])
-  //const { load } = props
   let cont = 1
   useEffect(() => {
     document.title = 'Recursos'
-    /*
     async function loadResources(){
       try{
         const { data } = await api.get('/resources')
