@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import {loadEvents, loadPlaces, loadResources, loadSectors, loadUsers} from './utils/load'
 
@@ -29,26 +29,26 @@ import UserList from './components/UserList'
 import UserForm from './components/UserForm'
 
 const App = () => {
-  const [logged, setLogged] = useState(false)
- 
+  //const [logged, setLogged] = useState(false)
+  const token = localStorage.getItem('token')
   useEffect(() => {
-    const token = localStorage.getItem('token')
+  
     if (token) {
-      setLogged(true)
       loadEvents()
       loadPlaces()
       loadResources()
       loadUsers()
       loadSectors()
     }
-  }, [])
+  }, [token])
 
   return (
     <>
-      {logged ?
+      {token ?
         <Router >
           <Navbar />
           <Switch>
+          
             <Route exact={true} path='/' component={Home} />
             <Route path='/home' component={Home} />
 
@@ -79,7 +79,7 @@ const App = () => {
         :
         <Router>
           <Route exact={true} path='/' component={Login} />
-          {/*<Redirect path='*' to='/' />/*/}
+          <Redirect path='*' to='/' />
          
         </Router>
       }

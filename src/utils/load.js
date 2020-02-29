@@ -6,6 +6,7 @@ export async function loadEvents() {
     localStorage.setItem('events', JSON.stringify(data))
     
   }catch(e){
+    console.log(e)
     logout()
   }
   
@@ -16,6 +17,7 @@ export async function loadPlaces() {
     const { data } = await api.get('/places')
     localStorage.setItem('places', JSON.stringify(data))      
   }catch(e){
+    //console.log(e)
     logout()
   }
   //setPlaces(data)
@@ -32,7 +34,7 @@ export async function loadSectors() {
   try{
     const { data } = await api.get('/sectors')
     localStorage.setItem('sectors', JSON.stringify(data))
-    console.log(data)
+    //console.log(data)
   
   }catch(e){
     logout()

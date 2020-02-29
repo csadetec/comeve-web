@@ -61,6 +61,7 @@ function EventList() {
                 <th scope="col">Horas</th>
                 <th scope="col">Nome</th>
                 <th scope="col">Local</th>
+                <th scope="col">Criador</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
@@ -74,6 +75,7 @@ function EventList() {
                   <td>{timeFormat(r.start)} - {timeFormat(r.end)}</td>
                   <td>{r.name}</td>
                   <td>{r.place.name}</td>
+                  <td>{r.user.name}</td>
                   <td>
                     <i className="fas fa-check-circle icon-green"></i>
                   </td>

@@ -89,7 +89,7 @@ const UserForm = (props) => {
         setBtnDisabled(true)
         return;
       }
-      loadUsers()
+      await loadUsers()
       history.push('/usuarios/listar')
      
 

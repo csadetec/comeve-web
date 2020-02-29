@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
-import {loadEvents} from '../utils/load'
+import { loadEvents } from '../utils/load'
 
 import Alert from './default/Alert'
 import Loading from './default/Loading'
@@ -30,6 +30,7 @@ function EventForm(props) {
 
   useEffect(() => {
 
+
     if (id === undefined) {
       document.title = 'Cadastrar Evento'
       setLoagind(false)
@@ -47,7 +48,7 @@ function EventForm(props) {
       setEnd(data.end)
       setItensResources(data.resources)
       setLoagind(false)
-
+      console.log(data.resources)
     }
     loadEvent()
 
@@ -60,11 +61,9 @@ function EventForm(props) {
     const obj = { name, place_id, date, start, end, itensResources }
     setBtnDisabled(true)
     setBtnLabel('Salvando ...')
-    //console.log(obj)
     //return;
     if (id) {
       const { status } = await api.put(`/events/${id}`, obj)
-
       //     console.log(data);
       if (status === 200) {
         loadEvents()
@@ -73,7 +72,6 @@ function EventForm(props) {
         setBtnLabel('Salvar')
 
       }
-
       return;
     }
 
@@ -104,7 +102,7 @@ function EventForm(props) {
     }
   }
 
-  const deleteResource = (id) => {
+  const handleClick = (id) => {
     ///console.log('excluir resource', id)
     let filter = itensResources.filter(r => {
       return r.id !== id
@@ -195,15 +193,29 @@ function EventForm(props) {
             <div className="col-md-5 border-left">
               <h4>
                 Recursos
-          </h4>
-              <ul className="list-group">
-                {itensResources.map(r =>
-                  <li key={r.id} className="list-group-item cursor-pointer" onClick={() => deleteResource(r.id)} title="Retirar Recurso">
-                    {r.name}
-                    <i className="fas fa-times-circle float-right"></i>
-                  </li>
-                )}
-              </ul>
+              </h4>
+              <table className="table">
+                {/*}
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                      */}
+                <tbody>
+                  {itensResources.map(r => 
+                    <tr key={r.id} className="cursor-pointer" onClick={() => handleClick(r.id)}>
+                      <td>{r.name}</td>
+                      <td>{r.sector.name}</td>
+                      <td><i className="fas fa-times-circle float-right"></i></td>
+                    </tr>
+                  )}
+                </tbody>
+
+              </table>
+              
             </div>
           </div>
         </div>

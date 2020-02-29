@@ -5,7 +5,7 @@ import logout from '../utils/logout'
 
 import Loading from './default/Loading'
 import Alert from './default/Alert'
-import {loadSectors} from '../utils/load'
+import {loadSectors, loadUsers} from '../utils/load'
 
 
 const ResourceForm = (props) => {
@@ -47,7 +47,8 @@ const ResourceForm = (props) => {
 
         if (status === 200) {
           setAlert('Atualizado com Sucesso')
-          loadSectors()         
+          loadSectors()      
+          loadUsers()   
          
           /** */
         }
@@ -62,6 +63,7 @@ const ResourceForm = (props) => {
         return;
       }
       await loadSectors()
+      await loadUsers()
       history.push('/setores/listar')
       //window.location.reload()
       /** */
