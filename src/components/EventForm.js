@@ -29,8 +29,6 @@ function EventForm(props) {
   let history = useHistory()
 
   useEffect(() => {
-
-
     if (id === undefined) {
       document.title = 'Cadastrar Evento'
       setLoagind(false)
@@ -113,11 +111,18 @@ function EventForm(props) {
 
   }
 
+  const handleAccept = (id) => {
+    console.log('Aceitar Recurso')
+  }
+  const handleDecline = (id) => {
+    console.log('negar recurso')
+  }
+
   return (
     <>
       {loading ?
         <Loading /> :
-        <div className="container">
+        <div className="container-fluid">
           <div className="row mb-4">
             <div className="col-md-12 border-bottom">
               <h2>{h2}</h2>
@@ -128,10 +133,12 @@ function EventForm(props) {
               <Alert msg={alert} />
             }
           </div>
-          <div className="row border border-light p-4">
+          <form onSubmit={handleSubmit}>
+            <div className="row border border-light p-4">
 
-            <div className="col-md-7">
-              <form onSubmit={handleSubmit}>
+
+              <div className="col-md-6">
+
                 <label htmlFor="name">Nome</label>
                 <input type="text" id="name" className="form-control mb-4" placeholder="Nome do eventos .."
                   value={name} onChange={e => setName(e.target.value)}
@@ -184,40 +191,43 @@ function EventForm(props) {
                     </select>
                   </div>
                 </div>
-                <div className="text-left">
-                  <button className="btn btn-outline-indigo" type="submit" disabled={btnDisabled}>{btnLabel}</button>
-                  <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
-                </div>
-              </form>
-            </div>
-            <div className="col-md-5 border-left">
-              <h4>
-                Recursos
+              </div>
+              <div className="col-md-5 border-left">
+                <h4>
+                  Recursos
               </h4>
-              <table className="table">
-                {/*}
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                      */}
-                <tbody>
-                  {itensResources.map(r => 
-                    <tr key={r.id} className="cursor-pointer" onClick={() => handleClick(r.id)}>
-                      <td>{r.name}</td>
-                      <td>{r.sector.name}</td>
-                      <td><i className="fas fa-times-circle float-right"></i></td>
-                    </tr>
-                  )}
-                </tbody>
+                <table className="table">
+                  <tbody>
+                    {itensResources.map(r =>
+                      <tr key={r.id} >
+                        <td className="cursor-pointer" onClick={() => handleClick(r.id)} title="Excluir Recurso">
+                          <i className="far fa-times-circle"></i>
+                        </td>
+                        <td>
+                          {r.name}
+                        </td>
+                        <td>{r.sector.name}</td>
+                        <td className="cursor-pointer" title="Aprovar Recurso" onClick={() => handleAccept(r.id) }>
+                          <i className="far fa-thumbs-up"></i>
+                        </td>
+                        <td className="cursor-pointer" title="Negar Recurso" onClick={() => handleDecline(r.id) }>
+                          <i className="far fa-thumbs-down"></i>
 
-              </table>
-              
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+
+                </table>
+
+              </div>
+              <div className="text-left">
+                <button className="btn btn-outline-indigo" type="submit" disabled={btnDisabled}>{btnLabel}</button>
+                <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
+              </div>
             </div>
-          </div>
+          </form>
+
         </div>
       }
     </>
