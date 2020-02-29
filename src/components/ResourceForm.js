@@ -9,13 +9,17 @@ import Alert from './default/Alert'
 
 const ResourceForm = (props) => {
 
-  const [name, setName] = useState('')
-  const [sector, setSector] = useState('')
+  const [resource, setResource] = useState({
+    name:'',
+    sector: ''
+  })
   const [alert, setAlert] = useState(false)
   const [h2, setH2] = useState('Cadastrar Recurso')
-  const [listSectors] = useState(JSON.parse(localStorage.getItem('sectors')))
-  const [btnLabel, setBtnLabel] = useState('Salvar')
-  const [btnDisabled, setBtnDisabled] = useState(false)
+  const [sectors] = useState(JSON.parse(localStorage.getItem('sectors')))
+  const [btn, setBtn] = useState({
+    label:'Salvar',
+    disabled:false
+  })
   const [loading, setLoading] = useState(true)
   const { id } = props.match.params
 
@@ -29,45 +33,41 @@ const ResourceForm = (props) => {
     }
     setH2('Editar Recurso')
     document.title = 'Editar Recurso'
-    async function loadResource() {
+    async function load() {
       const { data } = await api.get(`/resources/${id}`)
-      setName(data.name)
-      setSector(data.sector_id)
+      setResource(data)
       setLoading(false)
     }
-    loadResource()
+    load()
 
   }, [id])
 
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    let obj = { name, sector_id: sector }
-    setBtnLabel('Salvando ...')
-    setBtnDisabled(true)
-
+    setBtn({label:'Salvando...', disabled:true})
     try {
       if (id) {
-        const { status } = await api.put(`/resources/${id}`, obj)
+        const { status } = await api.put(`/resources/${id}`, resource)
 
         if (status === 200) {
           setAlert('Atualizado com Sucesso')
           //localStorage.setItem()
-          setBtnLabel('Salvar')
-          setBtnDisabled(false)
+          setBtn({label:'Salvar', disabled:false})
+
           loadResources()
           return;
         }
       }
 
 
-      const { data } = await api.post('/resources', obj)
+      const { data } = await api.post('/resources', resource)
       const { message } = data
 
       if (message) {
         setAlert(message)
-        setBtnLabel('Salvar')
-        setBtnDisabled(false)
+        setBtn({label:'Salvar', disabled:false})
+
         return;
       }
       await loadResources()
@@ -108,19 +108,20 @@ const ResourceForm = (props) => {
                 <form className="text-center" onSubmit={handleSubmit}>
 
                   <div className="md-form mt-3">
-                    <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} autoFocus={true} required />
+                    <input type="text" id="name" className="form-control" value={resource.name} 
+                    onChange={e => setResource({...resource, name: e.target.value}) } autoFocus={true} required />
                     <label htmlFor="name" >Name</label>
                   </div>
                   <div className="form-row">
-                    <select value={sector} className="form-control" onChange={e => setSector(e.target.value)} required>
+                    <select value={resource.sector_id} className="form-control" onChange={e => setResource({...resource, sector_id: e.target.value})} required>
                       <option value="">Selecione o Setor</option>
-                      {listSectors.map(r =>
+                      {sectors.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
                       )}
                     </select>
                   </div>
 
-                  <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit" disabled={btnDisabled}>{btnLabel}</button>
+                  <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit" disabled={btn.disabled}>{btn.label}</button>
                   <Link className="btn btn-outline-danger" to='/recursos/listar'>Fechar</Link>
 
                 </form>

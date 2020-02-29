@@ -3,8 +3,8 @@ import api from '../../service/api'
 
 
 function Login() {
-  const [email, setEmail] = useState('teste@gmail')
-  const [password, setPassword] = useState('teste')
+  const [email, setEmail] = useState('gerente@gmail.com')
+  const [password, setPassword] = useState('gerente')
   const [alert, setAlert] = useState(false)
   const [btnLabel, setBtnLabel] = useState('ENTRAR')
   const [btnStatus, setBtnStatus] = useState(false)
@@ -22,16 +22,15 @@ function Login() {
     try {
 
       const { data } = await api.post('/login', obj)
-      
+      console.log(data.user)
+      localStorage.setItem('logged',JSON.stringify(data.user))
       localStorage.setItem('token', data.access_token)
-      localStorage.setItem('name', data.user.name)
       window.location.reload()
       /** */
-      console.log(data)
     } catch (e) {
       setBtnLabel('ENTRAR')
       setBtnStatus(false)
-
+      console.log(e)
       if (!e.response) {
         return setAlert('Erro no Servidor!')
       }

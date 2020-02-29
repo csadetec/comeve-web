@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 
 
@@ -11,6 +11,12 @@ const Navbar = () =>{
   const [recursos, setRecursos] = useState('nav-item')
   const [setores, setSetores ] = useState('nav-item')
   const [usuarios, setUsuarios ] = useState('nav-item')
+  const [logged] = useState(JSON.parse(localStorage.getItem('logged')))
+
+  useEffect(() => {
+    handleActive()
+  })
+
 
   const handleLogout = () =>{
     localStorage.clear()
@@ -78,7 +84,7 @@ const Navbar = () =>{
             
             <li className="nav-item dropdown">
               <div className="nav-link dropdown-toggle cursor-pointer" id="navbarDropdownMenuLink" data-toggle="dropdown"
-aria-haspopup="true" aria-expanded="false" >{localStorage.getItem('name') }</div>
+aria-haspopup="true" aria-expanded="false" >{logged.name} | {logged.sector.name}</div>
               <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                 <Link className="dropdown-item" to="/eventos/listar">Eventos</Link>
                 <Link className="dropdown-item" to="/usuarios/listar" onClick={handleActive}  >Usuários</Link>

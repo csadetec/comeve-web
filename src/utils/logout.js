@@ -2,10 +2,10 @@
 //import  {Redirect} from 'react-router-dom'
 
 const logout = () => {
-  
+  /*
   localStorage.clear()
   window.location.reload()
-
+  /** */
 }
 
 export default logout

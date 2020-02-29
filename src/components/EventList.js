@@ -58,7 +58,6 @@ function EventList() {
             <thead>
               <tr>
                 <th scope="col">Data</th>
-                <th scope="col">Horas</th>
                 <th scope="col">Nome</th>
                 <th scope="col">Local</th>
                 <th scope="col">Criador</th>
@@ -71,8 +70,9 @@ function EventList() {
                 <tr 
                   title={title(r.date, r.name,  r.resources)}
                   onClick={() => handleClick(r.id)} key={r.id} className="cursor-pointer">
-                  <th>{dateFormat(r.date)}</th>
-                  <td>{timeFormat(r.start)} - {timeFormat(r.end)}</td>
+                  <td>
+                    <strong>{dateFormat(r.date)}</strong> - {timeFormat(r.start)} - {timeFormat(r.end)}
+                  </td>
                   <td>{r.name}</td>
                   <td>{r.place.name}</td>
                   <td>{r.user.name}</td>

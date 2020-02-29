@@ -9,11 +9,10 @@ import Loading from './default/Loading'
 
 function PlaceForm(props) {
 
-  const [name, setName] = useState('')
+  const [place, setPlace] = useState('')
   const [alert, setAlert] = useState(false)
   const [h2, setH2] = useState('Cadastrar Local')
-  const [btndisabled, setBtndisabled] = useState(false)
-  const [btnLabel, setBtnLabel] = useState('Salvar')
+  const [btn, setBtn] = useState({label:'Salvar', disabled: false})
   const [loading, setLoading ] = useState(true)
   const { id } = props.match.params
   const history = useHistory()
@@ -30,7 +29,7 @@ function PlaceForm(props) {
     setH2('Editar Local')
     async function loadPlace() {
       const { data } = await api.get(`/places/${id}`)
-      setName(data.name)
+      setPlace(data)
       setLoading(false)
       //console.log(data)
     }
@@ -40,32 +39,29 @@ function PlaceForm(props) {
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    let obj = { name }
-    //console.log(obj)
-    setBtnLabel('SALVANDO ...')
-    setBtndisabled(true)
+    setBtn({label:'Salvando...', disabled:true})
     try {
 
       if (id) {
-        const { status } = await api.put(`/places/${id}`, obj)
+        const { status } = await api.put(`/places/${id}`, place)
 
         if (status === 200) {
           setAlert('Atualizado com Sucesso')
-          setBtnLabel('Salvar')
-          setBtndisabled(false)
+          setBtn({label:'Salvar', disabled:false})
+
           loadPlaces()
   
         }
         return;
       }
 
-      const { data } = await api.post('/places', obj)
+      const { data } = await api.post('/places', place)
       const { message } = data
 
       if (message) {
         setAlert(message)
-        setBtnLabel('Salvar')
-        setBtndisabled(false)
+        setBtn({label:'Salvar', disabled:false})
+
         return;
       }
       await loadPlaces()
@@ -80,6 +76,7 @@ function PlaceForm(props) {
 
   }
 
+ 
   return (
     <div className="container pb-5">
       <div className="row mb-4">
@@ -100,11 +97,12 @@ function PlaceForm(props) {
             <p className="h4 mb-4 text-center">Dados do Evento</p>*/}
               <label htmlFor="name">Nome</label>
               <input type="text" id="name" className="form-control mb-4" placeholder="Nome do local .."
-                value={name} onChange={e => setName(e.target.value)}
+                value={place.name} onChange={e => setPlace({...place, name:e.target.value})}
+                
                 required
               />
               <div className="text-center">
-                <button className="btn btn-outline-indigo" type="submit" disabled={btndisabled}>{btnLabel}</button>
+                <button className="btn btn-outline-indigo" type="submit" disabled={btn.disabled}>{btn.label}</button>
                 <Link className="btn btn-outline-danger" type="submit" to="/locais/listar">Fechar</Link>
               </div>
             </form>

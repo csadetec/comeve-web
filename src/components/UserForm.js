@@ -14,7 +14,7 @@ const UserForm = (props) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [sector_id, setSectorId] = useState('')
-  const [sectors, setSectors] = useState([])
+  const [sectors] = useState(JSON.parse(localStorage.getItem('sectors')))
   const [alert, setAlert] = useState(false)
   const [loading, setLoading] = useState(true)
   const [h2, setH2] = useState('')
@@ -25,15 +25,6 @@ const UserForm = (props) => {
   const history = useHistory()
 
   useEffect(() => {
-    async function loadSectors() {
-      
-      const { data } = await api.get('sectors')
-
-      setSectors(data)
-      //console.log(data)
-    }
-    loadSectors()
-
     if (id === undefined) {
       document.title = 'Cadastrar Usuário'
       setLoading(false)
@@ -74,7 +65,7 @@ const UserForm = (props) => {
 
           setAlert('Usuário Atualizado com Sucesso')
           setBtnLabel('Salvar')
-          setBtnDisabled(true)
+          setBtnDisabled(false)
           loadUsers()
           return;
         }
@@ -86,7 +77,7 @@ const UserForm = (props) => {
       if (message) {
         setAlert(message)
         setBtnLabel('Salvar')
-        setBtnDisabled(true)
+        setBtnDisabled(false)
         return;
       }
       await loadUsers()
