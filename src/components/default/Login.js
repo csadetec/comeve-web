@@ -54,7 +54,7 @@ function Login() {
   return (
     <div className="container">
       <div className="row justify-content-center mt-5">
-        <div className="col-md-6">
+        <div className="col-md-8">
           {alert &&
             <div className="alert alert-warning mt-2" role="alert">
               {alert}

@@ -17,6 +17,7 @@ function EventForm(props) {
     date: '',
     start: '',
     end: '',
+    user:'',
     resources:[]
   })
 
@@ -25,6 +26,11 @@ function EventForm(props) {
   const [h2, setH2] = useState('Cadastrar Evento')
   const [alert, setAlert] = useState(false)
   const [loading, setLoagind] = useState(true)
+
+  const [thumps, setThumps] = useState({
+    class:'far fa-thumbs-down',
+    title:'Aceitar Recurso'
+  })
   
   const [btn, setBtn] = useState({label:'Salvar', disabled:false  })  
 
@@ -119,16 +125,19 @@ function EventForm(props) {
 
   }
 
-  const handleAccept = (id) => {
-    console.log('Aceitar Recurso')
-  }
-  const handleDecline = (id) => {
-    console.log('negar recurso')
-  }
+  const handleAcceptDecline = (id) => {
 
-  const updateField = e => {
-    setEvent({...event, [e.target.name]: e.target.value})
-    console.log(event)
+    if(thumps.class === 'far fa-thumbs-up'){
+      setThumps({class:'far fa-thumbs-down', title:'Aceitar Recurso'})
+    }else{
+      setThumps({class:'far fa-thumbs-up', title:'Negar Recurso'})
+    }
+
+    //window.alert('aceitar solicitação do recurso', 1)
+    console.log(thumps)
+    console.log('Aceitar Recurso')
+
+
   }
 
   return (
@@ -143,7 +152,7 @@ function EventForm(props) {
             <div className="col-md-6 text-right">
               {event.user.name && `Criador do Evento: ${event.user.name}`}
               <br/>
-              {event.created_at && `Criação: ${event.created}`}
+              {event.created_at && `Criação: ${event.created_at}`}
             </div>
           </div>
           <div className="row">
@@ -151,19 +160,19 @@ function EventForm(props) {
               <Alert msg={alert} />
             }
           </div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>date
             <div className="row border border-light p-4">
               <div className="col-md-6">
                 <label htmlFor="name">Nome</label>
-                <input type="text" id="name" name="name" className="form-control mb-4" placeholder="Nome do eventos .."
-                  value={event.name} onChange={updateField}
+                <input type="text" id="name"  className="form-control mb-4" placeholder="Nome do eventos .."
+                  value={event.name} onChange={e => setEvent({...event, name:e.target.value})}
                   required
                 />
 
                 <div className="row">
                   <div className="col-md-6">
                     <label htmlFor="place">Local</label>
-                    <select value={event.place_id} onChange={updateField} className="form-control" required>
+                    <select value={event.place_id} onChange={e => setEvent({...event, place_id:e.target.value})} className="form-control" required>
                       <option value="">Selecione</option>
                       {places.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
@@ -173,7 +182,7 @@ function EventForm(props) {
                   <div className="col-md-6">
                     <label htmlFor="date">Data</label>
                     <input type="date" id="date" className="form-control mb-4"
-                      value={event.date} onChange={updateField}
+                      value={event.date} onChange={e => setEvent({...event, date:e.target.value})}
                       required
                     />
                   </div>
@@ -182,14 +191,14 @@ function EventForm(props) {
                   <div className="col-md-6">
                     <label htmlFor="start">Inicio</label>
                     <input type="time" id="start" className="form-control mb-4"
-                      value={event.start} onChange={updateField}
+                      value={event.start} onChange={e => setEvent({...event, start:e.target.value})}
                       required
                     />
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="end">Fim</label>
                     <input type="time" id="end" name="end" className="form-control mb-4"
-                      value={event.end} onChange={updateField}
+                      value={event.end} onChange={e => setEvent({...event, end:e.target.value})}
                       required
 
                     />
@@ -221,13 +230,9 @@ function EventForm(props) {
                         <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
                           <i className="far fa-times-circle"></i>
                         </td>
-                        <td className="cursor-pointer" title="Aprovar Recurso" onClick={() => handleAccept(r.id)}>
-                          <i className="far fa-thumbs-up"></i>
+                        <td className="cursor-pointer" title={thumps.title} onClick={() => handleAcceptDecline(r.id)}>
+                          <i className={thumps.class}></i>
                         </td>
-                        <td className="cursor-pointer" title="Negar Recurso" onClick={() => handleDecline(r.id)}>
-                          <i className="far fa-thumbs-down"></i>
-                        </td>
-
                       </tr>
                     )}
                   </tbody>

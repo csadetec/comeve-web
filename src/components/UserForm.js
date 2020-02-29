@@ -10,16 +10,19 @@ import './style.css'
 import { loadUsers } from '../utils/load'
 const UserForm = (props) => {
 
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [sector_id, setSectorId] = useState('')
+  const [user, setUser] = useState({
+    name:'',
+    email:'',
+    password:'',
+    sector_id:''
+  })
+
   const [sectors] = useState(JSON.parse(localStorage.getItem('sectors')))
   const [alert, setAlert] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [h2, setH2] = useState('')
-  const [btnLabel, setBtnLabel] = useState('Salvar')
-  const [btnDisabled, setBtnDisabled ] = useState(false)
+  const [h2, setH2] = useState('Cadastrar Usuário')
+
+  const [btn, setBtn] = useState({label:'Salvar', disabled:false})
   const { id } = props.match.params
 
   const history = useHistory()
@@ -34,50 +37,44 @@ const UserForm = (props) => {
     document.title = 'Editar Usuário'
 
 
-    async function loadUser() {
+    async function load() {
       const { data } = await api.get(`/users/${id}`)
-
-      setName(data.name)
-      setEmail(data.email)
-      setSectorId(data.sector_id)
+      data.password = ''
+      setUser(data)
       setLoading(false)
-      /** */
-
     }
-    loadUser()
+    load()
     /** */
   }, [id])
 
   /** */
   async function handleSubmit(e) {
     e.preventDefault()
-    let obj = { email, password, name, sector_id }
-   
-    setBtnLabel('Salvando ...')
-    setBtnDisabled(true)
+    setBtn({label: 'Salvando...', disabled:true})
+
+    //console.log(user)
+    //return
 
     try {
       if (id) {
-        const { status } = await api.put(`/users/${id}`, obj)
+        const { status } = await api.put(`/users/${id}`, user)
 
         //console.log(data)
         if (status === 200) {
 
           setAlert('Usuário Atualizado com Sucesso')
-          setBtnLabel('Salvar')
-          setBtnDisabled(false)
+          setBtn({label: 'Salvar', disabled:false})
           loadUsers()
           return;
         }
       }
 
-      const { data } = await api.post('/users', obj)
+      const { data } = await api.post('/users', user)
       const { message } = data
 
       if (message) {
         setAlert(message)
-        setBtnLabel('Salvar')
-        setBtnDisabled(false)
+        setBtn({label: 'Salvar', disabled:false})
         return;
       }
       await loadUsers()
@@ -118,21 +115,24 @@ const UserForm = (props) => {
                     
                   }
                   <div className="md-form mt-3">
-                    <input type="email" id="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
+                    <input type="email" id="email" className="form-control" value={user.email} 
+                      onChange={e => setUser({...user, email:e.target.value})} required />
                     <label htmlFor="email" >Email</label>
                   </div>
 
                   <div className="md-form mt-3">
-                    <input type="password" id="password" className="form-control" value={password} onChange={e => setPassword(e.target.value)} />
+                    <input type="password" id="password" className="form-control" value={user.password} 
+                      onChange={e => setUser({...user, password:e.target.value})} />
                     <label htmlFor="password" >Senha</label>
                   </div>
                   <div className="md-form mt-3">
-                    <input type="text" id="name" className="form-control" value={name} onChange={e => setName(e.target.value)} required />
+                    <input type="text" id="name" className="form-control" value={user.name} 
+                      onChange={e => setUser({...user, name:e.target.value})} required />
                     <label htmlFor="name" >Nome</label>
                   </div>
 
                   <div className="form-row">
-                    <select value={sector_id} className="form-control" onChange={e => setSectorId(e.target.value)} required>
+                    <select value={user.sector_id} className="form-control" onChange={e => setUser({...user, sector_id:e.target.value})} required>
                       <option value="">Selecione o Setor</option>
                       {sectors.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
@@ -140,7 +140,7 @@ const UserForm = (props) => {
                     </select>
                   </div>
 
-                  <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit" disabled={btnDisabled}>{btnLabel}</button>
+                  <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit" disabled={btn.disabled}>{btn.label}</button>
                   <Link className="btn btn-outline-danger" to='/usuarios/listar'>Fechar</Link>
 
                 </form>

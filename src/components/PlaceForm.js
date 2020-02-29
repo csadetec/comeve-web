@@ -9,7 +9,7 @@ import Loading from './default/Loading'
 
 function PlaceForm(props) {
 
-  const [place, setPlace] = useState('')
+  const [place, setPlace] = useState({name:''})
   const [alert, setAlert] = useState(false)
   const [h2, setH2] = useState('Cadastrar Local')
   const [btn, setBtn] = useState({label:'Salvar', disabled: false})
