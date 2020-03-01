@@ -21,17 +21,14 @@ function EventForm(props) {
     resources:[]
   })
 
+
+  //const [log]
   const [places] = useState(JSON.parse(localStorage.getItem('places')))
   const [resources] = useState(JSON.parse(localStorage.getItem('resources')))
   const [h2, setH2] = useState('Cadastrar Evento')
   const [alert, setAlert] = useState(false)
   const [loading, setLoagind] = useState(true)
 
-  const [thumps, setThumps] = useState({
-    class:'far fa-thumbs-down',
-    title:'Aceitar Recurso'
-  })
-  
   const [btn, setBtn] = useState({label:'Salvar', disabled:false  })  
 
   const { id } = props.match.params
@@ -47,7 +44,7 @@ function EventForm(props) {
     setH2(`Editar Evento - ${id}`)
     async function load() {
       const { data } = await api.get(`/events/${id}`)
-      console.log(data)
+      //console.log(data)
     
       setEvent(data)
       setLoagind(false)
@@ -66,15 +63,13 @@ function EventForm(props) {
     setBtn({label:'Salvando...', disabled:true})
     //return;
     if (id) {
-      const { status } = await api.put(`/events/${id}`, event)
-      //     console.log(data);
+      const { status, data } = await api.put(`/events/${id}`, event)
+      console.log(data);
+      
       if (status === 200) {
         loadEvents()
         setAlert('Atualizado com Sucesso!')
         setBtn({label:'Salvar', disabled:false})
-
-       
-
       }
       return;
     }
@@ -89,54 +84,57 @@ function EventForm(props) {
   }
 
   async function handleAddResource(e) {
-
     
-    let itemSelected = parseInt(e.target.value)
-    let obj = resources.filter((r) => {
-      return r.id === itemSelected
+    let resource_id = parseInt(e.target.value)
+    //console.log('Id do recurso selecionado', resource_id)
+
+    let resourceSelected = resources.filter((r) => {
+      return r.id === resource_id
+    
     })
-
-    let testFind = event.resources.filter((r) => {
-      return r.id === itemSelected
+   
+    let resourceVerifySelected  = event.resources.filter((r) => {
+      return r.id === resource_id
     })
+    if (resourceVerifySelected.length === 0) {
+      resourceSelected  = resourceSelected[0];
+      //let er = {accept: 0}
 
-
-    if (testFind.length === 0) {
-
-      let myResources = ([...event.resources, obj[0]])
-      setEvent({...event, resources:myResources})
-      //setEvent({...event,  obj[0]])
-
+      resourceSelected = {...resourceSelected, accept:0};
+      let myResources = ([...event.resources, resourceSelected])
+      await setEvent({...event, resources:myResources})
+      
+    }else{
+      //await window.alert(`Recurso já foi adicionando`)
+      console.log('ja foi adicionando')
     }
+
     /** */
   }
 
+  
+
   const handleExcludeResource = (id) => {
-    console.log('excluir resource', id)
-    console.log(event.resources)
+    console.log(id)
     
     let filter = event.resources.filter(r => {
       return r.id !== id
     })
 
     setEvent({...event, resources: filter})
-    //console.log(filter)
-    /** */
 
   }
 
-  const handleAcceptDecline = (id) => {
+  const handleAcceptDecline = (id, accept) => {
 
-    if(thumps.class === 'far fa-thumbs-up'){
-      setThumps({class:'far fa-thumbs-down', title:'Aceitar Recurso'})
-    }else{
-      setThumps({class:'far fa-thumbs-up', title:'Negar Recurso'})
-    }
+    let myResources = event.resources.map( r => {
+      if(r.id === id){
+        r.accept = accept === 1 ? 0 : 1
+      }
+      return r
+    })
 
-    //window.alert('aceitar solicitação do recurso', 1)
-    console.log(thumps)
-    console.log('Aceitar Recurso')
-
+    setEvent({...event, resources:myResources})
 
   }
 
@@ -160,7 +158,7 @@ function EventForm(props) {
               <Alert msg={alert} />
             }
           </div>
-          <form onSubmit={handleSubmit}>date
+          <form onSubmit={handleSubmit}>
             <div className="row border border-light p-4">
               <div className="col-md-6">
                 <label htmlFor="name">Nome</label>
@@ -206,7 +204,7 @@ function EventForm(props) {
                 </div>
                 <div className="row">
                   <div className="col-md-12">
-                    <select  className="form-control mb-4" onChange={handleAddResource} >
+                    <select value="" className="form-control mb-4" onChange={handleAddResource} >
                       <option value="">SELECIONE O RECURSO</option>
                       {resources.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
@@ -224,14 +222,14 @@ function EventForm(props) {
                   <tbody>
                     {event.resources.map(r =>
                       <tr key={r.id} >
-                        <td>          {r.name}
+                        <td>{r.name}
                         </td>
                         <td>{r.sector.name}</td>
                         <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
                           <i className="far fa-times-circle"></i>
                         </td>
-                        <td className="cursor-pointer" title={thumps.title} onClick={() => handleAcceptDecline(r.id)}>
-                          <i className={thumps.class}></i>
+                        <td className="cursor-pointer" title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'} onClick={() => handleAcceptDecline(r.id, r.accept)}>
+                          <i className={r.accept === 1 ? 'far fa-thumbs-up' : 'far fa-thumbs-down'}></i>
                         </td>
                       </tr>
                     )}
