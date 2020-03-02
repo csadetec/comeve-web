@@ -48,7 +48,7 @@ function EventForm(props) {
     async function load() {
       const { data } = await api.get(`/events/${id}`)
       //console.log(data.resources)
-      console.log(logged)
+      //console.log(logged)
       if(data.user.id !== logged.id){
         setDisable(true)
       }
