@@ -110,7 +110,7 @@ const ResourceForm = (props) => {
                   <div className="md-form mt-3">
                     <input type="text" id="name" className="form-control" value={resource.name} 
                     onChange={e => setResource({...resource, name: e.target.value}) } autoFocus={true} required />
-                    <label htmlFor="name" >Name</label>
+                    <label htmlFor="name" >Nome</label>
                   </div>
                   <div className="form-row">
                     <select value={resource.sector_id} className="form-control" onChange={e => setResource({...resource, sector_id: e.target.value})} required>

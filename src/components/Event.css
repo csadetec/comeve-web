@@ -16,3 +16,12 @@
 .far{
   font-size: 20px;
 }
+.like{
+  font-size: 20px;
+  color:green;
+}
+.deslike{
+  font-size: 20px;
+  color:red;
+}
+

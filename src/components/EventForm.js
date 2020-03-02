@@ -17,19 +17,21 @@ function EventForm(props) {
     date: '',
     start: '',
     end: '',
-    user:'',
-    resources:[]
+    user: '',
+    resources: []
   })
 
 
-  //const [log]
+  const [logged] = useState(JSON.parse(localStorage.getItem('logged')))
   const [places] = useState(JSON.parse(localStorage.getItem('places')))
   const [resources] = useState(JSON.parse(localStorage.getItem('resources')))
+  const [ disabled, setDisable ] = useState(false)
+
   const [h2, setH2] = useState('Cadastrar Evento')
   const [alert, setAlert] = useState(false)
   const [loading, setLoagind] = useState(true)
 
-  const [btn, setBtn] = useState({label:'Salvar', disabled:false  })  
+  const [btn, setBtn] = useState({ label: 'Salvar', disabled: false })
 
   const { id } = props.match.params
   let history = useHistory()
@@ -41,11 +43,15 @@ function EventForm(props) {
       return;
     }
     document.title = `Editar Evento ${id}`
+
     setH2(`Editar Evento - ${id}`)
     async function load() {
       const { data } = await api.get(`/events/${id}`)
-      //console.log(data)
-    
+      //console.log(data.resources)
+      console.log(logged)
+      if(data.user.id !== logged.id){
+        setDisable(true)
+      }
       setEvent(data)
       setLoagind(false)
 
@@ -60,16 +66,16 @@ function EventForm(props) {
   async function handleSubmit(e) {
     e.preventDefault()
 
-    setBtn({label:'Salvando...', disabled:true})
+    setBtn({ label: 'Salvando...', disabled: true })
     //return;
     if (id) {
       const { status, data } = await api.put(`/events/${id}`, event)
       console.log(data);
-      
+
       if (status === 200) {
         loadEvents()
         setAlert('Atualizado com Sucesso!')
-        setBtn({label:'Salvar', disabled:false})
+        setBtn({ label: 'Salvar', disabled: false })
       }
       return;
     }
@@ -84,27 +90,27 @@ function EventForm(props) {
   }
 
   async function handleAddResource(e) {
-    
+    setAlert(false)
     let resource_id = parseInt(e.target.value)
     //console.log('Id do recurso selecionado', resource_id)
 
     let resourceSelected = resources.filter((r) => {
       return r.id === resource_id
-    
+
     })
-   
-    let resourceVerifySelected  = event.resources.filter((r) => {
+
+    let resourceVerifySelected = event.resources.filter((r) => {
       return r.id === resource_id
     })
     if (resourceVerifySelected.length === 0) {
-      resourceSelected  = resourceSelected[0];
+      resourceSelected = resourceSelected[0];
       //let er = {accept: 0}
 
-      resourceSelected = {...resourceSelected, accept:0};
+      resourceSelected = { ...resourceSelected, accept: 0 };
       let myResources = ([...event.resources, resourceSelected])
-      await setEvent({...event, resources:myResources})
-      
-    }else{
+      await setEvent({ ...event, resources: myResources })
+
+    } else {
       //await window.alert(`Recurso já foi adicionando`)
       console.log('ja foi adicionando')
     }
@@ -112,32 +118,38 @@ function EventForm(props) {
     /** */
   }
 
-  
-
   const handleExcludeResource = (id) => {
-    console.log(id)
-    
+    setAlert(false)
     let filter = event.resources.filter(r => {
       return r.id !== id
     })
 
-    setEvent({...event, resources: filter})
+    setEvent({ ...event, resources: filter })
 
   }
 
-  const handleAcceptDecline = (id, accept) => {
+  const handleAcceptDecline = (id, sectorName, accept) => {
+    setAlert(false)
+    if (logged.sector.name !== sectorName) {
+      window.alert(`Entre em contato com - ${sectorName}\nPara realizar está ação`)
+      return;
+    }
 
-    let myResources = event.resources.map( r => {
-      if(r.id === id){
+    let myResources = event.resources.map(r => {
+      if (r.id === id) {
         r.accept = accept === 1 ? 0 : 1
       }
       return r
     })
 
-    setEvent({...event, resources:myResources})
+    setEvent({ ...event, resources: myResources })
 
   }
 
+  const updateField = (e) => {
+    setAlert(false)
+    setEvent({ ...event, [e.target.name]: e.target.value })
+  }
   return (
     <>
       {loading ?
@@ -149,28 +161,27 @@ function EventForm(props) {
             </div>
             <div className="col-md-6 text-right">
               {event.user.name && `Criador do Evento: ${event.user.name}`}
-              <br/>
+              <br />
               {event.created_at && `Criação: ${event.created_at}`}
             </div>
           </div>
-          <div className="row">
+
+          <form onSubmit={handleSubmit}>
             {alert &&
               <Alert msg={alert} />
             }
-          </div>
-          <form onSubmit={handleSubmit}>
             <div className="row border border-light p-4">
               <div className="col-md-6">
                 <label htmlFor="name">Nome</label>
-                <input type="text" id="name"  className="form-control mb-4" placeholder="Nome do eventos .."
-                  value={event.name} onChange={e => setEvent({...event, name:e.target.value})}
+                <input type="text" id="name" name="name" className="form-control mb-4" placeholder="Nome do eventos .."
+                  value={event.name} onChange={updateField} disabled={disabled}
                   required
                 />
 
                 <div className="row">
                   <div className="col-md-6">
                     <label htmlFor="place">Local</label>
-                    <select value={event.place_id} onChange={e => setEvent({...event, place_id:e.target.value})} className="form-control" required>
+                    <select value={event.place_id} name="place_id" onChange={updateField} className="form-control" disabled={disabled} required>
                       <option value="">Selecione</option>
                       {places.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
@@ -179,8 +190,8 @@ function EventForm(props) {
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="date">Data</label>
-                    <input type="date" id="date" className="form-control mb-4"
-                      value={event.date} onChange={e => setEvent({...event, date:e.target.value})}
+                    <input type="date" id="date" name="date" className="form-control mb-4"
+                      value={event.date} onChange={updateField} disabled={disabled}
                       required
                     />
                   </div>
@@ -188,15 +199,15 @@ function EventForm(props) {
                 <div className="row">
                   <div className="col-md-6">
                     <label htmlFor="start">Inicio</label>
-                    <input type="time" id="start" className="form-control mb-4"
-                      value={event.start} onChange={e => setEvent({...event, start:e.target.value})}
+                    <input type="time" id="start" name="start" className="form-control mb-4"
+                      value={event.start} onChange={updateField} disabled={disabled}
                       required
                     />
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="end">Fim</label>
                     <input type="time" id="end" name="end" className="form-control mb-4"
-                      value={event.end} onChange={e => setEvent({...event, end:e.target.value})}
+                      value={event.end} onChange={updateField} disabled={disabled}
                       required
 
                     />
@@ -225,12 +236,17 @@ function EventForm(props) {
                         <td>{r.name}
                         </td>
                         <td>{r.sector.name}</td>
-                        <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
-                          <i className="far fa-times-circle"></i>
+                        {event.user.id === logged.id &&
+                          <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
+                            <i className="far fa-times-circle"></i>
+                          </td>
+                        }
+                        <td className="cursor-pointer"
+                          title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
+                          onClick={() => handleAcceptDecline(r.id, r.sector.name, r.accept)}>
+                          <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
                         </td>
-                        <td className="cursor-pointer" title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'} onClick={() => handleAcceptDecline(r.id, r.accept)}>
-                          <i className={r.accept === 1 ? 'far fa-thumbs-up' : 'far fa-thumbs-down'}></i>
-                        </td>
+
                       </tr>
                     )}
                   </tbody>
