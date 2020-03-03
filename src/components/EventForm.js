@@ -24,6 +24,7 @@ function EventForm(props) {
 
   const [logged] = useState(JSON.parse(localStorage.getItem('logged')))
   const [places] = useState(JSON.parse(localStorage.getItem('places')))
+  const [sectors] = useState(JSON.parse(localStorage.getItem('sectors')))
   const [resources] = useState(JSON.parse(localStorage.getItem('resources')))
   const [ disabled, setDisable ] = useState(false)
 
@@ -49,9 +50,10 @@ function EventForm(props) {
       const { data } = await api.get(`/events/${id}`)
       //console.log(data.resources)
       //console.log(logged)
-      if(data.user.id !== logged.id){
-        setDisable(true)
-      }
+      data.resources.map( r =>
+        r.accept = r.pivot.accept
+      )
+
       setEvent(data)
       setLoagind(false)
 
@@ -128,10 +130,11 @@ function EventForm(props) {
 
   }
 
-  const handleAcceptDecline = (id, sectorName, accept) => {
+  const handleAcceptDecline = (id, sector_id, accept) => {
     setAlert(false)
-    if (logged.sector.name !== sectorName) {
-      window.alert(`Entre em contato com - ${sectorName}\nPara realizar está ação`)
+    console.log(accept)
+    if (logged.sector_id !== sector_id) {
+      window.alert(`Entre em contato com - ${sectorName(sector_id)}\nPara realizar está ação`)
       return;
     }
 
@@ -145,7 +148,15 @@ function EventForm(props) {
     setEvent({ ...event, resources: myResources })
 
   }
+  
+  const sectorName = (id) =>{
+    let filter = sectors.filter((r) => {
+      return r.id === id 
+    })
+    //console.log(filter)
+    return filter[0].name
 
+  }
   const updateField = (e) => {
     setAlert(false)
     setEvent({ ...event, [e.target.name]: e.target.value })
@@ -235,7 +246,7 @@ function EventForm(props) {
                       <tr key={r.id} >
                         <td>{r.name}
                         </td>
-                        <td>{r.sector.name}</td>
+                        <td>{sectorName(r.sector_id)}</td>
                         {event.user.id === logged.id &&
                           <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
                             <i className="far fa-times-circle"></i>
@@ -243,7 +254,7 @@ function EventForm(props) {
                         }
                         <td className="cursor-pointer"
                           title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
-                          onClick={() => handleAcceptDecline(r.id, r.sector.name, r.accept)}>
+                          onClick={() => handleAcceptDecline(r.id, r.sector_id, r.accept)}>
                           <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
                         </td>
 

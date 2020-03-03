@@ -22,9 +22,11 @@ function Login() {
     try {
 
       const { data } = await api.post('/login', obj)
-      console.log(data.user)
+      console.log(data)
+      
       localStorage.setItem('logged',JSON.stringify(data.user))
-      localStorage.setItem('token', data.access_token)
+      //localStorage.setItem('token', data.access_token) with laravel
+      localStorage.setItem('token', data.token)
       window.location.reload()
       /** */
     } catch (e) {
