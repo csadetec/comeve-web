@@ -4,8 +4,8 @@ import api from '../service/api'
 import logout from '../utils/logout'
 import {loadResources} from '../utils/load'
 
-import Loading from './default/Loading'
-import Alert from './default/Alert'
+import Loading from '../components/Loading'
+import Alert from '../components/Alert'
 
 const ResourceForm = (props) => {
 

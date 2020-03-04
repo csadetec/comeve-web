@@ -3,30 +3,32 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import {loadEvents, loadPlaces, loadResources, loadSectors, loadUsers} from './utils/load'
 
 //components default
-import Navbar from './components/default/Navbar'
-import Footer from './components/default/Footer'
-import Home from './components/default/Home'
-import Login from './components/default/Login'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
-//components events
-import EventList from './components/EventList'
-import EventForm from './components/EventForm'
+//pages basic
+import Home from './pages/Home'
+import Login from './pages/Login'
 
-//components places
-import PlaceList from './components/PlaceList'
-import PlaceForm from './components/PlaceForm'
+//pages events
+import EventList from './pages/EventList'
+import EventForm from './pages/EventForm'
 
-//components resources
-import ResourceList from './components/ResourceList'
-import ResourceForm from './components/ResourceForm'
+//pages places
+import PlaceList from './pages/PlaceList'
+import PlaceForm from './pages/PlaceForm'
 
-//components sectors
-import SectorList from './components/SectorList'
-import SectorForm from './components/SectorForm'
+//pages resources
+import ResourceList from './pages/ResourceList'
+import ResourceForm from './pages/ResourceForm'
+
+//pages sectors
+import SectorList from './pages/SectorList'
+import SectorForm from './pages/SectorForm'
 
 //componets users
-import UserList from './components/UserList'
-import UserForm from './components/UserForm'
+import UserList from './pages/UserList'
+import UserForm from './pages/UserForm'
 
 const App = () => {
   //const [logged, setLogged] = useState(false)

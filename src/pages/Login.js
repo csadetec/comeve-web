@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import api from '../../service/api'
+import api from '../service/api'
 
 
 function Login() {
@@ -36,12 +36,11 @@ function Login() {
       if (!e.response) {
         return setAlert('Erro no Servidor!')
       }
-      //console.log(e.response)
-      //return ;
-      let { error } = e.response.data
-      console.log(error)
 
-      if (error === 'Email not exist') {
+      let { field } = e.response.data[0]
+      console.log(field)
+
+      if (field === 'email') {
         setAlert('E-mail não cadastrado')
         return false;
       }

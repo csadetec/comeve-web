@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 import logout from '../utils/logout'
-import {loadPlaces} from '../utils/load'
+import {loadPlaces, loadEvents} from '../utils/load'
 
-import Alert from './default/Alert'
-import Loading from './default/Loading'
+import Alert from '../components/Alert'
+import Loading from '../components/Loading'
 
 function PlaceForm(props) {
 
@@ -48,8 +48,9 @@ function PlaceForm(props) {
         if (status === 200) {
           setAlert('Atualizado com Sucesso')
           setBtn({label:'Salvar', disabled:false})
-
           loadPlaces()
+          loadEvents()
+
   
         }
         return;

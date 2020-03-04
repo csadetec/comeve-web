@@ -3,9 +3,9 @@ import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 import logout from '../utils/logout'
 
-import Loading from './default/Loading'
-import Alert from './default/Alert'
-import {loadSectors, loadUsers} from '../utils/load'
+import Loading from '../components/Loading'
+import Alert from '../components/Alert'
+import {loadSectors, loadUsers, loadResources} from '../utils/load'
 
 
 const ResourceForm = (props) => {
@@ -47,6 +47,7 @@ const ResourceForm = (props) => {
         if (status === 200) {
           setAlert('Atualizado com Sucesso')
           loadSectors()      
+          loadResources()
           loadUsers()   
           setBtn({label:'Salvar', disabled:false})
         }

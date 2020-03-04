@@ -38,7 +38,7 @@ const  UserList = () => {
                   <th scope="row">{cont++}</th>
                   <td>{r.name}</td>
                   <td>{r.email}</td>
-                  <td>{r.sector.name}</td>
+                  <td>{r.sector_name}</td>
                   <td><Link to={`/usuarios/editar/${r.id}`} title="Editar Usuário"><i className="fas fa-edit"></i></Link></td>
                 </tr>
               )}

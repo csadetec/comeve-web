@@ -3,8 +3,8 @@ import { Link, useHistory } from 'react-router-dom'
 import api from '../service/api'
 import logout from '../utils/logout'
 
-import Alert from './default/Alert'
-import Loading from './default/Loading'
+import Alert from '../components/Alert'
+import Loading from '../components/Loading'
 
 import './style.css'
 import { loadUsers } from '../utils/load'

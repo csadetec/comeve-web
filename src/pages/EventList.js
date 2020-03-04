@@ -37,7 +37,7 @@ function EventList() {
     +`Editar ${name} - ${dateFormat(date)}\n`
     
     txt += resource.map( r => {
-      return '\n'+r.name
+      return `\n${r.name} - ${r.pivot.accept === 0 ? 'AGUARDANDO...' : 'ACEITO'}` 
     })
     /** */
 
@@ -74,7 +74,7 @@ function EventList() {
                     <strong>{dateFormat(r.date)}</strong> - {timeFormat(r.start)} - {timeFormat(r.end)}
                   </td>
                   <td>{r.name}</td>
-                  <td>{r.place.name}</td>
+                  <td>{r.place_name}</td>
                   <td>{r.user.name}</td>
                   <td>
                     <i className="fas fa-check-circle icon-green"></i>

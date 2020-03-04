@@ -84,7 +84,7 @@ const Navbar = () =>{
             
             <li className="nav-item dropdown">
               <div className="nav-link dropdown-toggle cursor-pointer" id="navbarDropdownMenuLink" data-toggle="dropdown"
-aria-haspopup="true" aria-expanded="false" >{logged.name} | {logged.sector.name}</div>
+aria-haspopup="true" aria-expanded="false" >{logged.name} | {logged.sector_name}</div>
               <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                 <Link className="dropdown-item" to="/eventos/listar">Eventos</Link>
                 <Link className="dropdown-item" to="/usuarios/listar" onClick={handleActive}  >Usuários</Link>
