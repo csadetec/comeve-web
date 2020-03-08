@@ -1,6 +1,6 @@
 import React, {useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import {loadEvents, loadPlaces, loadResources, loadSectors, loadUsers} from './utils/load'
+import {loadEvents, loadFollows, loadMoments, loadPlaces, loadResources, loadSectors, loadUsers} from './utils/load'
 
 //components default
 import Navbar from './components/Navbar'
@@ -9,6 +9,18 @@ import Footer from './components/Footer'
 //pages basic
 import Home from './pages/Home'
 import Login from './pages/Login'
+
+//pages follows
+import FollowList from './pages/FollowList'
+import FollowForm from './pages/FollowForm'
+
+//pages moments
+import MomentList from './pages/MomentList'
+import MomentForm from './pages/MomentForm'
+
+//pages sectors
+import SectorList from './pages/SectorList'
+import SectorForm from './pages/SectorForm'
 
 //pages events
 import EventList from './pages/EventList'
@@ -22,9 +34,7 @@ import PlaceForm from './pages/PlaceForm'
 import ResourceList from './pages/ResourceList'
 import ResourceForm from './pages/ResourceForm'
 
-//pages sectors
-import SectorList from './pages/SectorList'
-import SectorForm from './pages/SectorForm'
+
 
 //componets users
 import UserList from './pages/UserList'
@@ -36,11 +46,13 @@ const App = () => {
   useEffect(() => {
   
     if (token) {
+      loadFollows()
+      loadSectors()
+      loadMoments()
+      loadResources()
       loadEvents()
       loadPlaces()
-      loadResources()
       loadUsers()
-      loadSectors()
     }
   }, [token])
 
@@ -53,6 +65,14 @@ const App = () => {
           
             <Route exact={true} path='/' component={Home} />
             <Route path='/home' component={Home} />
+
+            <Route path='/seguimentos/listar' component={FollowList} />
+            <Route path='/seguimentos/editar/:id' component={FollowForm} />
+            <Route path='/seguimentos/cadastrar' component={FollowForm} />
+
+            <Route path='/momentos/listar' component={MomentList} />
+            <Route path='/momentos/editar/:id' component={MomentForm} />
+            <Route path='/momentos/cadastrar' component={MomentForm} />                     
 
             <Route path='/locais/listar' component={PlaceList} />
             <Route path='/locais/editar/:id' component={PlaceForm} />
@@ -73,6 +93,8 @@ const App = () => {
             <Route path='/usuarios/listar' component={UserList} />
             <Route path='/usuarios/cadastrar' component={UserForm} />
             <Route path='/usuarios/editar/:id' component={UserForm} />
+
+            <Redirect  to='/' />
            
           </Switch>
 

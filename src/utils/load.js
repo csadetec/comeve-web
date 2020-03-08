@@ -9,8 +9,25 @@ export async function loadEvents() {
     console.log(e)
     logout()
   }
-  
 
+}
+export async function loadFollows(){
+  try{
+    const { data } = await api.get('/follows')
+    localStorage.setItem('follows', JSON.stringify(data))
+  }catch(e){
+    console.log(e)
+    logout()
+  }
+}
+export async function loadMoments(){
+  try{
+    const { data } = await api.get('/moments')
+    localStorage.setItem('moments', JSON.stringify(data))
+  }catch(e){
+    console.log(e)
+    logout()
+  }
 }
 export async function loadPlaces() {
   try{
