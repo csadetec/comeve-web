@@ -10,7 +10,7 @@ import Loading from '../components/Loading'
 import './Event.css'
 
 function EventForm(props) {
-
+  /*
   const [event, setEvent] = useState({
     name: '',
     place_id: '',
@@ -20,12 +20,24 @@ function EventForm(props) {
     user: '',
     resources: []
   })
+  /** */
+  const [event, setEvent] = useState({
+    name: 'Livro dos Ávos | Fundamental 2',
+    place_id: 1,
+    date: '2020-12-12',
+    start: '15:00',
+    end: '19:00',
+    user: { name: 'Gerente Name', id: 1 },
+    guests: [],
+    resources: []
+  })
 
 
   const [logged] = useState(JSON.parse(localStorage.getItem('logged')))
   const [places] = useState(JSON.parse(localStorage.getItem('places')))
   const [resources] = useState(JSON.parse(localStorage.getItem('resources')))
-  const [ disabled, setDisable ] = useState(false)
+  const [guest] = useState(JSON.parse(localStorage.getItem('users')))
+  const [disabled, setDisable] = useState(false)
 
   const [h2, setH2] = useState('Cadastrar Evento')
   const [alert, setAlert] = useState(false)
@@ -47,10 +59,10 @@ function EventForm(props) {
     setH2(`Editar Evento - ${id}`)
     async function load() {
       const { data } = await api.get(`/events/${id}`)
-      data.resources.map( r => 
+      data.resources.map(r =>
         r.accept = r.pivot.accept
       )
-      if(logged.id !== data.user_id){
+      if (logged.id !== data.user_id) {
         setDisable(true)
       }
       setEvent(data)
@@ -67,6 +79,13 @@ function EventForm(props) {
   async function handleSubmit(e) {
     e.preventDefault()
 
+    console.log(event)
+    let txt = 'Dados Q serão salvos do evento'
+    txt += `${JSON.stringify(event)}`
+    //txt += `\n${event}`
+    setAlert(txt)
+    txt = null
+    return
     setBtn({ label: 'Salvando...', disabled: true })
     //return;
     if (id) {
@@ -90,10 +109,12 @@ function EventForm(props) {
 
   }
 
+  async function handleAddGuest(e){
+
+  }
+
   async function handleAddResource(e) {
-    setAlert(false)
     let resource_id = parseInt(e.target.value)
-    //console.log('Id do recurso selecionado', resource_id)
 
     let resourceSelected = resources.filter((r) => {
       return r.id === resource_id
@@ -147,7 +168,7 @@ function EventForm(props) {
     setEvent({ ...event, resources: myResources })
 
   }
-  
+
   const updateField = (e) => {
     setAlert(false)
     setEvent({ ...event, [e.target.name]: e.target.value })
@@ -173,7 +194,7 @@ function EventForm(props) {
               <Alert msg={alert} />
             }
             <div className="row border border-light p-4">
-              <div className="col-md-6">
+              <div className="col-md-4">
                 <label htmlFor="name">Nome</label>
                 <input type="text" id="name" name="name" className="form-control mb-4" placeholder="Nome do eventos .."
                   value={event.name} onChange={updateField} disabled={disabled}
@@ -217,7 +238,7 @@ function EventForm(props) {
                 </div>
                 <div className="row">
                   <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} >
+                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
                       <option value="">SELECIONE O RECURSO</option>
                       {resources.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
@@ -227,10 +248,10 @@ function EventForm(props) {
                   </div>
                 </div>
               </div>
-              <div className="col-md-5 border-left">
+              <div className="col-md-6 border-left">
                 <h4>
                   Recursos
-              </h4>
+                </h4>
                 <table className="table">
                   <tbody>
                     {event.resources.map(r =>
@@ -238,6 +259,34 @@ function EventForm(props) {
                         <td>{r.name}
                         </td>
                         <td>{r.sector_name}</td>
+                        {event.user.id === logged.id &&
+                          <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
+                            <i className="far fa-times-circle"></i>
+                          </td>
+                        }
+                        <td className="cursor-pointer"
+                          title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
+                          onClick={() => handleAcceptDecline(r.id, r.sector_name, r.accept)}>
+                          <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
+                        </td>
+
+                      </tr>
+                    )}
+                  </tbody>
+
+                </table>
+
+              </div>
+              <div className="col-md-2">
+                <h4>
+                  Solicitantes
+                </h4>
+                <table className="table">
+                  <tbody>
+                    {event.guests.map(r =>
+                      <tr key={r.id} >
+                        <td>{r.name}
+                        </td>
                         {event.user.id === logged.id &&
                           <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
                             <i className="far fa-times-circle"></i>

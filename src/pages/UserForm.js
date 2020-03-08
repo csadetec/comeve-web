@@ -7,7 +7,7 @@ import Alert from '../components/Alert'
 import Loading from '../components/Loading'
 
 import './style.css'
-import { loadUsers } from '../utils/load'
+import { loadUsers, loadEvents } from '../utils/load'
 const UserForm = (props) => {
 
   const [user, setUser] = useState({
@@ -65,6 +65,7 @@ const UserForm = (props) => {
           setAlert('Usuário Atualizado com Sucesso')
           setBtn({label: 'Salvar', disabled:false})
           loadUsers()
+          loadEvents()
           return;
         }
       }
@@ -78,6 +79,7 @@ const UserForm = (props) => {
         return;
       }
       await loadUsers()
+      await loadEvents()
       history.push('/usuarios/listar')
      
 
