@@ -23,6 +23,7 @@ function EventForm(props) {
   /** */
   const [event, setEvent] = useState({
     name: 'Livro dos Ávos | Fundamental 2',
+    amount_people:50,
     place_id: 1,
     date: '2020-12-12',
     start: '15:00',
@@ -62,18 +63,17 @@ function EventForm(props) {
       data.resources.map(r =>
         r.accept = r.pivot.accept
       )
+      data.guests = [{ id: 1, name: 'teste' }]
       if (logged.id !== data.user_id) {
         setDisable(true)
       }
       setEvent(data)
       setLoagind(false)
-
-      console.log(data.resources)
+      // console.log(event.resources)
+      //console.log(event.guests)
+      //console.log(data.resources)
     }
     load()
-
-
-
   }, [id, logged.id])
 
   async function handleSubmit(e) {
@@ -109,8 +109,11 @@ function EventForm(props) {
 
   }
 
-  async function handleAddGuest(e){
+  async function handleAddGuest(e) {
 
+  }
+  const handleExludeGuest = (id) => {
+    console.log('exclude ', id)
   }
 
   async function handleAddResource(e) {
@@ -194,13 +197,29 @@ function EventForm(props) {
               <Alert msg={alert} />
             }
             <div className="row border border-light p-4">
-              <div className="col-md-4">
+              <div className="col-md-5">
                 <label htmlFor="name">Nome</label>
                 <input type="text" id="name" name="name" className="form-control mb-4" placeholder="Nome do eventos .."
                   value={event.name} onChange={updateField} disabled={disabled}
                   required
                 />
+                <div className="row">
+                  <div className="col-md-6">
+                    <label htmlFor="amount_people">Qtd Pessoas</label>
+                    <input type="number" name="amount_people" className="form-control mb-4" 
+                      value={event.amount_people} onChange={updateField} disabled={disabled}
+                      required
+                    />
 
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="date">Presença dos Pais</label>
+                    <input type="date" id="date" name="date" className="form-control mb-4"
+                      value={event.date} onChange={updateField} disabled={disabled}
+                      required
+                    />
+                  </div>
+                </div>
                 <div className="row">
                   <div className="col-md-6">
                     <label htmlFor="place">Local</label>
@@ -248,10 +267,10 @@ function EventForm(props) {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 border-left">
-                <h4>
+              <div className="col-md-5 border-left">
+                <h5>
                   Recursos
-                </h4>
+                </h5>
                 <table className="table">
                   <tbody>
                     {event.resources.map(r =>
@@ -277,10 +296,10 @@ function EventForm(props) {
                 </table>
 
               </div>
-              <div className="col-md-2">
-                <h4>
-                  Solicitantes
-                </h4>
+              <div className="col-md-2 text-right">
+                <ul className="list-group">
+                  <li className="list-group-item">teste</li>
+                </ul>
                 <table className="table">
                   <tbody>
                     {event.guests.map(r =>
@@ -288,16 +307,10 @@ function EventForm(props) {
                         <td>{r.name}
                         </td>
                         {event.user.id === logged.id &&
-                          <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
+                          <td className="cursor-pointer" onClick={() => handleExludeGuest(r.id)} title="Excluir Solicitante">
                             <i className="far fa-times-circle"></i>
                           </td>
                         }
-                        <td className="cursor-pointer"
-                          title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
-                          onClick={() => handleAcceptDecline(r.id, r.sector_name, r.accept)}>
-                          <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
-                        </td>
-
                       </tr>
                     )}
                   </tbody>
