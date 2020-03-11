@@ -19,6 +19,7 @@ function EventForm(props) {
     start: '',
     end: '',
     user: '',
+    parentes: '',
     guest: [],
     resources: []
   })
@@ -226,7 +227,7 @@ function EventForm(props) {
             {alert &&
               <Alert msg={alert} />
             }
-            <div className="row border border-light p-4">
+            <div className="row border border-light p-3">
               <div className="col-md-6">
                 <label htmlFor="name">Nome</label>
                 <input type="text" id="name" name="name" className="form-control mb-4" placeholder="Nome do eventos .."
@@ -234,7 +235,7 @@ function EventForm(props) {
                   required
                 />
                 <div className="row">
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <label htmlFor="place">Local</label>
                     <select value={event.place_id} name="place_id" onChange={updateField} className="form-control" disabled={disabled} required>
                       <option value="">Selecione</option>
@@ -243,7 +244,7 @@ function EventForm(props) {
                       )}
                     </select>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <label htmlFor="amount_people">Qtd Pessoas</label>
                     <input type="number" name="amount_people" className="form-control mb-4"
                       value={event.amount_people} onChange={updateField} disabled={disabled}
@@ -251,32 +252,35 @@ function EventForm(props) {
                     />
 
                   </div>
-                  <div className="col-md-4">
+
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
                     <label htmlFor="date">Presença dos Pais</label>
-                    <select name="fathers" value={event.fathers} onChange={updateField} className="form-control" required >
+                    <select name="parents" value={event.parents} onChange={updateField} className="form-control" required >
                       <option value="">Selecione</option>
                       <option value="0">Não</option>
                       <option value="1">Sim</option>
                     </select>
                   </div>
-                </div>
-                <div className="row">
-
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <label htmlFor="date">Data</label>
                     <input type="date" id="date" name="date" className="form-control mb-4"
                       value={event.date} onChange={updateField} disabled={disabled}
                       required
                     />
                   </div>
-                  <div className="col-md-4">
+
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
                     <label htmlFor="start">Inicio</label>
                     <input type="time" id="start" name="start" className="form-control mb-4"
                       value={event.start} onChange={updateField} disabled={disabled}
                       required
                     />
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <label htmlFor="end">Fim</label>
                     <input type="time" id="end" name="end" className="form-control mb-4"
                       value={event.end} onChange={updateField} disabled={disabled}
@@ -284,9 +288,6 @@ function EventForm(props) {
 
                     />
                   </div>
-                </div>
-                <div className="row">
-
                 </div>
                 <div className="row">
                   <div className="col-md-12">
@@ -299,6 +300,67 @@ function EventForm(props) {
                     </select>
                   </div>
                 </div>
+                <div className="row">
+                  <div className="col-md-12">
+                    <button className="btn btn-outline-indigo" type="submit" disabled={btn.disabled}>{btn.label}</button>
+                    <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
+                  </div>
+                </div>
+
+
+              </div>
+              <div className="col-md-4 border-left ">
+                <div className="row pt-4" >
+             
+                  <div className="col-md-12">
+                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
+                      <option value="">Divulgação</option>
+                      {filter.divulgacao.map(r =>
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      )}
+
+                    </select>
+                  </div>
+                </div>
+                <TableResources
+                  resources={event.resources}
+                  event={event}
+                  update={updateResource}
+                  updateResource={updateResource} />
+
+                <div className="row  pt-4">
+                  <div className="col-md-12">
+                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
+                      <option value="">Pré-Produção</option>
+                      {filter.preproducao.map(r =>
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      )}
+
+                    </select>
+                  </div>
+                </div>
+                <TableResources
+                  resources={event.resources}
+                  event={event}
+                  update={updateResource}
+                  updateResource={updateResource} />
+
+                <div className="row">
+                  <div className="col-md-12">
+                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
+                      <option value="">Ensaios</option>
+                      {filter.ensaios.map(r =>
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      )}
+
+                    </select>
+                  </div>
+                </div>
+                <TableResources
+                  resources={event.resources}
+                  event={event}
+                  update={updateResource}
+                  updateResource={updateResource} />
                 <div className="row">
                   <div className="col-md-12">
                     <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
@@ -322,58 +384,6 @@ function EventForm(props) {
                   </div>
                 </div>
               </div>
-              <div className="col-md-4 border-left">
-                <div className="row">
-                  <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
-                      <option value="">Divulgação</option>
-                      {filter.divulgacao.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
-
-                    </select>
-                  </div>
-                </div>
-                <TableResources
-                  resources={event.resources}
-                  event={event}
-                  update={updateResource}
-                  updateResource={updateResource} />
-
-                <div className="row border-top pt-4">
-                  <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
-                      <option value="">Pré-Produção</option>
-                      {filter.preproducao.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
-
-                    </select>
-                  </div>
-                </div>
-                <TableResources
-                  resources={event.resources}
-                  event={event}
-                  update={updateResource}
-                  updateResource={updateResource} />
-            
-                <div className="row">
-                  <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
-                      <option value="">Ensaios</option>
-                      {filter.ensaios.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
-
-                    </select>
-                  </div>
-                </div>
-                <TableResources
-                  resources={event.resources}
-                  event={event}
-                  update={updateResource}
-                  updateResource={updateResource} />
-              </div>
               <div className="col-md-2 text-right">
                 <ul className="list-group">
                   {event.guests.map(r =>
@@ -382,12 +392,6 @@ function EventForm(props) {
                     </li>
                   )}
                 </ul>
-              </div>
-              <div className="row">
-                <div className="col-md-12 ml-2">
-                  <button className="btn btn-outline-indigo" type="submit" disabled={btn.disabled}>{btn.label}</button>
-                  <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
-                </div>
               </div>
 
             </div>
