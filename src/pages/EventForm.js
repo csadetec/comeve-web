@@ -5,7 +5,7 @@ import { loadEvents } from '../utils/load'
 
 import Alert from '../components/Alert'
 import Loading from '../components/Loading'
-import TableResources from '../components/Event/TableResources'
+//import TableResources from '../components/Event/TableResources'
 
 
 import './Event.css'
@@ -31,13 +31,8 @@ function EventForm(props) {
     'montagem': '',
     'apresentacao': ''
   })
-  const [table, setTable] = useState({
-    'divulgacao': '',
-    'preproducao': '',
-    'ensaios': '',
-    'montagem': '',
-    'apresentacao': ''
-  })
+  const [table, setTable] = useState([])
+
   const [logged] = useState(JSON.parse(localStorage.getItem('logged')))
   const [places] = useState(JSON.parse(localStorage.getItem('places')))
   const [resources] = useState(JSON.parse(localStorage.getItem('resources')))
@@ -73,13 +68,10 @@ function EventForm(props) {
       }
       setEvent(data)
       setLoagind(false)
-      console.log(data)
-
     }
     load()
-    loadTable()
-  }, [id, logged.id])
 
+  }, [id, logged.id])
   useEffect(() => {
     async function loadFilters() {
       let divulgacao = resources.filter(r => {
@@ -97,43 +89,26 @@ function EventForm(props) {
       let apresentacao = resources.filter(r => {
         return r.moment_id === 5
       })
-      setFilter({ divulgacao, apresentacao, preproducao, ensaios, montagem, apresentacao })
-      //await console.log(filter)
+      setFilter({ divulgacao, preproducao, ensaios, montagem, apresentacao })
     }
     loadFilters()
 
-  }, [])
 
-  async function loadTable() {
-    let divulgacao = event.resources.filter((r) => {
-      return r.moment_id === 1
-    })
-    let preproducao = event.resources.filter((r) => {
-      return r.moment_id === 2
-    })
-    let ensaios = event.resources.filter((r) => {
-      return r.moment_id === 3
-    })
-    let montagem = event.resources.filter((r) => {
-      return r.moment_id === 4
-    })
-    let apresentacao = event.resources.filter((r) => {
-      return r.moment_id === 5
-    })
+  }, [resources])
 
-    setTable({ divulgacao, preproducao, ensaios, montagem, apresentacao })
-  }
 
   async function handleSubmit(e) {
     e.preventDefault()
 
     console.log(event)
+    /*
     let txt = 'Dados Q serão salvos do evento'
     txt += `${JSON.stringify(event)}`
     //txt += `\n${event}`
     setAlert(txt)
     txt = null
     return
+    /** */
     setBtn({ label: 'Salvando...', disabled: true })
     //return;
     if (id) {
@@ -177,10 +152,6 @@ function EventForm(props) {
 
   }
 
-  const handleExludeGuest = (id) => {
-    console.log('exclude ', id)
-  }
-
   async function handleAddResource(e) {
     let resource_id = parseInt(e.target.value)
     let resourceSelected = resources.filter((r) => {
@@ -191,7 +162,8 @@ function EventForm(props) {
     })
     if (resourceVerifySelected.length === 0) {
       resourceSelected = resourceSelected[0];
-      resourceSelected = { ...resourceSelected, accept: 0 };
+      //resourcesSe
+      resourceSelected = { ...resourceSelected, accept: 0, date: event.date };
       let myResources = ([...event.resources, resourceSelected])
       await setEvent({ ...event, resources: myResources })
 
@@ -199,20 +171,69 @@ function EventForm(props) {
   }
   async function updateResource(r) {
     await setEvent({ ...event, resources: r })
-    //console.log('update resource')
-    //console.log(r)
+
+  }
+  const handleExcludeResource = (id) => {
+    console.log('exlude resource ', id)
+
+    let resources = event.resources.filter(r => {
+      return r.id !== id
+    })
+    updateResource(resources)
+
   }
 
+  const handleAcceptDecline = (id, sector_name, accept) => {
+
+    if (logged.sector_name !== sector_name) {
+      window.alert(`Entre em contato com - ${sector_name}\nPara realizar está ação`)
+      return;
+    }
+    let resources = event.resources.map(r => {
+      if (r.id === id) {
+        r.accept = accept === 1 ? 0 : 1
+      }
+      return r
+    })
+    updateResource(resources)
+  }
+
+  useEffect(() => {
+    async function loadTable() {
+      let divulgacao = event.resources.filter((r) => {
+        return r.moment_id === 1
+      })
+      let preproducao = event.resources.filter((r) => {
+        return r.moment_id === 2
+      })
+      let ensaios = event.resources.filter((r) => {
+        return r.moment_id === 3
+      })
+      let montagem = event.resources.filter((r) => {
+        return r.moment_id === 4
+      })
+      let apresentacao = event.resources.filter((r) => {
+        return r.moment_id === 5
+      })
+
+
+      await setTable({ divulgacao, preproducao, ensaios, montagem, apresentacao })
+    }
+    loadTable()
+
+  }, [event.resources])
   const updateField = (e) => {
     setAlert(false)
     setEvent({ ...event, [e.target.name]: e.target.value })
+    //await loadTable()
   }
   return (
     <>
+
       {loading ?
         <Loading /> :
-        <div className="container-fluid">
-          <div className="row mb-4 border-bottom">
+        <div className="container-fluid pb-5">
+          <div className="row mb-4 border-bottom ">
             <div className="col-md-6">
               <h2>{h2}</h2>
             </div>
@@ -230,12 +251,38 @@ function EventForm(props) {
             <div className="row border border-light p-3">
               <div className="col-md-6">
                 <label htmlFor="name">Nome</label>
-                <input type="text" id="name" name="name" className="form-control mb-4" placeholder="Nome do eventos .."
+                <input type="text" id="name" name="name" className="form-control mb-3" placeholder="Nome do eventos .."
                   value={event.name} onChange={updateField} disabled={disabled}
                   required
                 />
+
                 <div className="row">
-                  <div className="col-md-6">
+
+                  <div className="col-md-4">
+                    <label htmlFor="date">Data</label>
+                    <input type="date" id="date" name="date" className="form-control mb-3"
+                      value={event.date} onChange={updateField} disabled={disabled}
+                      required
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <label htmlFor="start">Inicio</label>
+                    <input type="time" id="start" name="start" className="form-control mb-3"
+                      value={event.start} onChange={updateField} disabled={disabled}
+                      required
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <label htmlFor="end">Fim</label>
+                    <input type="time" id="end" name="end" className="form-control mb-3"
+                      value={event.end} onChange={updateField} disabled={disabled}
+                      required
+
+                    />
+                  </div>
+                </div>
+                <div className="row pb-2">
+                  <div className="col-md-4">
                     <label htmlFor="place">Local</label>
                     <select value={event.place_id} name="place_id" onChange={updateField} className="form-control" disabled={disabled} required>
                       <option value="">Selecione</option>
@@ -244,18 +291,15 @@ function EventForm(props) {
                       )}
                     </select>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-4">
                     <label htmlFor="amount_people">Qtd Pessoas</label>
-                    <input type="number" name="amount_people" className="form-control mb-4"
+                    <input type="number" name="amount_people" className="form-control mb-3"
                       value={event.amount_people} onChange={updateField} disabled={disabled}
                       required
                     />
 
                   </div>
-
-                </div>
-                <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-md-4">
                     <label htmlFor="date">Presença dos Pais</label>
                     <select name="parents" value={event.parents} onChange={updateField} className="form-control" required >
                       <option value="">Selecione</option>
@@ -263,35 +307,10 @@ function EventForm(props) {
                       <option value="1">Sim</option>
                     </select>
                   </div>
-                  <div className="col-md-6">
-                    <label htmlFor="date">Data</label>
-                    <input type="date" id="date" name="date" className="form-control mb-4"
-                      value={event.date} onChange={updateField} disabled={disabled}
-                      required
-                    />
-                  </div>
-
-                </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <label htmlFor="start">Inicio</label>
-                    <input type="time" id="start" name="start" className="form-control mb-4"
-                      value={event.start} onChange={updateField} disabled={disabled}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label htmlFor="end">Fim</label>
-                    <input type="time" id="end" name="end" className="form-control mb-4"
-                      value={event.end} onChange={updateField} disabled={disabled}
-                      required
-
-                    />
-                  </div>
                 </div>
                 <div className="row">
                   <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddGuest} disabled={disabled} >
+                    <select value="" className="form-control mb-3" onChange={handleAddGuest} disabled={disabled} >
                       <option value="">SELECIONE O CONVIDADO</option>
                       {guest.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
@@ -309,91 +328,200 @@ function EventForm(props) {
 
 
               </div>
-              <div className="col-md-4 border-left ">
-                <div className="row pt-4" >
-             
+              <div className="col-md-6 border-left ">
+
+                { /*Divulgação */ }
+                <div className="row">
                   <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
+
+                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
                       <option value="">Divulgação</option>
                       {filter.divulgacao.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
                       )}
-
                     </select>
+                    <table className="table">
+                      <tbody>
+                        {table.divulgacao.map(r =>
+                          <tr key={r.id} >
+                            <td>{r.name}
+                            </td>
+                            <td>{r.sector_name}</td>
+                            {event.user.id === logged.id &&
+                              <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
+                                <i className="far fa-times-circle"></i>
+                              </td>
+                            }
+                            <td className="cursor-pointer"
+                              title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
+                              onClick={() => handleAcceptDecline(r.id, r.sector_name, r.accept)}>
+                              <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
+                            </td>
+
+                          </tr>
+                        )}
+                      </tbody>
+
+                    </table>
                   </div>
                 </div>
-                <TableResources
-                  resources={event.resources}
-                  event={event}
-                  update={updateResource}
-                  updateResource={updateResource} />
+                {/*end Divulgação */}
 
-                <div className="row  pt-4">
+                {/*Pre produção */}
+
+                <div className="row">
                   <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
+                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
                       <option value="">Pré-Produção</option>
                       {filter.preproducao.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
                       )}
-
                     </select>
+                    <table className="table">
+                      <tbody>
+                        {table.preproducao.map(r =>
+                          <tr key={r.id} >
+                            <td>{r.name}
+                            </td>
+                            <td>{r.sector_name}</td>
+                            {event.user.id === logged.id &&
+                              <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
+                                <i className="far fa-times-circle"></i>
+                              </td>
+                            }
+                            <td className="cursor-pointer"
+                              title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
+                              onClick={() => handleAcceptDecline(r.id, r.sector_name, r.accept)}>
+                              <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
+                            </td>
+
+                          </tr>
+                        )}
+                      </tbody>
+
+                    </table>
                   </div>
                 </div>
-                <TableResources
-                  resources={event.resources}
-                  event={event}
-                  update={updateResource}
-                  updateResource={updateResource} />
+
+                {/* end Pre produção */}
+
+                {/*Ensaios */}
 
                 <div className="row">
                   <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
+                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
                       <option value="">Ensaios</option>
                       {filter.ensaios.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
                       )}
-
                     </select>
+                    <table className="table">
+                      <tbody>
+                        {table.ensaios.map(r =>
+                          <tr key={r.id} >
+                            <td>{r.name}
+                            </td>
+                            <td>{r.sector_name}</td>
+                            {event.user.id === logged.id &&
+                              <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
+                                <i className="far fa-times-circle"></i>
+                              </td>
+                            }
+                            <td className="cursor-pointer"
+                              title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
+                              onClick={() => handleAcceptDecline(r.id, r.sector_name, r.accept)}>
+                              <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
+                            </td>
+
+                          </tr>
+                        )}
+                      </tbody>
+
+                    </table>
                   </div>
                 </div>
-                <TableResources
-                  resources={event.resources}
-                  event={event}
-                  update={updateResource}
-                  updateResource={updateResource} />
+
+                {/* end Ensaios */}
+
+                {/*Montagem */}
+
                 <div className="row">
                   <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
+                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
                       <option value="">Montagem</option>
                       {filter.montagem.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
                       )}
-
                     </select>
+                    <table className="table">
+                      <tbody>
+                        {table.montagem.map(r =>
+                          <tr key={r.id} >
+                            <td>{r.name}
+                            </td>
+                            <td>{r.sector_name}</td>
+                            {event.user.id === logged.id &&
+                              <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
+                                <i className="far fa-times-circle"></i>
+                              </td>
+                            }
+                            <td className="cursor-pointer"
+                              title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
+                              onClick={() => handleAcceptDecline(r.id, r.sector_name, r.accept)}>
+                              <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
+                            </td>
+
+                          </tr>
+                        )}
+                      </tbody>
+
+                    </table>
                   </div>
                 </div>
+
+                {/* end Montagem */}
+
+                {/*Apresentacao */}
+
                 <div className="row">
                   <div className="col-md-12">
-                    <select value="" className="form-control mb-4" onChange={handleAddResource} disabled={disabled} >
+                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
                       <option value="">Apresentação</option>
                       {filter.apresentacao.map(r =>
                         <option key={r.id} value={r.id}>{r.name}</option>
                       )}
-
                     </select>
+                    <table className="table">
+                      <tbody>
+                        {table.apresentacao.map(r =>
+                          <tr key={r.id} >
+                            <td>{r.name}
+                            </td>
+                            <td>{r.sector_name}</td>
+                            {event.user.id === logged.id &&
+                              <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
+                                <i className="far fa-times-circle"></i>
+                              </td>
+                            }
+                            <td className="cursor-pointer"
+                              title={r.accept === 1 ? 'Negar Recurso' : 'Aceitar Recurso'}
+                              onClick={() => handleAcceptDecline(r.id, r.sector_name, r.accept)}>
+                              <i className={r.accept === 1 ? 'far fa-thumbs-up like' : 'far fa-thumbs-down deslike'}></i>
+                            </td>
+
+                          </tr>
+                        )}
+                      </tbody>
+
+                    </table>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-2 text-right">
-                <ul className="list-group">
-                  {event.guests.map(r =>
-                    <li className="list-group-item" key={r.id}>
-                      {r.name}
-                    </li>
-                  )}
-                </ul>
-              </div>
 
+                {/* end Apresentacao */}
+
+
+
+              </div>
             </div>
           </form>
 
