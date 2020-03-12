@@ -5,10 +5,13 @@ import { loadEvents } from '../utils/load'
 
 import Alert from '../components/Alert'
 import Loading from '../components/Loading'
+import dateFormat from '../utils/date'
+
 //import TableResources from '../components/Event/TableResources'
 
 
 import './Event.css'
+import logout from '../utils/logout'
 
 function EventForm(props) {
 
@@ -60,9 +63,12 @@ function EventForm(props) {
     async function load() {
       const { data } = await api.get(`/events/${id}`)
       data.resources.map(r =>
-        r.accept = r.pivot.accept
+        r.accept = r.pivot.accept,
       )
-      //data.guests = []
+      data.resources.map(r =>
+        r.date = r.pivot.date
+      )
+      console.log(data)
       if (logged.id !== data.user_id) {
         setDisable(true)
       }
@@ -101,34 +107,31 @@ function EventForm(props) {
     e.preventDefault()
 
     console.log(event)
-    /*
-    let txt = 'Dados Q serão salvos do evento'
-    txt += `${JSON.stringify(event)}`
-    //txt += `\n${event}`
-    setAlert(txt)
-    txt = null
-    return
-    /** */
     setBtn({ label: 'Salvando...', disabled: true })
     //return;
-    if (id) {
-      const { status, data } = await api.put(`/events/${id}`, event)
-      console.log(data);
+    try {
+      if (id) {
+        const { status } = await api.put(`/events/${id}`, event)
+        // console.log(data);
 
-      if (status === 200) {
-        loadEvents()
-        setAlert('Atualizado com Sucesso!')
-        setBtn({ label: 'Salvar', disabled: false })
+        if (status === 200) {
+          loadEvents()
+          setAlert('Atualizado com Sucesso!')
+          setBtn({ label: 'Salvar', disabled: false })
+        }
+        return;
       }
-      return;
+
+      const { status } = await api.post('/events', event)
+      //console.log
+      if (status === 201 || status === 200) {
+        await loadEvents()
+        history.push(`/eventos/listar`)
+      }
+    } catch (e) {
+      logout()
     }
 
-    const { status } = await api.post('/events', event)
-    //console.log
-    if (status === 201 || status === 200) {
-      await loadEvents()
-      history.push(`/eventos/listar`)
-    }
 
   }
 
@@ -330,22 +333,34 @@ function EventForm(props) {
               </div>
               <div className="col-md-6 border-left ">
 
-                { /*Divulgação */ }
+                { /*Divulgação */}
                 <div className="row">
                   <div className="col-md-12">
 
-                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                      <option value="">Divulgação</option>
-                      {filter.divulgacao.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
-                    </select>
                     <table className="table">
                       <tbody>
+                        <tr>
+                          <td colSpan={disabled ? 4 : 5} className="text-center">
+
+                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                              <option value="">Divulgação</option>
+                              {filter.divulgacao.map(r =>
+                                <option key={r.id} value={r.id}>{r.name}</option>
+                              )}
+                            </select>
+                          </td>
+
+                        </tr>
                         {table.divulgacao.map(r =>
                           <tr key={r.id} >
-                            <td>{r.name}
-                            </td>
+                            {disabled ?
+                              <td>{dateFormat(r.date)}</td>
+                              :
+                              <td>
+                                <input type="date" value={r.date} className="form-control col-md-9" />
+                              </td>
+                            }
+                            <td>{r.name}</td>
                             <td>{r.sector_name}</td>
                             {event.user.id === logged.id &&
                               <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
@@ -360,29 +375,26 @@ function EventForm(props) {
 
                           </tr>
                         )}
-                      </tbody>
-
-                    </table>
-                  </div>
-                </div>
-                {/*end Divulgação */}
-
-                {/*Pre produção */}
-
-                <div className="row">
-                  <div className="col-md-12">
-                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                      <option value="">Pré-Produção</option>
-                      {filter.preproducao.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
-                    </select>
-                    <table className="table">
-                      <tbody>
+                        <tr>
+                          <td colSpan={disabled ? 4 : 5} >
+                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                              <option value="">Pré-Produção</option>
+                              {filter.preproducao.map(r =>
+                                <option key={r.id} value={r.id}>{r.name}</option>
+                              )}
+                            </select>
+                          </td>
+                        </tr>
                         {table.preproducao.map(r =>
                           <tr key={r.id} >
-                            <td>{r.name}
-                            </td>
+                            {disabled ?
+                              <td>{dateFormat(r.date)}</td>
+                              :
+                              <td>
+                                <input type="date" name="" id="" value={r.date} className="form-control col-md-9" />
+                              </td>
+                            }
+                            <td>{r.name}</td>
                             <td>{r.sector_name}</td>
                             {event.user.id === logged.id &&
                               <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
@@ -397,30 +409,20 @@ function EventForm(props) {
 
                           </tr>
                         )}
-                      </tbody>
-
-                    </table>
-                  </div>
-                </div>
-
-                {/* end Pre produção */}
-
-                {/*Ensaios */}
-
-                <div className="row">
-                  <div className="col-md-12">
-                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                      <option value="">Ensaios</option>
-                      {filter.ensaios.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
-                    </select>
-                    <table className="table">
-                      <tbody>
+                        <tr>
+                          <td colSpan={disabled ? 4 : 5} >
+                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                              <option value="">Ensaios</option>
+                              {filter.ensaios.map(r =>
+                                <option key={r.id} value={r.id}>{r.name}</option>
+                              )}
+                            </select>
+                          </td>
+                        </tr>
                         {table.ensaios.map(r =>
                           <tr key={r.id} >
-                            <td>{r.name}
-                            </td>
+                            <td>{dateFormat(r.date)}</td>
+                            <td>{r.name}</td>
                             <td>{r.sector_name}</td>
                             {event.user.id === logged.id &&
                               <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
@@ -435,30 +437,20 @@ function EventForm(props) {
 
                           </tr>
                         )}
-                      </tbody>
-
-                    </table>
-                  </div>
-                </div>
-
-                {/* end Ensaios */}
-
-                {/*Montagem */}
-
-                <div className="row">
-                  <div className="col-md-12">
-                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                      <option value="">Montagem</option>
-                      {filter.montagem.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
-                    </select>
-                    <table className="table">
-                      <tbody>
+                        <tr>
+                          <td colSpan={disabled ? 4 : 5} >
+                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                              <option value="">Montagem</option>
+                              {filter.montagem.map(r =>
+                                <option key={r.id} value={r.id}>{r.name}</option>
+                              )}
+                            </select>
+                          </td>
+                        </tr>
                         {table.montagem.map(r =>
                           <tr key={r.id} >
-                            <td>{r.name}
-                            </td>
+                            <td>{dateFormat(r.date)}</td>
+                            <td>{r.name}</td>
                             <td>{r.sector_name}</td>
                             {event.user.id === logged.id &&
                               <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
@@ -473,30 +465,20 @@ function EventForm(props) {
 
                           </tr>
                         )}
-                      </tbody>
-
-                    </table>
-                  </div>
-                </div>
-
-                {/* end Montagem */}
-
-                {/*Apresentacao */}
-
-                <div className="row">
-                  <div className="col-md-12">
-                    <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                      <option value="">Apresentação</option>
-                      {filter.apresentacao.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
-                    </select>
-                    <table className="table">
-                      <tbody>
+                        <tr>
+                          <td colSpan={disabled ? 4 : 5} >
+                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                              <option value="">Apresentação</option>
+                              {filter.apresentacao.map(r =>
+                                <option key={r.id} value={r.id}>{r.name}</option>
+                              )}
+                            </select>
+                          </td>
+                        </tr>
                         {table.apresentacao.map(r =>
                           <tr key={r.id} >
-                            <td>{r.name}
-                            </td>
+                            <td>{dateFormat(r.date)}</td>
+                            <td>{r.name}</td>
                             <td>{r.sector_name}</td>
                             {event.user.id === logged.id &&
                               <td className="cursor-pointer" onClick={() => handleExcludeResource(r.id)} title="Excluir Recurso">
@@ -516,11 +498,6 @@ function EventForm(props) {
                     </table>
                   </div>
                 </div>
-
-                {/* end Apresentacao */}
-
-
-
               </div>
             </div>
           </form>

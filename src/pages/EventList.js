@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import dateFormat from '../utils/date'
 
 function EventList() {
   const [events] = useState(JSON.parse(localStorage.getItem('events')))
@@ -10,17 +11,7 @@ function EventList() {
    
   }, [])
 
-  const dateFormat = (dateString) => {
-    let d = new Date(dateString)
-    let month = String(d.getMonth() + 1);
-    let day = String(d.getDate());
-    //const year = String(d.getFullYear());
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return `${day}/${month}`;
-  }
 
   const timeFormat = (time) => {
     return time.slice(0, 5)
