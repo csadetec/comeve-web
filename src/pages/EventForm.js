@@ -36,6 +36,8 @@ function EventForm(props) {
   })
   const [table, setTable] = useState([])
 
+  //const [temp, setTemp] = useState([])
+  //const [teste, setTeste] = useState('2019-11-01')
   const [logged] = useState(JSON.parse(localStorage.getItem('logged')))
   const [places] = useState(JSON.parse(localStorage.getItem('places')))
   const [resources] = useState(JSON.parse(localStorage.getItem('resources')))
@@ -68,7 +70,7 @@ function EventForm(props) {
       data.resources.map(r =>
         r.date = r.pivot.date
       )
-      console.log(data)
+      //console.log(data)
       if (logged.id !== data.user_id) {
         setDisable(true)
       }
@@ -101,12 +103,35 @@ function EventForm(props) {
 
 
   }, [resources])
+  useEffect(() => {
+    async function loadTable() {
+      let divulgacao = event.resources.filter((r) => {
+        return r.moment_id === 1
+      })
+      let preproducao = event.resources.filter((r) => {
+        return r.moment_id === 2
+      })
+      let ensaios = event.resources.filter((r) => {
+        return r.moment_id === 3
+      })
+      let montagem = event.resources.filter((r) => {
+        return r.moment_id === 4
+      })
+      let apresentacao = event.resources.filter((r) => {
+        return r.moment_id === 5
+      })
 
+
+      await setTable({ divulgacao, preproducao, ensaios, montagem, apresentacao })
+    }
+    loadTable()
+
+  }, [event.resources])
 
   async function handleSubmit(e) {
     e.preventDefault()
 
-    console.log(event)
+    //console.log(event)
     setBtn({ label: 'Salvando...', disabled: true })
     //return;
     try {
@@ -201,35 +226,30 @@ function EventForm(props) {
     updateResource(resources)
   }
 
-  useEffect(() => {
-    async function loadTable() {
-      let divulgacao = event.resources.filter((r) => {
-        return r.moment_id === 1
-      })
-      let preproducao = event.resources.filter((r) => {
-        return r.moment_id === 2
-      })
-      let ensaios = event.resources.filter((r) => {
-        return r.moment_id === 3
-      })
-      let montagem = event.resources.filter((r) => {
-        return r.moment_id === 4
-      })
-      let apresentacao = event.resources.filter((r) => {
-        return r.moment_id === 5
-      })
 
-
-      await setTable({ divulgacao, preproducao, ensaios, montagem, apresentacao })
-    }
-    loadTable()
-
-  }, [event.resources])
   const updateField = (e) => {
     setAlert(false)
     setEvent({ ...event, [e.target.name]: e.target.value })
     //await loadTable()
   }
+
+
+  const handleChangeData = (e) => {
+    let newDate = e.target.value
+    let idResource = parseInt(e.target.name)
+
+    let resources = event.resources.filter(r => {
+      if (r.id === idResource) {
+        r.date = newDate
+      }
+      return r
+    })
+
+    updateResource(resources)
+
+
+  }
+
   return (
     <>
 
@@ -304,7 +324,8 @@ function EventForm(props) {
                   </div>
                   <div className="col-md-4">
                     <label htmlFor="date">Presença dos Pais</label>
-                    <select name="parents" value={event.parents} onChange={updateField} className="form-control" required >
+                    <select name="parents" value={event.parents} onChange={updateField} className="form-control"
+                      disabled={disabled} required >
                       <option value="">Selecione</option>
                       <option value="0">Não</option>
                       <option value="1">Sim</option>
@@ -341,13 +362,17 @@ function EventForm(props) {
                       <tbody>
                         <tr>
                           <td colSpan={disabled ? 4 : 5} className="text-center">
+                            {disabled ?
+                              <h5>Divulgação</h5>
+                              :
+                              <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                                <option value="">Divulgação</option>
+                                {filter.divulgacao.map(r =>
+                                  <option key={r.id} value={r.id}>{r.name}</option>
+                                )}
+                              </select>
+                            }
 
-                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                              <option value="">Divulgação</option>
-                              {filter.divulgacao.map(r =>
-                                <option key={r.id} value={r.id}>{r.name}</option>
-                              )}
-                            </select>
                           </td>
 
                         </tr>
@@ -357,7 +382,9 @@ function EventForm(props) {
                               <td>{dateFormat(r.date)}</td>
                               :
                               <td>
-                                <input type="date" value={r.date} className="form-control col-md-9" />
+                                <input type="date" value={r.date} name={r.id} className="form-control col-md-11"
+                                  onChange={handleChangeData}
+                                />
                               </td>
                             }
                             <td>{r.name}</td>
@@ -376,13 +403,17 @@ function EventForm(props) {
                           </tr>
                         )}
                         <tr>
-                          <td colSpan={disabled ? 4 : 5} >
-                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                              <option value="">Pré-Produção</option>
-                              {filter.preproducao.map(r =>
-                                <option key={r.id} value={r.id}>{r.name}</option>
-                              )}
-                            </select>
+                          <td colSpan={disabled ? 4 : 5} className="text-center" >
+                            {disabled ?
+                              <h5>Pré-Produção</h5>
+                              :
+                              <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                                <option value="">Pré-Produção</option>
+                                {filter.preproducao.map(r =>
+                                  <option key={r.id} value={r.id}>{r.name}</option>
+                                )}
+                              </select>
+                            }
                           </td>
                         </tr>
                         {table.preproducao.map(r =>
@@ -391,7 +422,9 @@ function EventForm(props) {
                               <td>{dateFormat(r.date)}</td>
                               :
                               <td>
-                                <input type="date" name="" id="" value={r.date} className="form-control col-md-9" />
+                                <input type="date" name={r.id} id="" value={r.date} className="form-control col-md-11"
+                                  onChange={handleChangeData}
+                                />
                               </td>
                             }
                             <td>{r.name}</td>
@@ -421,7 +454,15 @@ function EventForm(props) {
                         </tr>
                         {table.ensaios.map(r =>
                           <tr key={r.id} >
-                            <td>{dateFormat(r.date)}</td>
+                            {disabled ?
+                              <td>{dateFormat(r.date)}</td>
+                              :
+                              <td>
+                                <input type="date" name={r.id} id="" value={r.date} className="form-control col-md-11"
+                                  onChange={handleChangeData}
+                                />
+                              </td>
+                            }
                             <td>{r.name}</td>
                             <td>{r.sector_name}</td>
                             {event.user.id === logged.id &&
@@ -449,7 +490,15 @@ function EventForm(props) {
                         </tr>
                         {table.montagem.map(r =>
                           <tr key={r.id} >
-                            <td>{dateFormat(r.date)}</td>
+                            {disabled ?
+                              <td>{dateFormat(r.date)}</td>
+                              :
+                              <td>
+                                <input type="date" name={r.id} id="" value={r.date} className="form-control col-md-11"
+                                  onChange={handleChangeData}
+                                />
+                              </td>
+                            }
                             <td>{r.name}</td>
                             <td>{r.sector_name}</td>
                             {event.user.id === logged.id &&
@@ -477,7 +526,15 @@ function EventForm(props) {
                         </tr>
                         {table.apresentacao.map(r =>
                           <tr key={r.id} >
-                            <td>{dateFormat(r.date)}</td>
+                            {disabled ?
+                              <td>{dateFormat(r.date)}</td>
+                              :
+                              <td>
+                                <input type="date" name={r.id} id="" value={r.date} className="form-control col-md-11"
+                                  onChange={handleChangeData}
+                                />
+                              </td>
+                            }
                             <td>{r.name}</td>
                             <td>{r.sector_name}</td>
                             {event.user.id === logged.id &&
