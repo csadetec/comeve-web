@@ -363,6 +363,7 @@ function EventForm(props) {
                         <tr>
                           <td colSpan={disabled ? 4 : 5} className="text-center">
                             {disabled ?
+                              table.divulgacao.length > 0 &&
                               <h5>Divulgação</h5>
                               :
                               <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
@@ -405,6 +406,7 @@ function EventForm(props) {
                         <tr>
                           <td colSpan={disabled ? 4 : 5} className="text-center" >
                             {disabled ?
+                              table.preproducao.length > 0 &&
                               <h5>Pré-Produção</h5>
                               :
                               <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
@@ -443,13 +445,20 @@ function EventForm(props) {
                           </tr>
                         )}
                         <tr>
-                          <td colSpan={disabled ? 4 : 5} >
-                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                              <option value="">Ensaios</option>
-                              {filter.ensaios.map(r =>
-                                <option key={r.id} value={r.id}>{r.name}</option>
-                              )}
-                            </select>
+                          <td colSpan={disabled ? 4 : 5} className="text-center">
+
+
+                            {disabled ?
+                              table.ensaios.length > 0 &&
+                              <h5>Ensaios</h5>
+                              :
+                              <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                                <option value="">Ensaios</option>
+                                {filter.ensaios.map(r =>
+                                  <option key={r.id} value={r.id}>{r.name}</option>
+                                )}
+                              </select>
+                            }
                           </td>
                         </tr>
                         {table.ensaios.map(r =>
@@ -479,13 +488,18 @@ function EventForm(props) {
                           </tr>
                         )}
                         <tr>
-                          <td colSpan={disabled ? 4 : 5} >
-                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                              <option value="">Montagem</option>
-                              {filter.montagem.map(r =>
-                                <option key={r.id} value={r.id}>{r.name}</option>
-                              )}
-                            </select>
+                          <td colSpan={disabled ? 4 : 5} className="text-center" >
+                            {disabled ?
+                              table.montagem.length > 0 &&
+                              <h5>Montagem</h5>
+                              :
+                              <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                                <option value="">Montagem</option>
+                                {filter.montagem.map(r =>
+                                  <option key={r.id} value={r.id}>{r.name}</option>
+                                )}
+                              </select>
+                            }
                           </td>
                         </tr>
                         {table.montagem.map(r =>
@@ -515,13 +529,18 @@ function EventForm(props) {
                           </tr>
                         )}
                         <tr>
-                          <td colSpan={disabled ? 4 : 5} >
-                            <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
-                              <option value="">Apresentação</option>
-                              {filter.apresentacao.map(r =>
-                                <option key={r.id} value={r.id}>{r.name}</option>
-                              )}
-                            </select>
+                          <td colSpan={disabled ? 4 : 5} className="text-center">
+                            {disabled ?
+                              table.apresentacao.length > 0 &&
+                              <h5>Apresentação</h5>
+                              :
+                              <select value="" className="form-control" onChange={handleAddResource} disabled={disabled} >
+                                <option value="">Apresentação</option>
+                                {filter.apresentacao.map(r =>
+                                  <option key={r.id} value={r.id}>{r.name}</option>
+                                )}
+                              </select>
+                            }
                           </td>
                         </tr>
                         {table.apresentacao.map(r =>
