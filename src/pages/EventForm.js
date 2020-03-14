@@ -62,7 +62,7 @@ function EventForm(props) {
     }
     document.title = `Editar Evento ${id}`
 
-  
+
     async function load() {
       const { data } = await api.get(`/events/${id}`)
       setH2(`Editar Evento - Criado ${data.user.name} | ${dateFormat(data.created_at)}`)
@@ -277,7 +277,7 @@ function EventForm(props) {
                   </li>
                 }
                 {event.guests.map(r =>
-                  <li>{r.name}</li>
+                  <li key={r.id}>{r.name}</li>
                 )}
               </ul>
             </div>
