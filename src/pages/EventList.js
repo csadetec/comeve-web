@@ -4,14 +4,13 @@ import dateFormat from '../utils/date'
 
 function EventList() {
   const [events] = useState(JSON.parse(localStorage.getItem('events')))
+  //const [guest] = useState([])
   let history = useHistory()
 
   useEffect(() => {
     document.title = 'Eventos'
    
   }, [])
-
-
 
   const timeFormat = (time) => {
     return time.slice(0, 5)
@@ -51,8 +50,7 @@ function EventList() {
                 <th scope="col">Data</th>
                 <th scope="col">Nome</th>
                 <th scope="col">Local</th>
-                <th scope="col">Criador</th>
-                <th scope="col">Status</th>
+                <th scope="col">Solicitante</th>
               </tr>
             </thead>
             <tbody>
@@ -62,13 +60,12 @@ function EventList() {
                   title={title(r.date, r.name,  r.resources)}
                   onClick={() => handleClick(r.id)} key={r.id} className="cursor-pointer">
                   <td>
-                    <strong>{dateFormat(r.date)}</strong> - {timeFormat(r.start)} - {timeFormat(r.end)}
+                    <strong>{dateFormat(r.date)}</strong><br/> {timeFormat(r.start)} - {timeFormat(r.end)}
                   </td>
                   <td>{r.name}</td>
                   <td>{r.place_name}</td>
-                  <td>{r.user.name}</td>
                   <td>
-                    <i className="fas fa-check-circle icon-green"></i>
+                    {r.guests.length === 0 ? r.user.name :    r.guests[0].name}                
                   </td>
                 </tr>
               )}

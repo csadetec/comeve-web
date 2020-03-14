@@ -24,4 +24,14 @@
   font-size: 20px;
   color:red;
 }
+.list-create{
+  border: 1px solid #dee2e6;
+  border-radius: 5px;    
+  width: 90%;
+  float: right;
+}
 
+.list-create li{
+  list-style: none;
+  padding: 3px;
+}

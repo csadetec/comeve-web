@@ -23,7 +23,7 @@ function EventForm(props) {
     end: '',
     user: '',
     parentes: '',
-    guest: [],
+    guests: [],
     resources: []
   })
 
@@ -36,12 +36,13 @@ function EventForm(props) {
   })
   const [table, setTable] = useState([])
 
+  const [search, setSearch] = useState('')
   //const [temp, setTemp] = useState([])
   //const [teste, setTeste] = useState('2019-11-01')
   const [logged] = useState(JSON.parse(localStorage.getItem('logged')))
   const [places] = useState(JSON.parse(localStorage.getItem('places')))
   const [resources] = useState(JSON.parse(localStorage.getItem('resources')))
-  const [guest] = useState(JSON.parse(localStorage.getItem('users')))
+  const [guests] = useState(JSON.parse(localStorage.getItem('users')))
   const [disabled, setDisable] = useState(false)
 
   const [h2, setH2] = useState('Cadastrar Evento')
@@ -61,9 +62,10 @@ function EventForm(props) {
     }
     document.title = `Editar Evento ${id}`
 
-    setH2(`Editar Evento - ${id}`)
+  
     async function load() {
       const { data } = await api.get(`/events/${id}`)
+      setH2(`Editar Evento - Criado ${data.user.name} | ${dateFormat(data.created_at)}`)
       data.resources.map(r =>
         r.accept = r.pivot.accept,
       )
@@ -159,28 +161,8 @@ function EventForm(props) {
 
 
   }
-
-  async function handleAddGuest(e) {
-    let guest_id = parseInt(e.target.value)
-    let guestSelected = resources.filter((r) => {
-      return r.id === guest_id
-    })
-
-    let guestVerifySelected = event.guests.filter((r) => {
-      return r.id === guest_id
-    })
-
-    if (guestVerifySelected.length === 0) {
-      guestSelected = guestSelected[0]
-      console.log(guestSelected)
-      console.log(guestVerifySelected)
-
-    }
-    //console.log(guest_id)
-
-  }
-
   async function handleAddResource(e) {
+    setAlert(false)
     let resource_id = parseInt(e.target.value)
     let resourceSelected = resources.filter((r) => {
       return r.id === resource_id
@@ -202,7 +184,7 @@ function EventForm(props) {
 
   }
   const handleExcludeResource = (id) => {
-    console.log('exlude resource ', id)
+    setAlert(false)
 
     let resources = event.resources.filter(r => {
       return r.id !== id
@@ -226,15 +208,14 @@ function EventForm(props) {
     updateResource(resources)
   }
 
-
   const updateField = (e) => {
     setAlert(false)
     setEvent({ ...event, [e.target.name]: e.target.value })
     //await loadTable()
   }
 
-
   const handleChangeData = (e) => {
+    setAlert(false)
     let newDate = e.target.value
     let idResource = parseInt(e.target.name)
 
@@ -249,21 +230,56 @@ function EventForm(props) {
 
 
   }
+  async function handleAddGuest(e) {
+    setAlert(false)
+    let guestSearch = e.target.value
+    setSearch(guestSearch)
 
+    let guestVerify = guests.filter(r => {
+      return r.name === guestSearch
+    })
+
+    if (guestVerify[0] === undefined) {
+      return
+    }
+
+    let haveGuest = event.guests.filter(r => {
+
+      return r.id === guestVerify[0].id
+    })
+    if (haveGuest.length === 0) {
+      guestVerify = guestVerify[0]
+      let myGuests = ([...event.guests, guestVerify])
+      setEvent({ ...event, guests: myGuests })
+      setSearch('')
+      console.log(myGuests)
+    } else {
+      setSearch('')
+      console.log('ja tem bb')
+    }
+    /** */
+  }
   return (
     <>
 
       {loading ?
         <Loading /> :
         <div className="container-fluid pb-5">
-          <div className="row mb-4 border-bottom ">
-            <div className="col-md-6">
+          <div className="row  justify-content-between ">
+            <div className="col-md-10 mt-3">
               <h2>{h2}</h2>
             </div>
-            <div className="col-md-6 text-right">
-              {event.user.name && `Criador: ${event.user.name}`}
-              <br />
-              {event.created_at && `Data: ${event.created_at}`}
+            <div className="col-md-2 text-right ">
+              <ul className="list-create">
+                {disabled &&
+                  <li>
+                    {dateFormat(event.created_at)} | {event.user.name}
+                  </li>
+                }
+                {event.guests.map(r =>
+                  <li>{r.name}</li>
+                )}
+              </ul>
             </div>
           </div>
 
@@ -332,15 +348,15 @@ function EventForm(props) {
                     </select>
                   </div>
                 </div>
-                <div className="row">
+                <div className="row pb-2">
                   <div className="col-md-12">
-                    <select value="" className="form-control mb-3" onChange={handleAddGuest} disabled={disabled} >
-                      <option value="">SELECIONE O CONVIDADO</option>
-                      {guest.map(r =>
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      )}
+                    <input input="seach" list="guests" className="form-control" autoComplete="off" placeholder="Solicitantes" onChange={handleAddGuest} value={search} />
 
-                    </select>
+                    <datalist id="guests">
+                      {guests.map(r =>
+                        <option key={r.id} value={r.name} />
+                      )}
+                    </datalist>
                   </div>
                 </div>
                 <div className="row">
@@ -349,8 +365,6 @@ function EventForm(props) {
                     <Link className="btn btn-outline-danger" type="submit" to="/eventos/listar">Fechar</Link>
                   </div>
                 </div>
-
-
               </div>
               <div className="col-md-6 border-left ">
 
