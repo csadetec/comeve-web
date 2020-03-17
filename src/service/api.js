@@ -8,16 +8,14 @@ const hostname = () => {
   if(app === 'localhost'){
     return 'http://localhost:8000' 
   }
-  if(app === 'teste-comeve.netlify.com' || app === 'comeve.netlify.com'){
+  if(app === 'comeve.netlify.com'){
     return 'https://comeve-node.azurewebsites.net'
-    //return 'https://comeve-azure.azurewebsites.net/api'
-    //return 'https://comeve.detec.site'
-  }
-  if(app === 'd-comeve.netlify.com'){
-    return 'https://comeve.servico.site/api'
+  } 
+  if(app === 'comeve-teste.netlify.com'){
+    return 'https://comeve.servico.site'
   }
   //https://comeve.netlify.com/
-  return 'http://10.20.0.26:8001'
+  return 'http://10.20.0.22:8000'
 }
 
 const api = axios.create({
