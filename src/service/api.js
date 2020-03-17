@@ -12,7 +12,7 @@ const hostname = () => {
     return 'https://comeve-node.azurewebsites.net'
   } 
   if(app === 'comeve-teste.netlify.com'){
-    return 'https://comeve.servico.site'
+    return 'https://comeve.detec.site'
   }
   //https://comeve.netlify.com/
   return 'http://10.20.0.22:8000'
