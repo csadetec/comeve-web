@@ -111,6 +111,7 @@ const Navbar = () => {
               <div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                 <Link className="dropdown-item" to="/eventos/listar">Eventos</Link>
                 <Link className="dropdown-item" to="/usuarios/listar" onClick={handleActive}  >Usuários</Link>
+                <Link className="dropdown-item" to="/teste" onClick={handleActive}  >Teste</Link>
                 <a className="dropdown-item" href="/" onClick={handleLogout}>Sair</a>
               </div>
             </li>

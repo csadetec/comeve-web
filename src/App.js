@@ -11,34 +11,35 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 
 //pages follows
-import FollowList from './pages/FollowList'
-import FollowForm from './pages/FollowForm'
+import FollowList from './pages/Follow/FollowList'
+import FollowForm from './pages/Follow/FollowForm'
 
 //pages moments
-import MomentList from './pages/MomentList'
-import MomentForm from './pages/MomentForm'
+import MomentList from './pages/Moment/MomentList'
+import MomentForm from './pages/Moment/MomentForm'
 
 //pages sectors
-import SectorList from './pages/SectorList'
-import SectorForm from './pages/SectorForm'
+import SectorList from './pages/Sector/SectorList'
+import SectorForm from './pages/Sector/SectorForm'
 
 //pages events
-import EventList from './pages/EventList'
-import EventForm from './pages/EventForm'
+import EventList from './pages/Event/EventList'
+import EventForm from './pages/Event/EventForm'
 
 //pages places
-import PlaceList from './pages/PlaceList'
-import PlaceForm from './pages/PlaceForm'
+import PlaceList from './pages/Place/PlaceList'
+import PlaceForm from './pages/Place/PlaceForm'
 
 //pages resources
-import ResourceList from './pages/ResourceList'
-import ResourceForm from './pages/ResourceForm'
+import ResourceList from './pages/Resource/ResourceList'
+import ResourceForm from './pages/Resource/ResourceForm'
 
 
 
 //componets users
-import UserList from './pages/UserList'
-import UserForm from './pages/UserForm'
+import UserList from './pages/User/UserList'
+import UserForm from './pages/User/UserForm'
+
 
 const App = () => {
   //const [logged, setLogged] = useState(false)
@@ -93,7 +94,9 @@ const App = () => {
             <Route path='/usuarios/listar' component={UserList} />
             <Route path='/usuarios/cadastrar' component={UserForm} />
             <Route path='/usuarios/editar/:id' component={UserForm} />
-
+            {/*}
+            <Route path='/teste' component={Teste} />
+            */}
             <Redirect  to='/' />
            
           </Switch>

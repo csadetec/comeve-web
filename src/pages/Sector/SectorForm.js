@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import api from '../service/api'
-import logout from '../utils/logout'
+import api from '../../service/api'
+import logout from '../../utils/logout'
 
-import Loading from '../components/Loading'
-import Alert from '../components/Alert'
-import {loadSectors, loadUsers, loadResources} from '../utils/load'
+import Loading from '../../components/Loading'
+import Alert from '../../components/Alert'
+import {loadSectors, loadUsers, loadResources} from '../../utils/load'
 
 
 const ResourceForm = (props) => {

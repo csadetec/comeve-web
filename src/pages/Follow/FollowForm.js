@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import api from '../service/api'
-import logout from '../utils/logout'
+import api from '../../service/api'
+import logout from '../../utils/logout'
 
-import Loading from '../components/Loading'
-import Alert from '../components/Alert'
-import {loadMoments, loadResources} from '../utils/load'
+import Loading from '../../components/Loading'
+import Alert from '../../components/Alert'
+import {loadFollows} from '../../utils/load'
 
 
-const ResourceForm = (props) => {
+const FollowForm = (props) => {
 
-  const [moment, setMoment ] = useState({name:''})
+  const [follow, setFollow ] = useState({name:''})
   const [btn, setBtn] = useState({label:'Salvar', disabled:false})
   const [alert, setAlert] = useState(false)
-  const [h2, setH2] = useState('Cadastrar Momento')
+  const [h2, setH2] = useState('Cadastrar Seguimento')
   const [loading, setLoading] = useState(true)
   const { id } = props.match.params
 
@@ -21,17 +21,17 @@ const ResourceForm = (props) => {
 
   useEffect(() => {
     if (id === undefined) {
-      document.title = 'Cadastrar Momento'
+      document.title = 'Cadastrar Seguimento'
       setLoading(false)
       return;
     }
-    setH2('Editar Momento')
-    document.title = 'Editar Momento'
+    setH2('Editar Seguimento')
+    document.title = 'Editar Seguimento'
     //setLoading(true)
     async function load() {
-      const { data } = await api.get(`/moments/${id}`)
+      const { data } = await api.get(`/follows/${id}`)
       //console.log(data)
-      setMoment(data) 
+      setFollow(data) 
       setLoading(false)
     }
     load()
@@ -43,38 +43,32 @@ const ResourceForm = (props) => {
     setBtn({label:'Salvando...', disabled:true})
     try {
       if (id) {
-        const { status } = await api.put(`/moments/${id}`, moment)
+        const { status } = await api.put(`/follows/${id}`, follow)
 
         if (status === 200) {
           setAlert('Atualizado com Sucesso')
-          await loadMoments()
-          await loadResources()
+          await loadFollows()
+          //await load()
           setBtn({label:'Salvar', disabled:false})
         }
         return;
       }
 
-      const { data } = await api.post('/moments', moment)
+      const { data } = await api.post('/follows', follow)
       const { message } = data
       if (message) {
         setAlert(message)
         setBtn({label:'Salvando...', disabled:true})
-
         return;
       }
       //await loadSectors()
-      await loadMoments()
-      await loadResources()
-      //await load
-      history.push('/momentos/listar')
-      //window.location.reload()
-      /** */
+      await loadFollows()
+      history.push('/seguimentos/listar')
     } catch (e) {
 
       logout()
     }
-
-    /** */
+   /** */
   }
 
   return (
@@ -105,11 +99,11 @@ const ResourceForm = (props) => {
                 <form className="text-center mt-3" onSubmit={handleSubmit}>
 
                   <div className="md-form mt-3">
-                    <input type="text" id="name" className="form-control" value={moment.name} onChange={e => setMoment({...moment, name:e.target.value})} autoFocus={true} required />
+                    <input type="text" id="name" className="form-control" value={follow.name} onChange={e => setFollow({...follow, name:e.target.value})} autoFocus={true} required />
                     <label htmlFor="name" >Name</label>
                   </div>
                   <button className="btn btn-outline-indigo btn-rounded  z-depth-0 my-4 waves-effect" type="submit" disabled={btn.disabled}>{btn.label}</button>
-                  <Link className="btn btn-outline-danger" to='/momentos/listar'>Fechar</Link>
+                  <Link className="btn btn-outline-danger" to='/seguimentos/listar'>Fechar</Link>
 
                 </form>
               </div>
@@ -124,5 +118,5 @@ const ResourceForm = (props) => {
   )
 }
 
-export default ResourceForm
+export default FollowForm
 

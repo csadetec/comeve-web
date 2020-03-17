@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import dateFormat from '../utils/date'
+import dateFormat from '../../utils/date'
 
 function EventList() {
   const [events] = useState(JSON.parse(localStorage.getItem('events')))

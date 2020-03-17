@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import api from '../service/api'
-import logout from '../utils/logout'
+import api from '../../service/api'
+import logout from '../../utils/logout'
 
-import Alert from '../components/Alert'
-import Loading from '../components/Loading'
+import Alert from '../../components/Alert'
+import Loading from '../../components/Loading'
 
-import './style.css'
-import { loadUsers, loadEvents } from '../utils/load'
+import '../style.css'
+import { loadUsers, loadEvents } from '../../utils/load'
 const UserForm = (props) => {
 
   const [user, setUser] = useState({

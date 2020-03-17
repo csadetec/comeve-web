@@ -4,10 +4,10 @@ import api from '../service/api'
 import logout from '../utils/logout'
 import {loadPlaces, loadEvents} from '../utils/load'
 
-import Alert from '../components/Alert'
-import Loading from '../components/Loading'
+import Alert from './Alert'
+//import Loading from './Loading'
 
-function PlaceForm(props) {
+function Teste(props) {
 
   const [place, setPlace] = useState({name:''})
   const [alert, setAlert] = useState(false)
@@ -20,12 +20,12 @@ function PlaceForm(props) {
   useEffect(() => {
 
     if (id === undefined) {
-      document.title = 'Cadastrar Local'
+      document.title = 'Cadastrar Local - teste'
       setLoading(false)
       return;
       //setH2('Editar Local')
     }
-    document.title = 'Cadastrar Local '
+    document.title = 'Cadastrar Local - teste '
     setH2('Editar Local')
     async function loadPlace() {
       const { data } = await api.get(`/places/${id}`)
@@ -86,13 +86,13 @@ function PlaceForm(props) {
         </div>
       </div>
       <div className="row justify-content-center">
-        {loading ?
+        {/*loading ?
           <Loading />
-          :
+        :*/}
           <div className="col-md-8">
-            {alert &&
+            {/*alert &&
               <Alert msg={alert} />
-            }
+            */}
             <form className="border border-light p-4" onSubmit={handleSubmit}>
               {/*
             <p className="h4 mb-4 text-center">Dados do Evento</p>*/}
@@ -114,4 +114,4 @@ function PlaceForm(props) {
   )
 }
 
-export default PlaceForm
+export default Teste

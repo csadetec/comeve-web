@@ -35,3 +35,6 @@
   list-style: none;
   padding: 3px;
 }
+label{
+  font-size: 14px;
+}

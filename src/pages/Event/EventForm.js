@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import api from '../service/api'
-import { loadEvents } from '../utils/load'
+import api from '../../service/api'
+import { loadEvents } from '../../utils/load'
 
-import Alert from '../components/Alert'
-import Loading from '../components/Loading'
-import dateFormat from '../utils/date'
+import Alert from '../../components/Alert'
+import Loading from '../../components/Loading'
+import dateFormat from '../../utils/date'
 
 //import TableResources from '../components/Event/TableResources'
 
 
 import './Event.css'
-import logout from '../utils/logout'
+import logout from '../../utils/logout'
 
 function EventForm(props) {
 
@@ -287,7 +287,7 @@ function EventForm(props) {
             {alert &&
               <Alert msg={alert} />
             }
-            <div className="row border border-light p-3">
+            <div className="row border border-light pt-2 ">
               <div className="col-md-6">
                 <label htmlFor="name">Nome</label>
                 <input type="text" id="name" name="name" className="form-control mb-3" placeholder="Nome do eventos .."
@@ -366,7 +366,7 @@ function EventForm(props) {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 border-left ">
+              <div className="col-md-6 border-left pt-2">
 
                 { /*Divulgação */}
                 <div className="row">
